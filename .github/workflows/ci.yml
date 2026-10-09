@@ -1,4 +1,4 @@
-name: CI
+name: Build, scan and publish
 
 on:
   push:

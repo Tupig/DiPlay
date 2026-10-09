@@ -117,7 +117,7 @@ Run the unit tests, lint checks, and main debug build:
 ```
 
 Check that Gradle reports `BUILD SUCCESSFUL`.
-For the complete CI procedure, see [the `check` job in the CI workflow](../.github/workflows/ci.yml).
+For the complete CI procedure, see [the `check` job in the Build, scan and publish workflow](../.github/workflows/ci.yml).
 That job also checks and builds the `home` and `maphost` applications.
 
 ## Build a standalone car-test APK
