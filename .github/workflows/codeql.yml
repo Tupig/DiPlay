@@ -20,5 +20,7 @@ jobs:
       - uses: github/codeql-action/init@v3
         with:
           languages: java
-      - uses: github/codeql-action/autobuild@v3
+          # Buildless analysis. autobuild forces Temurin 17, but this project needs JDK 25
+          # plus the Android SDK, so a traced build would fail before analysis starts.
+          build-mode: none
       - uses: github/codeql-action/analyze@v3
