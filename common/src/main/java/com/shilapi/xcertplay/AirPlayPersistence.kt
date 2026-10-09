@@ -460,9 +460,30 @@ object AirPlayPersistence {
 
     fun loadOemLabel(context: Context): String =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getString(KEY_OEM_LABEL, DEFAULT_OEM_LABEL)
-            // iOS hides the car icon without a label.
-            .orEmpty().ifBlank { DEFAULT_OEM_LABEL }
+            .getString(KEY_OEM_LABEL, null)
+            ?.takeIf { it.isNotBlank() }
+            ?: defaultOemLabel(context)
+
+    /**
+     * The label iOS shows for the car. [DEFAULT_OEM_LABEL] stays the default only where a BYD head
+     * unit is actually detected; elsewhere a head unit in [LeapmotorC11Catalog] is named after its
+     * own brand, so a platform that reports itself as `generic` still reads as the car it is. Only
+     * when neither applies does the platform's own manufacturer name the car, which keeps a non-BYD
+     * head unit from ever being presented to the phone as a BYD.
+     */
+    fun defaultOemLabel(context: Context): String {
+        if (com.shilapi.xcertplay.hud.BydOutputSettings.available(context)) return DEFAULT_OEM_LABEL
+        CarProfileRuntime.match(context)?.let { return it.oem }
+        val label = Build.MANUFACTURER.orEmpty().trim().ifBlank { Build.BRAND.orEmpty().trim() }
+        // iOS hides the car icon without a label, so fall back rather than send an empty one.
+        return if (isPlausibleOemLabel(label)) label else DEFAULT_MANUFACTURER
+    }
+
+    /** Guards against platform placeholders that would read as the car's brand on the phone. */
+    private fun isPlausibleOemLabel(value: String): Boolean =
+        value.length in 2..32 &&
+            value.any { it.isLetter() } &&
+            value.lowercase() !in setOf("android", "aosp", "generic", "unknown")
 
     fun saveOemLabel(context: Context, oemLabel: String) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
@@ -509,7 +530,7 @@ object AirPlayPersistence {
 
     fun loadFps(context: Context): Int = AirPlayDisplaySettings.sanitizeFps(
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getInt(KEY_FPS, 30),
+            .getInt(KEY_FPS, CarProfileRuntime.recommendedFps(context)),
     )
 
     fun loadMediaBufferMillis(context: Context): Int = com.shilapi.xcertplay.media.MediaAudioBuffer.sanitize(
