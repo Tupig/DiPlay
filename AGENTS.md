@@ -4,8 +4,8 @@ Instructions for coding agents that work on DiPlay.
 
 ## Checks
 
-Run the CI command from the `check` job in `.github/workflows/ci.yml` before you report a
-change as done:
+Run the CI command from the `unit-test` and `build-apk` jobs in `.github/workflows/diplay.yml`
+before you report a change as done:
 
 ```sh
 ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :home:testDebugUnitTest \

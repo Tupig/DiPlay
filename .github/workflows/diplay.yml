@@ -1,0 +1,291 @@
+# DiPlay 统一 CI 工作流
+# 一个工作流完成：版本解析、单元测试与静态检查、调试 APK 构建、CodeQL 安全扫描、下载站部署。
+#
+# ── 触发矩阵（与各 job 的 if 条件逐项对应）─────────────────
+#   触发场景               resolve-version  unit-test  build-apk  codeql-scan  deploy-pages
+#   push main              ✓                ✓          ✓          ✓            ✓（仅站点相关变更）
+#   PR（目标 main）         ✓                ✓          ✓          ✓（仅同仓）   -
+#   定时 每周一 UTC 00:00   ✓                ✓          -          ✓            -
+#   手动 auto              ✓                ✓          ✓          ✓            ✓（仅站点相关变更）
+#   手动 test              ✓                ✓          -          -            -
+#   手动 build             ✓                ✓          ✓          -            -
+#   手动 security          ✓                ✓          -          ✓            -
+#   手动 deploy            ✓                ✓          -          -            ✓（始终部署）
+#   注1: fork PR 不跑 CodeQL——其令牌无 security-events 写权限，上传必失败
+#   注2: 定时不跑 build-apk（push main 已覆盖），只补 CodeQL 扫描
+#   防重复: push 仅绑定 main，PR 分支的推送不会二次触发；同一 PR 连续推送由 concurrency 取消陈旧运行
+#
+# ── jobs 总览与依赖 ───────────────────────────────────────
+#   0. resolve-version  解析 mobile 的 versionName + 检测站点相关变更
+#   1. unit-test       单元测试 + lint（质量门，build-apk 与 deploy-pages 的前置）
+#   2. build-apk       构建调试 APK（needs: resolve-version + unit-test）
+#   3. codeql-scan     CodeQL 安全扫描（与 unit-test 并行，必须自带 traced build）
+#   4. deploy-pages    部署下载站（needs: resolve-version + unit-test）
+#
+#   依赖: build-apk ← resolve-version + unit-test
+#         deploy-pages ← resolve-version + unit-test
+#         codeql-scan 与 unit-test 并行，互不阻塞
+#
+# ── 单一 workflow 为什么还需要 resolve-version ─────────────
+#   GitHub Actions 的 push.paths 过滤作用于整个 workflow，无法只对某个 job 生效。
+#   原先 pages.yml 独立时可用 paths 只在站点变更时部署；合并成一个 workflow 后，
+#   由 resolve-version 计算 site-changed，deploy-pages 读取该输出作为开关，等价还原。
+#
+# ── 工具链与缓存 ───────────────────────────────────────────
+#   JDK 25 (Temurin) + NDK 28.2.13676358，由仓库内 composite action
+#   .github/actions/setup-android-toolchain 统一提供（unit-test / build-apk / codeql-scan 共用）。
+#   runner 镜像已预装 build-tools 36.0.0、platforms;android-37.0、platform-tools。
+#   Gradle 缓存只开在 unit-test 与 build-apk：unit-test 保存缓存，build-apk 恢复后走增量编译。
+#   codeql-scan 显式关闭缓存——恢复的构建缓存会让 traced build 跳过编译，
+#   CodeQL 就在空数据库上分析，结果静默失效。
+#
+# ── 稳定性设计 ─────────────────────────────────────────────
+#   - runner 固定 ubuntu-24.04（构建依赖该镜像预装的 SDK 组件；ubuntu-latest 已迁 Ubuntu 26.04）
+#   - 所有 action 按 commit SHA 固定，版本升级手动执行
+#   - 所有 job 均设 timeout-minutes 上限
+#   - 版本号在写入输出前做格式校验，防止非法值污染产物命名
+#
+# ── 产物约定 ───────────────────────────────────────────────
+#   build-apk 产物   DiPlay-<version>-debug-<短SHA>.apk（Actions artifact，保留 7 天）
+#   注意：CI 无法产出可连真车的 APK——MFi 认证资产被 scripts/check_public_tree.py 禁入仓库，
+#         只能由本地构建并手动发布到 Releases。
+
+name: DiPlay
+
+on:
+  # 推送 main
+  push:
+    branches:
+      - main
+  # PR: 仅目标分支为 main 时触发
+  pull_request:
+    branches:
+      - main
+  # 每周一 UTC 00:00（北京时间 08:00）: 补跑 CodeQL
+  schedule:
+    - cron: '0 0 * * 1'
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      type:
+        description: "执行类型: auto=全部 | test=仅测试 | build=测试+构建 | security=测试+CodeQL | deploy=测试+部署站点"
+        required: false
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - test
+          - build
+          - security
+          - deploy
+
+concurrency:
+  group: diplay-${{ github.ref }}
+  # PR 场景取消陈旧构建（同 PR 连续 push 只保留最新）；push/schedule/发布不取消
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# 默认最小权限：只读代码。security-events / pages / id-token 由各 job 按需申请。
+permissions:
+  contents: read
+
+jobs:
+  # ═════════════════════════════════════════════════
+  # 0. 解析版本号与站点变更检测
+  # ═════════════════════════════════════════════════
+  resolve-version:
+    name: 解析版本号与变更检测
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+      site-changed: ${{ steps.resolve.outputs.site-changed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: 解析 versionName 与站点变更
+        id: resolve
+        shell: bash
+        # 经 env 传递而非 ${{ }} 内插进脚本：防止上下文值含特殊字符构成脚本注入
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+
+          VERSION="$(sed -n 's/^[[:space:]]*versionName = "\(.*\)"$/\1/p' mobile/build.gradle.kts | head -n1)"
+          # 写入输出前校验格式：非法值会污染产物命名
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::无法从 mobile/build.gradle.kts 解析出合法的 versionName，实际得到 '$VERSION'"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "版本号: $VERSION"
+
+          # 站点变更检测：等价还原原先 pages.yml 的 push.paths 过滤
+          # （GitHub Actions 的 paths 作用于整个 workflow，无法只过滤单个 job）
+          CHANGED=true
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            BEFORE="$EVENT_BEFORE"
+            # 首次推送的 before 为全零；本地对象不存在时也不做 diff
+            if [[ -n "$BEFORE" && ! "$BEFORE" =~ ^0+$ ]] && git cat-file -e "$BEFORE" 2>/dev/null; then
+              if git diff --name-only "$BEFORE" "$GITHUB_SHA" -- \
+                  site/ scripts/build_site.py .github/workflows/diplay.yml | grep -q .; then
+                CHANGED=true
+              else
+                CHANGED=false
+                echo "本次推送未触及站点相关路径，跳过下载站部署"
+              fi
+            fi
+          fi
+          echo "site-changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+  # ═════════════════════════════════════════════════
+  # 1. 单元测试与静态检查（质量门）
+  # ═════════════════════════════════════════════════
+  unit-test:
+    name: 单元测试与静态检查
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: 拒绝凭据文件进入公开源码树
+        run: python3 scripts/check_public_tree.py
+
+      - uses: ./.github/actions/setup-android-toolchain
+
+      - name: 运行单元测试与 lint
+        run: >-
+          ./gradlew
+          :shared:testDebugUnitTest :common:testDebugUnitTest :home:testDebugUnitTest
+          :mobile:lintDebug :home:lintDebug :maphost:lintDebug
+          --stacktrace
+
+      - name: 上传测试与 lint 报告
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: test-reports
+          path: |
+            shared/build/reports/tests/
+            common/build/reports/tests/
+            mobile/build/reports/lint-results-debug.html
+            samples/home/build/reports/tests/
+            samples/home/build/reports/lint-results-debug.html
+            samples/maphost/build/reports/lint-results-debug.html
+
+  # ═════════════════════════════════════════════════
+  # 2. 构建调试 APK（needs: 质量门 + 版本号）
+  # ═════════════════════════════════════════════════
+  build-apk:
+    name: 构建调试 APK
+    needs: [resolve-version, unit-test]
+    # 定时不跑：push main 已覆盖构建验证，定时只补 CodeQL 扫描
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'workflow_dispatch' && (inputs.type == 'auto' || inputs.type == 'build'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: ./.github/actions/setup-android-toolchain
+
+      - name: 构建各应用调试包
+        run: >-
+          ./gradlew
+          :mobile:assembleDebug :home:assembleDebug :maphost:assembleDebug
+          --stacktrace
+
+      - name: 上传 APK
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: DiPlay-${{ needs.resolve-version.outputs.version }}-debug-${{ github.sha }}
+          path: mobile/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
+
+  # ═════════════════════════════════════════════════
+  # 3. CodeQL 安全扫描（与 unit-test 并行）
+  # ═════════════════════════════════════════════════
+  codeql-scan:
+    name: CodeQL 安全扫描
+    # fork PR 的令牌无 security-events 写权限，跳过以避免上传必失败
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && (inputs.type == 'auto' || inputs.type == 'security'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: 拒绝凭据文件进入公开源码树
+        run: python3 scripts/check_public_tree.py
+
+      # gradle-cache=false：CodeQL 必须 trace 到完整编译过程
+      - uses: ./.github/actions/setup-android-toolchain
+        with:
+          gradle-cache: 'false'
+
+      - name: 初始化 CodeQL
+        uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+        with:
+          languages: java
+
+      # autobuild 会把 JDK 硬编码成 Temurin 17 且不装 Android SDK，无法构建本项目，
+      # 因此在此手动执行与 unit-test 相同的构建，确保 CodeQL trace 到真实编译。
+      - name: 构建（供 CodeQL 追踪）
+        run: >-
+          ./gradlew
+          :shared:testDebugUnitTest :common:testDebugUnitTest :home:testDebugUnitTest
+          :mobile:lintDebug :home:lintDebug :maphost:lintDebug
+          :mobile:assembleDebug :home:assembleDebug :maphost:assembleDebug
+          --stacktrace
+
+      - name: 上传扫描结果
+        uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+
+  # ═════════════════════════════════════════════════
+  # 4. 部署下载站（needs: 版本号 + 质量门）
+  # ═════════════════════════════════════════════════
+  deploy-pages:
+    name: 部署下载站
+    needs: [resolve-version, unit-test]
+    # push: 仅站点相关变更时部署；手动 deploy: 始终部署
+    if: |
+      (github.event_name == 'push' && needs.resolve-version.outputs.site-changed == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.type == 'deploy')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: 生成下载站
+        run: python3 scripts/build_site.py
+
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: site
+
+      - name: 发布到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

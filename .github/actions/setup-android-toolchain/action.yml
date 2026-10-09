@@ -1,0 +1,40 @@
+name: 'Set up the Android toolchain'
+description: >-
+  JDK 25 (Temurin) and the Android NDK pinned by shared/build.gradle.
+  build-tools 36.0.0, platforms;android-37.0 and platform-tools already ship with the
+  GitHub-hosted Ubuntu 24.04 runner image, so only the NDK is missing.
+inputs:
+  gradle-cache:
+    description: >-
+      缓存 Gradle 依赖与 wrapper。CodeQL 场景必须设为 false：恢复的构建缓存会让 traced build
+      跳过编译，CodeQL 就在空数据库上分析，结果静默失效。
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+    - name: 安装 JDK 25
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+      with:
+        distribution: temurin
+        java-version: '25'
+        # 空串即 setup-java 的默认值（不缓存），由 inputs.gradle-cache 决定
+        cache: ${{ inputs.gradle-cache == 'true' && 'gradle' || '' }}
+
+    - name: 安装项目锁定版本的 Android NDK
+      shell: bash
+      run: |
+        set -euo pipefail
+        SDKMANAGER="$(command -v sdkmanager || true)"
+        if [ -z "${SDKMANAGER}" ]; then
+          SDKMANAGER="$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}" -name sdkmanager -type f | head -n 1)"
+        fi
+        if [ -z "${SDKMANAGER}" ]; then
+          echo "::error::未找到 sdkmanager，runner 镜像不再预装 Android SDK；请检查 runs-on 是否仍是 ubuntu-24.04"
+          exit 1
+        fi
+        echo "使用 ${SDKMANAGER}"
+        yes | "${SDKMANAGER}" --licenses >/dev/null 2>&1 || true
+        "${SDKMANAGER}" --install "ndk;28.2.13676358"
+        test -d "${ANDROID_HOME:-/usr/local/lib/android/sdk}/ndk/28.2.13676358" \
+          || { echo "::error::NDK 28.2.13676358 安装后仍不存在"; exit 1; }
