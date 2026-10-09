@@ -54,6 +54,8 @@ adb install -r DiPlay-0.2.14.apk
 
 Only use a trusted computer. A different signing certificate cannot update this build; do not uninstall until you have saved any reports you need.
 
+Firmware that installs only vendor-approved packages needs that approval first. [Leapmotor notes](LEAPMOTOR.md) record what is published about the 零跑 C-series whitelist, the U盘 install procedure and the experimental build override this repository provides. None of it is a compatibility claim.
+
 ## BYD navigation
 
 See [BYD navigation displays](BYD_NAVIGATION.md) for the firmware scope, map metadata requirements, settings and cleanup behavior. Native DiLink 5 display routing needs no external ADB starter. Optional DiLink 3/4 integrations have separate firmware and authorized-ADB requirements described in the guide.

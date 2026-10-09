@@ -7,6 +7,12 @@ plugins {
 val localAuthenticationAssets = providers.environmentVariable("DIPLAY_AUTH_ASSETS_DIR")
     .orNull?.let { file(it).canonicalFile }
 
+// Optional local-only override for a head-unit whitelist experiment. Unset in CI, so ordinary
+// builds keep the default identity. When set it is the final package name: the debug suffix is
+// dropped so the APK carries exactly the requested applicationId.
+// Usage: ./gradlew :mobile:assembleDebug -PdiplayApplicationId=com.example.app
+val overrideApplicationId = providers.gradleProperty("diplayApplicationId").orNull
+
 android {
     namespace = "com.shilapi.xcertplay"
     compileSdk {
@@ -14,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.shihab.diplay"
+        applicationId = overrideApplicationId ?: "com.shihab.diplay"
         minSdk = 28
         targetSdk = 37
         versionCode = 33
@@ -39,7 +45,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".hudtest"
+            applicationIdSuffix = if (overrideApplicationId != null) "" else ".hudtest"
             versionNameSuffix = "-hud-test"
         }
         release {

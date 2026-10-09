@@ -76,6 +76,20 @@ mobile/build/outputs/apk/debug/mobile-debug.apk
 The debug application ID is `com.shihab.diplay.hudtest`.
 The release application ID is `com.shihab.diplay`.
 
+### Override the application ID
+
+A head unit that only installs vendor-approved packages rejects the default identity.
+`mobile` accepts an optional Gradle property that replaces the final application ID:
+
+```sh
+./gradlew :mobile:assembleDebug -PdiplayApplicationId=com.example.app
+```
+
+When the property is set the debug `.hudtest` suffix is dropped, so the APK carries exactly
+the value you pass. When it is unset, behaviour is identical to a normal build, so CI and every
+test in the CI command are unaffected. Use it only where the head unit requires a different
+package name; the consequences are listed in [Leapmotor notes](LEAPMOTOR.md).
+
 The source APK contains no accessory identity unless you supply runtime authentication assets.
 Standalone CarPlay needs these assets to connect to an iPhone.
 Use the car-test procedure below for that purpose.

@@ -1,6 +1,8 @@
 # DiPlay
 
-**CarPlay for compatible BYD Android head units.** Wired and wireless, with the familiar DiAuto interface. Independent app: `com.shihab.diplay`.
+**English** · [简体中文](README.zh-CN.md)
+
+**CarPlay for compatible BYD Android head units.** Wired and wireless, with the familiar DiAuto interface. Independent app: `com.shihab.diplay` (release) / `com.shihab.diplay.hudtest` (debug).
 
 > **BYD support scope:** These projects focus on BYD cars. They may work on other brands, but other brands are unsupported and there are no plans to add support or fix brand-specific incompatibilities.
 
@@ -8,9 +10,21 @@
 
 ![DiPlay home](site/assets/home.png)
 
+## Contents
+
+- [0.2.14 — public preview](#0214--public-preview)
+- [What’s new in 0.2.14](#whats-new-in-0214)
+- [Report a problem](#report-a-problem)
+- [Build and verify](#build-and-verify)
+- [Documentation](#documentation)
+- [Source and credits](#source-and-credits)
+- [Local release packaging](#local-release-packaging)
+
 ## 0.2.14 — public preview
 
-Install on the **car**, not the iPhone. No jailbreak, dongle, Mac, account or authentication server is required for use. Core CarPlay does not require ADB; optional dashboard, battery, wheel-speed and parked-video features do. Your head unit must permit APK installation. The APK supports Android 9+ (API 28); wireless supports Wi-Fi Direct, the car’s existing hotspot or Existing Wi-Fi / Same LAN. Android 9 Wi-Fi Direct uses a firmware-dependent legacy path with generated group credentials and unverified requested frequency; see [Android 9 Wi-Fi Direct](docs/ANDROID9_WIFI_DIRECT.md). Android 10+ verifies its negotiated group frequency.
+Install on the **car**, not the iPhone. No jailbreak, dongle, Mac, account or authentication server is required for use. Core CarPlay does not require ADB; optional dashboard, battery, wheel-speed and parked-video features do. Your head unit must permit APK installation.
+
+The APK supports Android 9+ (API 28). Wireless supports Wi-Fi Direct, the car’s existing hotspot, or Existing Wi-Fi / Same LAN. Android 9 Wi-Fi Direct uses a firmware-dependent legacy path with generated group credentials and unverified requested frequency; see [Android 9 Wi-Fi Direct](docs/ANDROID9_WIFI_DIRECT.md). Android 10+ verifies its negotiated group frequency.
 
 - Wired USB and wireless CarPlay with local authentication.
 - BYD HUD navigation with arrows, distance and street names on verified firmware.
@@ -20,9 +34,13 @@ Install on the **car**, not the iPhone. No jailbreak, dongle, Mac, account or au
 - Local diagnostic export. Reports are sent only if you choose to share them.
 - Separate installation alongside DiAuto. Run one projection app at a time.
 
-This is **not an Apple-certified product**. The APK bundles an experimental accessory identity recovered from public Carlinkit firmware, not a newly provisioned MFi identity for DiPlay. A bundled private key is extractable. Acceptance after future iOS updates, reliability across head units and suitability of that identity for general distribution are unresolved. This release invites community testing; it is not a guarantee of universal compatibility.
+> **This is not an Apple-certified product.** The APK bundles an experimental accessory identity recovered from public Carlinkit firmware, not a newly provisioned MFi identity for DiPlay. A bundled private key is extractable. Acceptance after future iOS updates, reliability across head units and suitability of that identity for general distribution are unresolved. This release invites community testing; it is not a guarantee of universal compatibility.
 
-Earlier releases were tested on the development DiLink5.1 car: live windshield guidance and street names work, Car hotspot now starts CarPlay, and Wi-Fi Direct performance is substantially improved. Occasional audio cutouts remain and are deferred to a later update. The floating-map test build was installed on the development DiLink 5.1 car; feedback led to the pinch corrections in 0.2.9. Earlier wheel-speed and video contributions were tested on a BYD Tang with DiLink 5.0 and an iPhone 15 Pro on iOS 27; wheel-speed dead reckoning in tunnels remains unverified. Broader head-unit and iOS compatibility is not guaranteed. The HUD firmware scope and cleanup limits are documented in [BYD navigation](docs/BYD_NAVIGATION.md).
+### Verified on hardware
+
+Earlier releases were tested on the development DiLink 5.1 car: live windshield guidance and street names work, Car hotspot now starts CarPlay, and Wi-Fi Direct performance is substantially improved. Occasional audio cutouts remain and are deferred to a later update. The floating-map test build was installed on the development DiLink 5.1 car; feedback led to the pinch corrections in 0.2.9.
+
+Earlier wheel-speed and video contributions were tested on a BYD Tang with DiLink 5.0 and an iPhone 15 Pro on iOS 27; wheel-speed dead reckoning in tunnels remains unverified. Broader head-unit and iOS compatibility is not guaranteed. The HUD firmware scope and cleanup limits are documented in [BYD navigation](docs/BYD_NAVIGATION.md).
 
 ## What’s new in 0.2.14
 
@@ -37,30 +55,70 @@ Earlier releases were tested on the development DiLink5.1 car: live windshield g
 
 See [0.2.14 release notes](docs/RELEASE-NOTES-0.2.14.md) and [validation](docs/VALIDATION.md) for contribution links and remaining physical tests. General stutter, calls/Siri, decoder and model-specific reports still need current-device evidence. [0.2.13 notes](docs/RELEASE-NOTES-0.2.13.md) remain available as historical guidance.
 
-If a problem remains, reproduce it on **0.2.14**, then use **Settings → Diagnostics → Save diagnostic report**. Android 10+ normally saves to **Downloads/DiPlay**; Android 9 uses the document picker. If unavailable, use **View report** or **Share** from the confirmation, which identifies external/private fallback storage. Review the `.txt` and add it to a matching [existing issue](https://github.com/shihabal3amri/DiPlay/issues), or [create one](https://github.com/shihabal3amri/DiPlay/issues/new/choose). Include vehicle/head-unit model, exact firmware and Android/DiLink, phone/iOS, connection backend, relevant settings, steps and failure time. Reports are shared only when you choose; never post your hotspot password.
+## Report a problem
+
+If a problem remains, reproduce it on **0.2.14**, then attach a fresh diagnostic report.
+
+1. Open **Settings → Diagnostics → Save diagnostic report**.
+2. Android 10+ normally saves to **Downloads/DiPlay**; Android 9 uses the document picker.
+3. If saving is unavailable, use **View report** or **Share** from the confirmation, which identifies external/private fallback storage.
+4. Review the `.txt`, then add it to a matching [existing issue](https://github.com/shihabal3amri/DiPlay/issues), or [create one](https://github.com/shihabal3amri/DiPlay/issues/new/choose).
+
+Include vehicle/head-unit model, exact firmware and Android/DiLink, phone/iOS, connection backend, relevant settings, steps and failure time. Reports are shared only when you choose; **never post your hotspot password**.
+
+## Build and verify
+
+Full environment setup, module selection and release signing are in [Build from source](docs/BUILD.md). Select the `mobile` module for the main DiPlay app; `maphost` is a map sample and `home` is an optional launcher.
+
+Requirements: JDK 25, Android SDK Platform 37, Build-Tools, Platform-Tools and NDK 28.2.13676358. Set `JAVA_HOME` and either `ANDROID_HOME` or `local.properties`.
+
+Run the same checks as CI:
+
+```sh
+./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :home:testDebugUnitTest \
+  :mobile:lintDebug :home:lintDebug :maphost:lintDebug \
+  :mobile:assembleDebug :home:assembleDebug :maphost:assembleDebug
+```
+
+Build a standalone car-test APK (the source build contains no accessory identity, so it cannot start CarPlay on its own):
+
+```sh
+DIPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets ./gradlew :mobile:assembleStandaloneDebug
+```
+
+Output: `mobile/build/outputs/apk/debug/mobile-debug.apk`. See [Build from source](docs/BUILD.md) for the required directory layout and verification steps.
 
 ## Documentation
 
-[Existing Wi-Fi / Same LAN](docs/EXISTING_WIFI.md) keeps the iPhone and head unit
-on an external router. See the guide for setup, build requirements and the
-BYD DiLink 4.0 / Android 10 clean-install validation result.
+[Existing Wi-Fi / Same LAN](docs/EXISTING_WIFI.md) keeps the iPhone and head unit on an external router. See the guide for setup, build requirements and the BYD DiLink 4.0 / Android 10 clean-install validation result.
 
-- [Install and connect](docs/INSTALL.md)
-- [Compatibility and troubleshooting](docs/COMPATIBILITY.md)
-- [Smooth wireless CarPlay](docs/SMOOTH_WIRELESS.md)
-- [Privacy and diagnostic reports](docs/PRIVACY.md)
-- [Build from source](docs/BUILD.md) — select `mobile` for the main DiPlay app; `maphost` is a map sample.
-- [Validation](docs/VALIDATION.md)
-- [Release notes](CHANGELOG.md)
-- [Credits and licenses](docs/THIRD_PARTY_NOTICES.md)
+| Topic | Guide |
+| --- | --- |
+| Install and connect | [INSTALL.md](docs/INSTALL.md) |
+| Leapmotor (零跑) install notes | [LEAPMOTOR.md](docs/LEAPMOTOR.md) |
+| Compatibility and troubleshooting | [COMPATIBILITY.md](docs/COMPATIBILITY.md) |
+| Smooth wireless CarPlay | [SMOOTH_WIRELESS.md](docs/SMOOTH_WIRELESS.md) |
+| Privacy and diagnostic reports | [PRIVACY.md](docs/PRIVACY.md) |
+| Build from source | [BUILD.md](docs/BUILD.md) |
+| Validation | [VALIDATION.md](docs/VALIDATION.md) |
+| Release notes | [CHANGELOG.md](CHANGELOG.md) |
+| Credits and licenses | [THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md) |
 
-The app and release website are available in English, Arabic, Russian, Ukrainian, Spanish, Simplified Chinese and Traditional Chinese (Taiwan). Traditional Chinese uses Taiwan wording; the app also recognizes Hong Kong/Macao and explicit Hant selections without claiming separate regional translations. Choose the app language in Settings; on Android 13+, it stays synchronized with Android’s per-app language setting.
+The standard navigation widget needs a launcher that supports Android widgets; the BYD built-in home screen does not accept arbitrary widgets. The floating map and embedded map require **CarPlay cluster map** to be enabled. Some head units may still stutter or fail to apply the icon-size setting.
+
+The app and release website are available in English, Arabic, Russian, Ukrainian, Spanish, Simplified Chinese and Traditional Chinese (Taiwan). Traditional Chinese uses Taiwan wording; the app also recognizes Hong Kong/Macao and explicit Hant selections without claiming separate regional translations. Choose the app language in Settings; on Android 13+, it stays synchronized with Android’s per-app language setting. Source code, build instructions and licenses ship with each release.
 
 ## Source and credits
 
 Based on [xcertplay](https://github.com/shilapi/xcertplay), GPL-3.0. The home/settings UI and website adapt [DiAuto](https://github.com/shihabal3amri/DiAuto), AGPL-3.0; that license is included in `docs/licenses`. Preserve those notices when distributing modifications. CarPlay and its icon belong to Apple Inc.; no Apple or BYD affiliation or endorsement is implied.
 
+The original xcertplay README is preserved at [docs/UPSTREAM-README.md](docs/UPSTREAM-README.md).
+
 This repository starts with a clean public source snapshot. Local research, tester reports and release-signing secrets are excluded. The complete source corresponding to the APK is provided with every release; experimental runtime identity assets are described separately in the build instructions and notices.
+
+### This fork
+
+This repository is a fork of [shihabal3amri/DiPlay](https://github.com/shihabal3amri/DiPlay). Releases, upstream issues and the website are hosted by the upstream project; local changes are recorded in this fork's commit history. Re-test on your own head unit before relying on a change.
 
 ## Local release packaging
 
