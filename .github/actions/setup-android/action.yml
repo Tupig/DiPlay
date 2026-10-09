@@ -1,0 +1,23 @@
+name: 'Set up Android NDK'
+description: >-
+  Install the Android NDK version pinned by shared/build.gradle.
+  build-tools 36.0.0, platforms;android-37.0 and platform-tools already ship with the
+  GitHub-hosted Ubuntu 24.04 runner image, so only the NDK is missing.
+runs:
+  using: composite
+  steps:
+    - name: Install the pinned Android NDK
+      shell: bash
+      run: |
+        set -euo pipefail
+        SDKMANAGER="$(command -v sdkmanager || true)"
+        if [ -z "${SDKMANAGER}" ]; then
+          SDKMANAGER="$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}" -name sdkmanager -type f | head -n 1)"
+        fi
+        if [ -z "${SDKMANAGER}" ]; then
+          echo "sdkmanager not found; the runner image no longer ships the Android SDK" >&2
+          exit 1
+        fi
+        echo "Using ${SDKMANAGER}"
+        yes | "${SDKMANAGER}" --licenses >/dev/null 2>&1 || true
+        "${SDKMANAGER}" --install "ndk;28.2.13676358"
