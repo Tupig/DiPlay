@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
+import com.shilapi.xcertplay.host.R
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.ExecutorService
@@ -143,8 +144,7 @@ class CarPlayVpnConsentTest {
         assertFalse(field("awaitingVpnConsent"))
         assertNull(ReflectionHelpers.getField<Any?>(activity, "controller"))
         val message = ReflectionHelpers.getField<TextView>(activity, "stageStatusView").text.toString()
-        assertTrue(message.contains("VPN authorization"))
-        assertTrue(message.contains("Return to DiPlay"))
+        assertTrue(message.contains(activity.getString(R.string.vpn_authorization_unavailable)))
         assertFalse(message.contains("Exception"))
         assertFalse(message.contains("adb shell"))
     }

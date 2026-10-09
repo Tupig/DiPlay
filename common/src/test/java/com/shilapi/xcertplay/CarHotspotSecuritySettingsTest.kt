@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.orchestration.ManualHotspotSecurity
 import com.shilapi.xcertplay.orchestration.WirelessHotspotMode
 import org.junit.Assert.*
@@ -85,13 +86,15 @@ class CarHotspotSecuritySettingsTest {
         DiPlayActivity::class.java.getDeclaredMethod("wirelessLinkControls", LinearLayout::class.java)
             .apply { isAccessible = true }.invoke(activity, parent)
         activity.setContentView(parent)
-        descendants(parent).filterIsInstance<Button>().first { it.text.startsWith("Edit saved hotspot") }.performClick()
+        descendants(parent).filterIsInstance<Button>()
+            .first { it.text.startsWith(activity.getString(R.string.edit_saved_hotspot_prefix)) }
+            .performClick()
         shadowOf(Looper.getMainLooper()).idle()
         return ShadowAlertDialog.getLatestAlertDialog()
     }
 
     private fun securityButton(dialog: AlertDialog): Button = descendants(dialog.window!!.decorView)
-        .filterIsInstance<Button>().first { it.text.startsWith("Security ·") }
+        .filterIsInstance<Button>().first { it.text.startsWith(activity.getString(R.string.security) + " ·") }
 
     private fun chooseSecurity(dialog: AlertDialog, name: String) {
         securityButton(dialog).performClick()
@@ -100,7 +103,7 @@ class CarHotspotSecuritySettingsTest {
         choices.listView.performItemClick(null, index, index.toLong())
         choices.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
         shadowOf(Looper.getMainLooper()).idle()
-        assertEquals("Security · $name", securityButton(dialog).text.toString())
+        assertEquals("${activity.getString(R.string.security)} · $name", securityButton(dialog).text.toString())
     }
 
     private fun inputs(dialog: AlertDialog) = descendants(dialog.window!!.decorView).filterIsInstance<EditText>().toList()

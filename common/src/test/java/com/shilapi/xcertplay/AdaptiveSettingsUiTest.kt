@@ -285,11 +285,20 @@ class AdaptiveSettingsUiTest {
         assertFalse("Opening settings must not focus the search box", box().hasFocus())
         assertFalse(texts(screen).any { it is android.widget.Button && it.text == screen.getString(R.string.settings_search) })
 
-        box().setText("FRAME rate")
+        // Case-mangle the localized title so the match stays case-insensitive.
+        val frameRate = screen.getString(R.string.frame_rate)
+        val query = frameRate.map {
+            when {
+                it.isLowerCase() -> it.uppercaseChar()
+                it.isUpperCase() -> it.lowercaseChar()
+                else -> it
+            }
+        }.joinToString("")
+        box().setText(query)
         shadowOf(Looper.getMainLooper()).idle()
 
         // Indexing re-rendered the header; the new box keeps the query and focus.
-        assertEquals("FRAME rate", box().text.toString())
+        assertEquals(query, box().text.toString())
         assertTrue(box().hasFocus())
         val popup = ReflectionHelpers.getField<PopupWindow>(screen, "settingsSearchPopup")
         assertTrue(popup.isShowing)
@@ -672,9 +681,12 @@ class AdaptiveSettingsUiTest {
     fun expandedRailUsesAnIconForEveryDestination() {
         val screen = openSettings()
         val rail = ReflectionHelpers.getField<ScrollView>(screen, "settingsRailScroll")
+        val openTemplate = screen.getString(R.string.settings_open_category, "§")
+        val openPrefix = openTemplate.substringBefore("§")
+        val openSuffix = openTemplate.substringAfter("§")
         val destinations = descendants(rail).filter { destination ->
-            destination.contentDescription?.startsWith("Open ") == true &&
-                destination.contentDescription?.endsWith(" settings") == true &&
+            destination.contentDescription?.startsWith(openPrefix) == true &&
+                destination.contentDescription?.endsWith(openSuffix) == true &&
                 descendants(destination).filterIsInstance<ImageView>().count() == 1
         }.toList()
         assertEquals(10, destinations.size)

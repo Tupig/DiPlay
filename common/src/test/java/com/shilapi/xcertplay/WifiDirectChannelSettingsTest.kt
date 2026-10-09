@@ -76,13 +76,15 @@ class WifiDirectChannelSettingsTest {
         val control = channelControl(controls())!!
         control.performClick()
         val dialog = ShadowAlertDialog.getLatestAlertDialog()
-        assertEquals("Auto · 5 GHz", dialog.listView.adapter.getItem(1).toString())
-        assertEquals("Auto · 2.4 GHz", dialog.listView.adapter.getItem(2).toString())
+        val auto5 = activity.getString(R.string.settings_wifi_direct_auto_band, activity.getString(R.string.s_5_ghz))
+        val auto24 = activity.getString(R.string.settings_wifi_direct_auto_band, activity.getString(R.string.s_2_4_ghz))
+        assertEquals(auto5, dialog.listView.adapter.getItem(1).toString())
+        assertEquals(auto24, dialog.listView.adapter.getItem(2).toString())
         select(dialog, WifiP2pChannels.AUTO_5_GHZ)
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
         shadowOf(Looper.getMainLooper()).idle()
         assertEquals(WifiP2pChannels.AUTO_5_GHZ, AirPlayPersistence.loadWifiP2pPreferredChannel(activity))
-        assertTrue(control.text.toString().endsWith("Auto · 5 GHz"))
+        assertTrue(control.text.toString().endsWith(auto5))
     }
 
     @Test fun invalidOrCorruptSavedChannelsUseAuto() {
