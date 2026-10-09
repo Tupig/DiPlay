@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.view.View
 import android.view.ViewGroup
+import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.network.CarHotspotSettings
 import com.shilapi.xcertplay.orchestration.CarPlayRuntimeConfig
 import com.shilapi.xcertplay.orchestration.CarPlayTransport
@@ -26,6 +27,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 @Config(sdk = [29], qualifiers = "en", manifest = Config.NONE)
 class ExistingWifiSettingsTest {
     private val app get() = RuntimeEnvironment.getApplication()
+    private val lanTitle get() = app.getString(R.string.existing_wifi_title)
     private lateinit var activity: DiPlayActivity
 
     @Before fun setup() {
@@ -52,11 +54,11 @@ class ExistingWifiSettingsTest {
 
     @Test fun cancellingSetupPreservesModeAndSavingValidCredentialsSelectsLan() {
         AirPlayPersistence.saveWirelessHotspotMode(app, WirelessHotspotMode.WIFI_P2P)
-        controls().filterIsInstance<Button>().first { it.text.contains("Same LAN") }.performClick()
+        controls().filterIsInstance<Button>().first { it.text.contains(lanTitle) }.performClick()
         shadowOf(Looper.getMainLooper()).idle()
         ShadowAlertDialog.getLatestAlertDialog().getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
         assertEquals(WirelessHotspotMode.WIFI_P2P, AirPlayPersistence.loadWirelessHotspotMode(app))
-        controls().filterIsInstance<Button>().first { it.text.contains("Same LAN") }.performClick()
+        controls().filterIsInstance<Button>().first { it.text.contains(lanTitle) }.performClick()
         shadowOf(Looper.getMainLooper()).idle()
         val dialog = ShadowAlertDialog.getLatestAlertDialog()
         val fields = descendants(dialog.window!!.decorView).filterIsInstance<EditText>().toList()

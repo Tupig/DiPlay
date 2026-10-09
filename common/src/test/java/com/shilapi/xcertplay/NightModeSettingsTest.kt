@@ -79,8 +79,10 @@ class NightModeSettingsTest {
         }
         renderSettings()
         assertAmbientVisible(true)
-        assertTrue(button(R.string.ambient_light_threshold_title).text.toString().endsWith("75 lux"))
-        assertTrue(button(R.string.ambient_delay_title).text.toString().endsWith("7 s"))
+        assertTrue(button(R.string.ambient_light_threshold_title).text.toString()
+            .endsWith(activity.getString(R.string.ambient_light_threshold_summary, 75)))
+        assertTrue(button(R.string.ambient_delay_title).text.toString()
+            .endsWith(activity.getString(R.string.ambient_delay_summary, 7)))
     }
 
     @Test fun cancellingModeChoiceKeepsSavedModeAndVisibility() {

@@ -90,7 +90,7 @@ class AdaptiveSettingsUiTest {
         val index = ReflectionHelpers.callInstanceMethod<List<Any>>(screen, "buildSettingsSearchIndex")
         val results = ReflectionHelpers.callInstanceMethod<List<Any>>(screen, "searchSettings",
             ReflectionHelpers.ClassParameter(List::class.java, index),
-            ReflectionHelpers.ClassParameter(String::class.java, "FRAME rate"))
+            ReflectionHelpers.ClassParameter(String::class.java, screen.getString(R.string.frame_rate)))
         val frameRate = results.single {
             ReflectionHelpers.getField<String>(it, "title") == screen.getString(R.string.frame_rate)
         }
@@ -405,10 +405,13 @@ class AdaptiveSettingsUiTest {
     @Config(sdk = [29], qualifiers = "en-w1000dp-h700dp")
     fun expandedRailUsesAnIconForEveryDestination() {
         val screen = openSettings()
+        val openMark = screen.getString(R.string.settings_open_category, "§§")
+        val openPrefix = openMark.substringBefore("§§")
+        val openSuffix = openMark.substringAfter("§§")
 
         val destinations = descendants(screen.window.decorView).filter { destination ->
-            destination.contentDescription?.startsWith("Open ") == true &&
-                destination.contentDescription?.endsWith(" settings") == true &&
+            destination.contentDescription?.startsWith(openPrefix) == true &&
+                destination.contentDescription?.endsWith(openSuffix) == true &&
                 descendants(destination).filterIsInstance<ImageView>().count() == 1
         }.toList()
         assertEquals(8, destinations.size)
