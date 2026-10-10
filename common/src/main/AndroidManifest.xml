@@ -87,6 +87,7 @@
             android:resizeableActivity="true"
             android:allowEmbedded="true"
             android:exported="true"
+            android:permission="android.permission.DUMP"
             android:configChanges="density|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
             android:theme="@style/Theme.AdbCluster">
         </activity>

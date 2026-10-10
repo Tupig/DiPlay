@@ -10,6 +10,7 @@ import android.view.Window
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -2246,6 +2247,13 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     private fun installUpdate() {
         val file = updateFile ?: return
+        val installed = installedSignatures()
+        if (installed != null && installed != archiveSignatures(file)) {
+            updateStage = UpdateStage.FAILED
+            updateMessage = getString(R.string.update_signature_mismatch)
+            render()
+            return
+        }
         // Before Oreo, the installer handles the global unknown-sources setting.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || packageManager.canRequestPackageInstalls()) {
             installApk(file)
@@ -2253,6 +2261,22 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             startActivity(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:$packageName")))
         }
     }
+
+    @Suppress("DEPRECATION")
+    private fun signaturesOf(info: PackageInfo): Set<String>? =
+        info.signatures?.map { it.toCharsString() }?.toSet()?.takeIf { it.isNotEmpty() }
+
+    /** The updater only ever hands the installer an APK signed by the key that signed this build. */
+    @Suppress("DEPRECATION")
+    private fun installedSignatures(): Set<String>? = runCatching {
+        signaturesOf(packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES))
+    }.getOrNull()
+
+    @Suppress("DEPRECATION")
+    private fun archiveSignatures(file: File): Set<String>? = runCatching {
+        packageManager.getPackageArchiveInfo(file.absolutePath, PackageManager.GET_SIGNATURES)
+            ?.let(::signaturesOf)
+    }.getOrNull()
 
     private fun installApk(file: File) {
         val uri = FileProvider.getUriForFile(this, "$packageName.update-apks", file)

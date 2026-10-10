@@ -50,8 +50,8 @@ class CarPlayHostThemeDiagnosticsTest {
         commands.runAll()
 
         assertEquals(true, getField("darkMode"))
-        assertTrue(logFile.readText().contains("reported=undefined applied=dark sessionActive=false"))
-        assertTrue(!logFile.readText().contains("THEME_DIAGNOSTIC send"))
+        assertTrue(logText().contains("reported=undefined applied=dark sessionActive=false"))
+        assertTrue(!logText().contains("THEME_DIAGNOSTIC send"))
     }
 
     @Test fun changedThemeIsSentOnceAndTheUnavailableEventChannelIsInTheSavedReport() {
@@ -64,7 +64,7 @@ class CarPlayHostThemeDiagnosticsTest {
 
         assertEquals(false, getField("darkMode"))
         verify(session, times(1)).setNightMode(false)
-        val log = logFile.readText()
+        val log = logText()
         assertTrue(log.contains("source=configuration-callback"))
         assertTrue(log.contains("reported=light applied=light sessionActive=true"))
         assertTrue(log.contains("THEME_DIAGNOSTIC send source=configuration-callback applied=light commandWritten=false"))
@@ -83,12 +83,17 @@ class CarPlayHostThemeDiagnosticsTest {
         assertEquals(false, getField("darkMode"))
         verify(session, times(1)).setNightMode(false)
         verify(session, times(0)).setNightMode(true)
-        assertTrue(logFile.readText().contains("reported=dark applied=light sessionActive=true"))
+        assertTrue(logText().contains("reported=dark applied=light sessionActive=true"))
     }
 
     private fun refresh(mode: Int, source: ThemeModeDiagnostics.Source) {
         activity.javaClass.getDeclaredMethod("refreshConfiguration", Configuration::class.java, ThemeModeDiagnostics.Source::class.java)
             .apply { isAccessible = true }.invoke(activity, configuration(mode), source)
+    }
+
+    private fun logText(): String {
+        AsyncDiagnosticLog.awaitIdle(2_000)
+        return logFile.readText()
     }
 
     private fun configuration(mode: Int) = Configuration().apply { uiMode = mode }

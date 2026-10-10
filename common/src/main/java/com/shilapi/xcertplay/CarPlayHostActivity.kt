@@ -90,6 +90,7 @@ import com.shilapi.xcertplay.location.AndroidCarPlayLocationProvider
 import com.shilapi.xcertplay.media.AndroidMediaSink
 import com.shilapi.xcertplay.media.CarPlayTouchMapper
 import com.shilapi.xcertplay.media.CarPlayVideoLayout
+import com.shilapi.xcertplay.mfi.RemoteMfiAuthenticationClient
 import com.shilapi.xcertplay.network.CarPlayVpnService
 import com.shilapi.xcertplay.orchestration.CarPlayController
 import com.shilapi.xcertplay.orchestration.CarPlayRuntimeConfig
@@ -1513,6 +1514,8 @@ class CarPlayHostActivity : ComponentActivity() {
         sessionLog?.append("Activity destroyed")
         sessionLog?.close()
         sessionLog = null
+        teardownExecutor.shutdown()
+        airPlayCommandExecutor.shutdown()
         super.onDestroy()
     }
 
@@ -3976,6 +3979,11 @@ class CarPlayHostActivity : ComponentActivity() {
                 !remoteMfiServer.trim().startsWith("http://") &&
                 !remoteMfiServer.trim().startsWith("https://") ->
                 getString(R.string.remote_server_address_must_start_with_http_or_https)
+            mfiTarget == MfiTarget.REMOTE &&
+                (remoteMfiServer.trim().startsWith("http://") ||
+                    remoteMfiServer.trim().startsWith("https://")) &&
+                !RemoteMfiAuthenticationClient.allowsAddress(remoteMfiServer) ->
+                getString(R.string.remote_server_address_must_use_https)
             '\u0000' in mfiI2cPath -> getString(R.string.i2c_device_path_contains_u_0000)
             '\u0000' in remoteMfiServer -> getString(R.string.remote_server_address_contains_u_0000)
             '\u0000' in remoteMfiToken -> getString(R.string.remote_token_contains_u_0000)
@@ -5718,8 +5726,7 @@ class CarPlayHostActivity : ComponentActivity() {
     }
 
     private fun appendLog(message: String) {
-        val safe = DiagnosticRedactor.redact(message) ?: return
-        sessionLog?.append(formattedLogLine(safe, System.currentTimeMillis()))
+        AsyncDiagnosticLog.append(sessionLog, message, System.currentTimeMillis())
     }
 
     private fun appendFileLog(message: String) {

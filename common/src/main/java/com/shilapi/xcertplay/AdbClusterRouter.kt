@@ -26,9 +26,9 @@ internal object AdbClusterRouter {
     internal fun displayId(dump: String): Int? {
         val candidates = dump.lineSequence().mapNotNull { line ->
             if (!line.contains("mBaseDisplayInfo=DisplayInfo{\"${DiLink4ClusterDisplay.NAME}, displayId ") ||
-                !Regex("\\breal 1920 x 720\\b").containsMatchIn(line) ||
+                !CLUSTER_REAL_SIZE.containsMatchIn(line) ||
                 !line.contains("owner com.xdja.containerservice (uid 1000)")) return@mapNotNull null
-            Regex("displayId (\\d+)\"").find(line)?.groupValues?.get(1)?.toIntOrNull()?.takeIf { it > 0 }
+            DISPLAY_ID.find(line)?.groupValues?.get(1)?.toIntOrNull()?.takeIf { it > 0 }
         }.distinct().toList()
         return candidates.singleOrNull()
     }
@@ -36,28 +36,30 @@ internal object AdbClusterRouter {
     // Direct shell launch, following Hanxu4131's legacy platform-21 adapter.
     internal fun launchCommand(pkg: String, display: Int, token: String): String {
         require(display > 0)
-        require(Regex("[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)+").matches(pkg))
+        require(PACKAGE_NAME.matches(pkg))
         require(runCatching { java.util.UUID.fromString(token).toString() == token }.getOrDefault(false))
         return "am start-activity --display $display -f 0x18000000 " +
             "-n $pkg/com.shilapi.xcertplay.AdbClusterActivity --es cluster_launch_token $token"
     }
 
     internal fun accepted(output: String): Boolean =
-        (output.contains("Starting: Intent {") || Regex("(?m)^Status: ok\\s*$").containsMatchIn(output)) &&
-        !Regex("(?i)error|exception|permission\\s*deni(?:al|ed)").containsMatchIn(output)
+        (output.contains("Starting: Intent {") || STATUS_OK.containsMatchIn(output)) &&
+        !FAILURE.containsMatchIn(output)
 
     internal fun activityDisplay(dump: String, pkg: String, task: Int): Int? {
         var display: Int? = null
         val matches = mutableListOf<Int>()
         val component = "$pkg/com.shilapi.xcertplay.AdbClusterActivity"
+        val componentPattern = Regex("\\bu\\d+\\s+" + Regex.escape(component) + "(?=\\s|,)")
+        val taskPattern = Regex("\\bt$task(?=\\s|\\})")
         for (line in dump.lineSequence()) {
-            val header = Regex("^Display #(\\d+) \\(activities from top to bottom\\):\\s*$").matchEntire(line)
+            val header = DISPLAY_HEADER.matchEntire(line)
             if (header != null) { display = header.groupValues[1].toInt(); continue }
             if (line.isNotEmpty() && !line.first().isWhitespace()) display = null
             val current = display ?: continue
-            if (Regex("^\\s{4,}\\* Hist #\\d+: ActivityRecord\\{").containsMatchIn(line) &&
-                Regex("\\bu\\d+\\s+" + Regex.escape(component) + "(?=\\s|,)").containsMatchIn(line) &&
-                Regex("\\bt$task(?=\\s|\\})").containsMatchIn(line)) matches.add(current)
+            if (HISTORY_HEADER.containsMatchIn(line) &&
+                componentPattern.containsMatchIn(line) &&
+                taskPattern.containsMatchIn(line)) matches.add(current)
         }
         return matches.singleOrNull()?.takeIf { it > 0 }
     }
@@ -107,4 +109,12 @@ internal object AdbClusterRouter {
     fun report(context: Context): String = File(context.filesDir, REPORT).let {
         if (it.isFile) it.readText() else "ADB cluster routing has not been run."
     }
+
+    private val CLUSTER_REAL_SIZE = Regex("\\breal 1920 x 720\\b")
+    private val DISPLAY_ID = Regex("displayId (\\d+)\"")
+    private val PACKAGE_NAME = Regex("[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)+")
+    private val STATUS_OK = Regex("(?m)^Status: ok\\s*$")
+    private val FAILURE = Regex("(?i)error|exception|permission\\s*deni(?:al|ed)")
+    private val DISPLAY_HEADER = Regex("^Display #(\\d+) \\(activities from top to bottom\\):\\s*$")
+    private val HISTORY_HEADER = Regex("^\\s{4,}\\* Hist #\\d+: ActivityRecord\\{")
 }

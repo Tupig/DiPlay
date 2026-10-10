@@ -297,6 +297,7 @@
     <string name="remote_server_address_contains_u_0000">عنوان الخادم البعيد يحتوي على U+0000</string>
     <string name="remote_server_address_is_required">عنوان الخادم البعيد مطلوب</string>
     <string name="remote_server_address_must_start_with_http_or_https">يجب أن يبدأ عنوان الخادم البعيد بـ http:// أو https://</string>
+    <string name="remote_server_address_must_use_https">يجب أن يستخدم عنوان الخادم البعيد https:// ما لم يكن على شبكة محلية أو خاصة</string>
     <string name="remote_token_contains_u_0000">الرمز البعيد يحتوي على U+0000</string>
     <string name="report_android_location_to_the_iphone">إرسال موقع Android إلى iPhone</string>
     <string name="report_location_to_iphone">إرسال الموقع إلى iPhone</string>
@@ -668,6 +669,7 @@
     <string name="update_verifying">جارٍ التحقق…</string>
     <string name="update_install">تثبيت %1$s</string>
     <string name="update_failed">فشل التحديث</string>
+    <string name="update_signature_mismatch">توقيع حزمة التحديث لا يتطابق مع النسخة المثبتة من DiPlay، تم إلغاء التثبيت</string>
     <string name="setup_guide">دليل الإعداد</string>
     <string name="setup_guide_description">اعرف إصدار DiLink، واختر طريقة الاتصال، وفعّل الميزات المناسبة لسيارتك.</string>
     <string name="setup_step_of">الخطوة %1$d من %2$d</string>

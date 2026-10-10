@@ -297,6 +297,7 @@
     <string name="remote_server_address_contains_u_0000">La dirección del servidor remoto contiene U+0000</string>
     <string name="remote_server_address_is_required">Se requiere la dirección del servidor remoto</string>
     <string name="remote_server_address_must_start_with_http_or_https">La dirección del servidor remoto debe empezar por http:// o https://</string>
+    <string name="remote_server_address_must_use_https">La dirección del servidor remoto debe usar https:// a menos que sea una red local o privada</string>
     <string name="remote_token_contains_u_0000">El token remoto contiene U+0000</string>
     <string name="report_android_location_to_the_iphone">Informar la ubicación de Android al iPhone</string>
     <string name="report_location_to_iphone">Informar la ubicación al iPhone</string>
@@ -668,6 +669,7 @@
     <string name="update_verifying">Verificando…</string>
     <string name="update_install">Instalar %1$s</string>
     <string name="update_failed">Error de actualización</string>
+    <string name="update_signature_mismatch">La firma del paquete de actualización no coincide con DiPlay instalado; se canceló la instalación</string>
     <string name="setup_guide">Guía de configuración</string>
     <string name="setup_guide_description">Detecta tu versión de DiLink, elige una conexión y activa las funciones adecuadas para tu coche.</string>
     <string name="setup_step_of">PASO %1$d DE %2$d</string>

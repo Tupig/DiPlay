@@ -41,6 +41,9 @@ class RemoteMfiAuthenticationClient(
         require(baseAddress.startsWith("http://") || baseAddress.startsWith("https://")) {
             "Remote MFI server address must use http:// or https://"
         }
+        require(allowsAddress(baseAddress)) {
+            "Remote MFI server must use https:// unless the host is a loopback or private network address"
+        }
         require(connectTimeoutMillis > 0) { "connectTimeoutMillis must be positive" }
         require(readTimeoutMillis > 0) { "readTimeoutMillis must be positive" }
         require(maximumAttempts > 0) { "maximumAttempts must be positive" }
@@ -278,6 +281,32 @@ class RemoteMfiAuthenticationClient(
         private const val CERTIFICATE_PATH = "/mfi/certificate"
         private const val SIGN_PATH = "/mfi/sign"
         private const val RESET_PATH = "/mfi/reset"
+
+        /**
+         * Reports whether [address] may carry the bearer token and the challenge signatures.
+         * Cleartext stays available for a signing service on the same machine or a private
+         * network, where there is no public path to eavesdrop on; anything else needs TLS.
+         */
+        fun allowsAddress(address: String): Boolean {
+            val trimmed = address.trim()
+            if (trimmed.startsWith("https://")) return true
+            if (!trimmed.startsWith("http://")) return false
+            return isLocalHost(trimmed.removePrefix("http://").substringBefore('/').substringBefore('?'))
+        }
+
+        internal fun isLocalHost(authority: String): Boolean {
+            val host = authority.substringBefore('@').substringBeforeLast(':').lowercase()
+            if (host.isEmpty()) return false
+            if (host == "localhost" || host == "::1" || host == "[::1]") return true
+            val octets = host.split('.').map { it.toIntOrNull() ?: return false }
+            if (octets.size != 4 || octets.any { it !in 0..255 }) return false
+            return octets[0] == 127 ||
+                octets[0] == 10 ||
+                (octets[0] == 192 && octets[1] == 168) ||
+                (octets[0] == 172 && octets[1] in 16..31) ||
+                (octets[0] == 169 && octets[1] == 254)
+        }
+
         private const val JSON_CONTENT_TYPE = "application/json; charset=utf-8"
         private const val DEFAULT_CONNECT_TIMEOUT_MILLIS = 5_000
         private const val DEFAULT_READ_TIMEOUT_MILLIS = 10_000

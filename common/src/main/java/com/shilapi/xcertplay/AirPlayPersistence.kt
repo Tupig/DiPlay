@@ -1,6 +1,7 @@
 package com.shilapi.xcertplay
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import com.shilapi.xcertplay.airplay.AirPlayDisplaySettings
 import com.shilapi.xcertplay.airplay.AirPlayPhysicalSizeBasis
@@ -1222,18 +1223,16 @@ object AirPlayPersistence {
 
     fun loadIdentity(context: Context): AirPlayIdentity {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        val privateKey = prefs.getString(KEY_IDENT_PRIVATE, null)
-        val publicKey = prefs.getString(KEY_IDENT_PUBLIC, null)
+        val privateKey = readSealed(prefs, KEY_IDENT_PRIVATE)
+        val publicKey = readSealed(prefs, KEY_IDENT_PUBLIC)
         val pairingId = prefs.getString(KEY_PAIRING_ID, null)
         if (privateKey != null && publicKey != null && pairingId != null) {
             return AirPlayIdentity(privateKey.decodeHex(), publicKey.decodeHex(), pairingId)
         }
         return AirPlayIdentity.generate().also { identity ->
-            prefs.edit()
-                .putString(KEY_IDENT_PRIVATE, identity.privateKey.toHex())
-                .putString(KEY_IDENT_PUBLIC, identity.publicKey.toHex())
-                .putString(KEY_PAIRING_ID, identity.pairingId)
-                .apply()
+            writeSealed(prefs, KEY_IDENT_PRIVATE, identity.privateKey.toHex())
+            writeSealed(prefs, KEY_IDENT_PUBLIC, identity.publicKey.toHex())
+            prefs.edit().putString(KEY_PAIRING_ID, identity.pairingId).apply()
         }
     }
 
@@ -1263,9 +1262,9 @@ object AirPlayPersistence {
         val wifiMac = prefs.getString(KEY_LOCKDOWN_WIFI_MAC, null) ?: return null
         val devicePublic = prefs.getString(KEY_LOCKDOWN_DEVICE_PUBLIC, null) ?: return null
         val deviceCert = prefs.getString(KEY_LOCKDOWN_DEVICE_CERT, null) ?: return null
-        val hostPrivate = prefs.getString(KEY_LOCKDOWN_HOST_PRIVATE, null) ?: return null
+        val hostPrivate = readSealed(prefs, KEY_LOCKDOWN_HOST_PRIVATE) ?: return null
         val hostCert = prefs.getString(KEY_LOCKDOWN_HOST_CERT, null) ?: return null
-        val rootPrivate = prefs.getString(KEY_LOCKDOWN_ROOT_PRIVATE, null) ?: return null
+        val rootPrivate = readSealed(prefs, KEY_LOCKDOWN_ROOT_PRIVATE) ?: return null
         val rootCert = prefs.getString(KEY_LOCKDOWN_ROOT_CERT, null) ?: return null
         return try {
             LockdownPairRecord.restore(
@@ -1285,17 +1284,31 @@ object AirPlayPersistence {
     }
 
     fun saveLockdownRecord(context: Context, record: LockdownPairRecord) {
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        prefs.edit()
             .putString(KEY_LOCKDOWN_HOST_ID, record.hostId)
             .putString(KEY_LOCKDOWN_SYSTEM_BUID, record.systemBuid)
             .putString(KEY_LOCKDOWN_WIFI_MAC, record.wifiMacAddress)
             .putString(KEY_LOCKDOWN_DEVICE_PUBLIC, record.devicePublicKeyPem.toHex())
             .putString(KEY_LOCKDOWN_DEVICE_CERT, record.deviceCertificatePem.toHex())
-            .putString(KEY_LOCKDOWN_HOST_PRIVATE, record.hostPrivateKeyPem.toHex())
             .putString(KEY_LOCKDOWN_HOST_CERT, record.hostCertificatePem.toHex())
-            .putString(KEY_LOCKDOWN_ROOT_PRIVATE, record.rootPrivateKeyPem.toHex())
             .putString(KEY_LOCKDOWN_ROOT_CERT, record.rootCertificatePem.toHex())
             .apply()
+        writeSealed(prefs, KEY_LOCKDOWN_HOST_PRIVATE, record.hostPrivateKeyPem.toHex())
+        writeSealed(prefs, KEY_LOCKDOWN_ROOT_PRIVATE, record.rootPrivateKeyPem.toHex())
+    }
+
+    private fun readSealed(prefs: SharedPreferences, key: String): String? {
+        val raw = prefs.getString(key, null) ?: return null
+        val plain = SecureStore.unseal(raw)
+        if (plain != raw) return plain
+        val sealed = SecureStore.seal(raw)
+        if (sealed != raw) prefs.edit().putString(key, sealed).apply()
+        return raw
+    }
+
+    private fun writeSealed(prefs: SharedPreferences, key: String, value: String) {
+        prefs.edit().putString(key, SecureStore.seal(value)).apply()
     }
 
     fun clearLockdownRecord(context: Context) {

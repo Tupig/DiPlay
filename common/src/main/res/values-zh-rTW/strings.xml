@@ -304,6 +304,7 @@
     <string name="remote_server_address_contains_u_0000">遠端伺服器位址包含 U+0000</string>
     <string name="remote_server_address_is_required">必須填寫遠端伺服器位址</string>
     <string name="remote_server_address_must_start_with_http_or_https">遠端伺服器位址必須以 http\:// 或 https\:// 開頭</string>
+    <string name="remote_server_address_must_use_https">非本機或私有網路的遠端伺服器位址必須使用 https://</string>
     <string name="remote_token_contains_u_0000">遠端權杖包含 U+0000</string>
     <string name="report_android_location_to_the_iphone">向 iPhone 回報 Android 位置</string>
     <string name="report_location_to_iphone">向 iPhone 回報位置</string>
@@ -732,6 +733,7 @@
     <string name="update_verifying">正在驗證…</string>
     <string name="update_install">安裝 %1$s</string>
     <string name="update_failed">更新失敗</string>
+    <string name="update_signature_mismatch">更新套件的簽章與目前安裝的 DiPlay 不一致，已取消安裝</string>
     <string name="setup_guide">設定精靈</string>
     <string name="setup_guide_description">識別 DiLink 版本，選擇連線方式，並開啟適合你車輛的功能。</string>
     <string name="setup_step_of">第 %1$d 步，共 %2$d 步</string>

@@ -297,6 +297,7 @@
     <string name="remote_server_address_contains_u_0000">Адрес удалённого сервера содержит U+0000</string>
     <string name="remote_server_address_is_required">Укажите адрес удалённого сервера</string>
     <string name="remote_server_address_must_start_with_http_or_https">Адрес удалённого сервера должен начинаться с http:// или https://</string>
+    <string name="remote_server_address_must_use_https">Удалённый сервер должен использовать https://, если это не локальная или частная сеть</string>
     <string name="remote_token_contains_u_0000">Удалённый токен содержит U+0000</string>
     <string name="report_android_location_to_the_iphone">Передавать местоположение Android на iPhone</string>
     <string name="report_location_to_iphone">Передавать местоположение на iPhone</string>
@@ -668,6 +669,7 @@
     <string name="update_verifying">Проверка…</string>
     <string name="update_install">Установить %1$s</string>
     <string name="update_failed">Не удалось обновить</string>
+    <string name="update_signature_mismatch">Подпись обновления не совпадает с установленным DiPlay, установка отменена</string>
     <string name="setup_guide">Мастер настройки</string>
     <string name="setup_guide_description">Определите версию DiLink, выберите подключение и включите функции, подходящие вашему автомобилю.</string>
     <string name="setup_step_of">ШАГ %1$d ИЗ %2$d</string>
