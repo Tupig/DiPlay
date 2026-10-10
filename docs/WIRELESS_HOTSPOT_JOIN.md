@@ -1,5 +1,7 @@
 # Automatic joining of a CarPlay hotspot
 
+**English** · [简体中文](WIRELESS_HOTSPOT_JOIN.zh-CN.md)
+
 An iPhone can receive usable hotspot credentials yet fail to join automatically.
 If it leaves its current Wi-Fi network, but selecting the receiver's hotspot
 manually starts CarPlay without a password prompt, distinguish that association

@@ -1,5 +1,7 @@
 # Build DiPlay
 
+**English** · [简体中文](BUILD.zh-CN.md)
+
 Use this procedure to build the DiPlay app for an Android head unit.
 Run the commands from the repository root, where `gradlew` and `settings.gradle.kts` are located.
 

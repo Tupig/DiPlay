@@ -1,5 +1,7 @@
 # Leapmotor (零跑) notes
 
+**English** · [简体中文](LEAPMOTOR.zh-CN.md)
+
 **Unvalidated.** No Leapmotor head unit has run DiPlay. This page collects published Leapmotor C-series install facts gathered while preparing a 2024 Leapmotor C11 EREV on LeapOS 3.21.40. Every item below is OEM- or community-sourced and none of it is a DiPlay compatibility claim. Confirm each step on the car before relying on it, and read the [warranty warning](#warranty) first.
 
 ## The application whitelist

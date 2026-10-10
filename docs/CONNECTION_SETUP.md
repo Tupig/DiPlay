@@ -1,5 +1,7 @@
 # Built-in car hotspot setup
 
+**English** · [简体中文](CONNECTION_SETUP.zh-CN.md)
+
 DiAuto & DiPlay — Built-in car hotspot test builds
 28 September 2026
 

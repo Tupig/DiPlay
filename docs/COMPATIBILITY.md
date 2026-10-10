@@ -1,5 +1,7 @@
 # Compatibility
 
+**English** · [简体中文](COMPATIBILITY.zh-CN.md)
+
 This public preview is an independent receiver, not an Apple-certified CarPlay accessory. The experimental bundled accessory identity is extractable and its future acceptance is not guaranteed.
 
 | Area | Current scope |

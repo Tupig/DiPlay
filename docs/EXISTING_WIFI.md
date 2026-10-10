@@ -1,5 +1,7 @@
 # Existing Wi-Fi / Same LAN
 
+**English** · [简体中文](EXISTING_WIFI.zh-CN.md)
+
 Connect the Android receiver and iPhone to the same third-party router or portable
 Wi-Fi in system settings. In DiPlay → Connection setup → Wireless, select
 **Existing Wi-Fi / Same LAN**, enter the exact SSID and WPA2 password, and save.

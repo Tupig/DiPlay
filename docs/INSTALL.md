@@ -1,5 +1,7 @@
 # Install and connect
 
+**English** · [简体中文](INSTALL.zh-CN.md)
+
 1. Park the car. Download `DiPlay-0.2.17.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.17), also linked on the [website](https://shihabal3amri.github.io/DiPlay/). The official app requires Android 7.1 or newer (API 25+); Android 7.1–8.1 support still needs vehicle testing.
 2. Install on the Android head unit using its supported APK installation method. Do not install on the iPhone. Use the same package/variant and a matching signing certificate for an in-place update that preserves settings and pairing records. Release-specific build and signing checks are recorded in [validation](VALIDATION.md); do not infer update compatibility from the filename.
 3. Open DiPlay. Grant the permissions requested for the features you use: Bluetooth/Nearby devices, Wi-Fi/Location on older Android, and microphone for Siri/calls. Allow notifications for connection controls.
