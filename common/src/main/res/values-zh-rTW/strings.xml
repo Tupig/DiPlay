@@ -811,4 +811,11 @@
     <string name="settings_ambient_parked_notice">請停車後設定。實驗性支援部分 BYD 燈光介面，無法保證每種車型及韌體相容。0 表示原廠最低檔，不代表關燈。</string>
     <string name="settings_ambient_checking">檢查中…</string>
     <string name="settings_ambient_unavailable">唯讀檢查失敗：缺少既有 ADB 授權或支援的燈光介面。未儲存燈光設定。請停車後另行設定存取；本功能不啟用 ADB，也不請求授權。</string>
+    <string name="notification_channel_carplay">CarPlay 連線</string>
+    <string name="notification_carplay_running">CarPlay 連線進行中</string>
+    <string name="notification_disconnect">中斷連線</string>
+    <string name="mfi_board_i2c_diagnostic">主機板 I2C 診斷</string>
+    <string name="mfi_linux_i2c_device">Linux I2C 裝置</string>
+    <string name="mfi_run_self_check">執行 MFi 自檢</string>
+    <string name="mfi_ch341_note">CH341 需要依部署環境設定 VID/PID。</string>
 </resources>

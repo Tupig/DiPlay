@@ -20,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.mfi.MfiProtocolMajorResult
 import com.shilapi.xcertplay.mfi.MfiSelfCheck
 import com.shilapi.xcertplay.mfi.MfiSelfCheckResult
@@ -47,12 +49,12 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(padding).padding(24.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        Text("Board I2C diagnostic")
+                        Text(stringResource(R.string.mfi_board_i2c_diagnostic))
                         OutlinedTextField(
                             value = devicePath,
                             onValueChange = { devicePath = it },
                             modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Linux I2C device") },
+                            label = { Text(stringResource(R.string.mfi_linux_i2c_device)) },
                             singleLine = true,
                             enabled = status !is DiagnosticStatus.Running,
                         )
@@ -60,11 +62,11 @@ class MainActivity : ComponentActivity() {
                             onClick = { runSelfCheck(devicePath) },
                             enabled = status !is DiagnosticStatus.Running,
                         ) {
-                            Text("Run MFi self-check")
+                            Text(stringResource(R.string.mfi_run_self_check))
                         }
                         Spacer(Modifier.height(4.dp))
                         Text(status.message())
-                        Text("CH341 requires deployment-specific VID/PID configuration.")
+                        Text(stringResource(R.string.mfi_ch341_note))
                     }
                 }
             }
