@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import com.shilapi.xcertplay.DiPlayPalette
 import com.shilapi.xcertplay.airplay.CarPlayDisplayScale
+import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.orchestration.MfiTarget
 import com.shilapi.xcertplay.orchestration.WirelessHotspotMode
 import org.junit.Assert.*
@@ -153,7 +154,7 @@ class SettingsWidgetsTest {
         val options = views(row.container).filterIsInstance<RadioButton>().toList()
         assertEquals(listOf(WirelessHotspotMode.MANUAL, WirelessHotspotMode.WIFI_P2P, WirelessHotspotMode.EXISTING_WIFI),
             options.map { it.tag })
-        assertEquals("Built-in car hotspot (recommended)", options.first().text.toString())
+        assertEquals(context.getString(R.string.settings_built_in_car_hotspot_recommended), options.first().text.toString())
         assertEquals(WirelessHotspotMode.WIFI_P2P, options.first { it.isChecked }.tag)
     }
 

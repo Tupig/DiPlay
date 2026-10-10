@@ -826,4 +826,16 @@
     <string name="turn_card_theme_night">始终夜间</string>
     <string name="settings_ambient_album">跟随专辑封面</string>
     <string name="settings_ambient_album_description">按封面取色并近似匹配原车可用色号。灰黑或无封面时使用全部31色；大面积白色封面可使用白色或冷白。</string>
+    <string name="fps_counter_millis">%1$d ms</string>
+    <string name="fps_counter_no_value">–</string>
+    <string name="fps_counter_text">%1$d FPS\nRX %2$d · %3$s</string>
+    <string name="fps_counter_waiting">-- FPS</string>
+    <string name="mfi_board_i2c_diagnostic">主板 I2C 诊断</string>
+    <string name="mfi_ch341_note">CH341 需要按部署环境配置 VID/PID。</string>
+    <string name="mfi_linux_i2c_device">Linux I2C 设备</string>
+    <string name="mfi_run_self_check">运行 MFi 自检</string>
+    <string name="notification_carplay_running">CarPlay 连接进行中</string>
+    <string name="notification_channel_carplay">CarPlay 连接</string>
+    <string name="notification_disconnect">断开连接</string>
+    <string name="update_signature_mismatch">更新包的签名与当前安装的 DiPlay 不一致，已取消安装</string>
 </resources>

@@ -826,4 +826,16 @@
     <string name="settings_ambient_unavailable">唯讀檢查失敗：缺少既有 ADB 授權或支援的燈光介面。未儲存燈光設定。請停車後另行設定存取；本功能不啟用 ADB，也不請求授權。</string>
     <string name="settings_ambient_album">跟隨專輯封面</string>
     <string name="settings_ambient_album_description">按封面取色並近似匹配原車可用色號。灰黑或無封面時使用全部31色；大面積白色封面可使用白色或冷白。</string>
+    <string name="fps_counter_millis">%1$d ms</string>
+    <string name="fps_counter_no_value">–</string>
+    <string name="fps_counter_text">%1$d FPS\nRX %2$d · %3$s</string>
+    <string name="fps_counter_waiting">-- FPS</string>
+    <string name="mfi_board_i2c_diagnostic">主機板 I2C 診斷</string>
+    <string name="mfi_ch341_note">CH341 需要依部署環境設定 VID/PID。</string>
+    <string name="mfi_linux_i2c_device">Linux I2C 裝置</string>
+    <string name="mfi_run_self_check">執行 MFi 自檢</string>
+    <string name="notification_carplay_running">CarPlay 連線進行中</string>
+    <string name="notification_channel_carplay">CarPlay 連線</string>
+    <string name="notification_disconnect">中斷連線</string>
+    <string name="update_signature_mismatch">更新套件的簽章與目前安裝的 DiPlay 不一致，已取消安裝</string>
 </resources>
