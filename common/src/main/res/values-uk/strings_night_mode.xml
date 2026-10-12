@@ -1,23 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="carplay_night_mode">Денний/нічний режим CarPlay</string>
-    <string name="settings_app_appearance">Вигляд застосунку</string>
-    <string name="settings_app_appearance_dark">Темний</string>
-    <string name="settings_app_appearance_light">Світлий</string>
-    <string name="settings_app_appearance_auto">Авто</string>
-    <string name="settings_app_appearance_description">Авто наслідує збережене налаштування денного/нічного режиму CarPlay, а поки CarPlay відкрито — поточний результат. Світлий і темний вигляд залишаються фіксованими та не потребують перепідключення.</string>
-    <string name="settings_switch_to_light_appearance">Перемкнути на світлий вигляд</string>
-    <string name="settings_switch_to_dark_appearance">Перемкнути на темний вигляд</string>
-    <string name="carplay_night_system">Як у системі Android</string>
-    <string name="carplay_night_ambient">За навколишнім освітленням</string>
-    <string name="carplay_night_day">Завжди денний</string>
-    <string name="carplay_night_night">Завжди нічний</string>
-    <string name="carplay_night_schedule">За розкладом</string>
-    <string name="carplay_night_start">Початок нічного режиму</string>
-    <string name="carplay_night_end">Кінець нічного режиму</string>
-    <string name="carplay_night_schedule_hint">Використовується місцевий час головного пристрою. Час початку й завершення має відрізнятися; період може переходити через північ.</string>
-    <string name="carplay_night_schedule_same_time">Час початку й завершення має відрізнятися.</string>
-    <string name="carplay_night_hint">Збережіть і поверніться до CarPlay.</string>
-    <string name="carplay_night_ambient_hint">Використовуються поріг і затримка нижче. Без датчика світла використовуються налаштування Android.</string>
-    <string name="carplay_night_time_note">Якщо в налаштуваннях оформлення всередині CarPlay вибрано автоматичний режим, CarPlay також враховує час iPhone. Навіть якщо вибрано режим «Завжди денний», уночі CarPlay може відображатися в темному оформленні.</string>
+    <string name="carplay_night_mode">袛械薪薪懈泄/薪褨褔薪懈泄 褉械卸懈屑 CarPlay</string>
+    <string name="settings_app_appearance">袙懈谐谢褟写 蟹邪褋褌芯褋褍薪泻褍</string>
+    <string name="settings_app_appearance_dark">孝械屑薪懈泄</string>
+    <string name="settings_app_appearance_light">小胁褨褌谢懈泄</string>
+    <string name="settings_app_appearance_auto">袗胁褌芯</string>
+    <string name="settings_app_appearance_description">袗胁褌芯 薪邪褋谢褨写褍褦 蟹斜械褉械卸械薪械 薪邪谢邪褕褌褍胁邪薪薪褟 写械薪薪芯谐芯/薪褨褔薪芯谐芯 褉械卸懈屑褍 CarPlay, 邪 锌芯泻懈 CarPlay 胁褨写泻褉懈褌芯 鈥?锌芯褌芯褔薪懈泄 褉械蟹褍谢褜褌邪褌. 小胁褨褌谢懈泄 褨 褌械屑薪懈泄 胁懈谐谢褟写 蟹邪谢懈褕邪褞褌褜褋褟 褎褨泻褋芯胁邪薪懈屑懈 褌邪 薪械 锌芯褌褉械斜褍褞褌褜 锌械褉械锌褨写泻谢褞褔械薪薪褟.</string>
+    <string name="settings_switch_to_light_appearance">袩械褉械屑泻薪褍褌懈 薪邪 褋胁褨褌谢懈泄 胁懈谐谢褟写</string>
+    <string name="settings_switch_to_dark_appearance">袩械褉械屑泻薪褍褌懈 薪邪 褌械屑薪懈泄 胁懈谐谢褟写</string>
+    <string name="carplay_night_system">携泻 褍 褋懈褋褌械屑褨 Android</string>
+    <string name="carplay_night_ambient">袟邪 薪邪胁泻芯谢懈褕薪褨屑 芯褋胁褨褌谢械薪薪褟屑</string>
+    <string name="carplay_night_day">袟邪胁卸写懈 写械薪薪懈泄</string>
+    <string name="carplay_night_night">袟邪胁卸写懈 薪褨褔薪懈泄</string>
+    <string name="carplay_night_schedule">袟邪 褉芯蟹泻谢邪写芯屑</string>
+    <string name="carplay_night_start">袩芯褔邪褌芯泻 薪褨褔薪芯谐芯 褉械卸懈屑褍</string>
+    <string name="carplay_night_end">袣褨薪械褑褜 薪褨褔薪芯谐芯 褉械卸懈屑褍</string>
+    <string name="carplay_night_schedule_hint">袙懈泻芯褉懈褋褌芯胁褍褦褌褜褋褟 屑褨褋褑械胁懈泄 褔邪褋 谐芯谢芯胁薪芯谐芯 锌褉懈褋褌褉芯褞. 效邪褋 锌芯褔邪褌泻褍 泄 蟹邪胁械褉褕械薪薪褟 屑邪褦 胁褨写褉褨蟹薪褟褌懈褋褟; 锌械褉褨芯写 屑芯卸械 锌械褉械褏芯写懈褌懈 褔械褉械蟹 锌褨胁薪褨褔.</string>
+    <string name="carplay_night_schedule_same_time">效邪褋 锌芯褔邪褌泻褍 泄 蟹邪胁械褉褕械薪薪褟 屑邪褦 胁褨写褉褨蟹薪褟褌懈褋褟.</string>
+    <string name="carplay_night_hint">袟斜械褉械卸褨褌褜 褨 锌芯胁械褉薪褨褌褜褋褟 写芯 CarPlay.</string>
+    <string name="carplay_night_ambient_hint">袙懈泻芯褉懈褋褌芯胁褍褞褌褜褋褟 锌芯褉褨谐 褨 蟹邪褌褉懈屑泻邪 薪懈卸褔械. 袘械蟹 写邪褌褔懈泻邪 褋胁褨褌谢邪 胁懈泻芯褉懈褋褌芯胁褍褞褌褜褋褟 薪邪谢邪褕褌褍胁邪薪薪褟 Android.</string>
+    <string name="carplay_night_time_note">携泻褖芯 胁 薪邪谢邪褕褌褍胁邪薪薪褟褏 芯褎芯褉屑谢械薪薪褟 胁褋械褉械写懈薪褨 CarPlay 胁懈斜褉邪薪芯 邪胁褌芯屑邪褌懈褔薪懈泄 褉械卸懈屑, CarPlay 褌邪泻芯卸 胁褉邪褏芯胁褍褦 褔邪褋 iPhone. 袧邪胁褨褌褜 褟泻褖芯 胁懈斜褉邪薪芯 褉械卸懈屑 芦袟邪胁卸写懈 写械薪薪懈泄禄, 褍薪芯褔褨 CarPlay 屑芯卸械 胁褨写芯斜褉邪卸邪褌懈褋褟 胁 褌械屑薪芯屑褍 芯褎芯褉屑谢械薪薪褨.</string>
 </resources>
+

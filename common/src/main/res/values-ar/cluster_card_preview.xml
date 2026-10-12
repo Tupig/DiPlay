@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="card_preview_title">معاينة موضع بطاقة الانعطاف</string>
-    <string name="card_preview_note">موضع نسبي على لوحة العدادات كاملة. تختلف حدود النافذة الصغيرة حسب السيارة.</string>
-    <string name="card_preview_full">شاشة كاملة</string>
-    <string name="card_preview_small">نافذة صغيرة</string>
+    <string name="card_preview_title">賲毓丕賷賳丞 賲賵囟毓 亘胤丕賯丞 丕賱丕賳毓胤丕賮</string>
+    <string name="card_preview_note">賲賵囟毓 賳爻亘賷 毓賱賶 賱賵丨丞 丕賱毓丿丕丿丕鬲 賰丕賲賱丞. 鬲禺鬲賱賮 丨丿賵丿 丕賱賳丕賮匕丞 丕賱氐睾賷乇丞 丨爻亘 丕賱爻賷丕乇丞.</string>
+    <string name="card_preview_full">卮丕卮丞 賰丕賲賱丞</string>
+    <string name="card_preview_small">賳丕賮匕丞 氐睾賷乇丞</string>
 </resources>
+

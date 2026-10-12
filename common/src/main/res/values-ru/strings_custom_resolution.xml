@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="custom_resolution_hint">Введите процент от 30 до 160. Применение переподключит CarPlay.</string>
-    <string name="resolution_number_error">Введите целое число от %1$d до %2$d.</string>
+    <string name="custom_resolution_hint">袙胁械写懈褌械 锌褉芯褑械薪褌 芯褌 30 写芯 160. 袩褉懈屑械薪械薪懈械 锌械褉械锌芯写泻谢褞褔懈褌 CarPlay.</string>
+    <string name="resolution_number_error">袙胁械写懈褌械 褑械谢芯械 褔懈褋谢芯 芯褌 %1$d 写芯 %2$d.</string>
     <string name="custom_resolution_summary">%1$d%%</string>
-    <string name="resolution_reset_defaults">Сбросить по умолчанию</string>
-    <string name="resolution_canvas_unsupported" formatted="false">Это головное устройство не может декодировать увеличенное разрешение. Используется 100%.</string>
+    <string name="resolution_reset_defaults">小斜褉芯褋懈褌褜 锌芯 褍屑芯谢褔邪薪懈褞</string>
+    <string name="resolution_canvas_unsupported" formatted="false">协褌芯 谐芯谢芯胁薪芯械 褍褋褌褉芯泄褋褌胁芯 薪械 屑芯卸械褌 写械泻芯写懈褉芯胁邪褌褜 褍胁械谢懈褔械薪薪芯械 褉邪蟹褉械褕械薪懈械. 袠褋锌芯谢褜蟹褍械褌褋褟 100%.</string>
 </resources>
+

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="picture_surface_output_unavailable">此螢幕使用相容影片輸出，暫不支援畫面調整。已儲存的調整設定會保留。</string>
+    <string name="picture_surface_output_unavailable">姝よ灑骞曚娇鐢ㄧ浉瀹瑰奖鐗囪几鍑猴紝鏆笉鏀彺鐣潰瑾挎暣銆傚凡鍎插瓨鐨勮鏁磋ō瀹氭渻淇濈暀銆?/string>
 </resources>
+

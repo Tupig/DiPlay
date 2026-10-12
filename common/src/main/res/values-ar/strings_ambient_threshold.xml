@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ambient_light_threshold_title">عتبة السطوع</string>
+    <string name="ambient_light_threshold_title">毓鬲亘丞 丕賱爻胤賵毓</string>
     <string name="ambient_light_threshold_summary">%1$d lux</string>
-    <string name="ambient_light_threshold_value">عتبة التبديل (lux)</string>
-    <string name="ambient_light_threshold_hint">أقل من العتبة (lux) يختار الليل، وعند العتبة أو فوقها يختار النهار. يجب أن تبقى القراءة على الجانب الجديد طوال التأخير المحدد. أدخل عددًا صحيحًا من 1 إلى 200000.</string>
-    <string name="ambient_light_threshold_error">أدخل عددًا صحيحًا من 1 إلى 200000.</string>
-    <string name="ambient_light_reset_defaults">استعادة القيمة الافتراضية</string>
+    <string name="ambient_light_threshold_value">毓鬲亘丞 丕賱鬲亘丿賷賱 (lux)</string>
+    <string name="ambient_light_threshold_hint">兀賯賱 賲賳 丕賱毓鬲亘丞 (lux) 賷禺鬲丕乇 丕賱賱賷賱貙 賵毓賳丿 丕賱毓鬲亘丞 兀賵 賮賵賯賴丕 賷禺鬲丕乇 丕賱賳賴丕乇. 賷噩亘 兀賳 鬲亘賯賶 丕賱賯乇丕亍丞 毓賱賶 丕賱噩丕賳亘 丕賱噩丿賷丿 胤賵丕賱 丕賱鬲兀禺賷乇 丕賱賲丨丿丿. 兀丿禺賱 毓丿丿賸丕 氐丨賷丨賸丕 賲賳 1 廿賱賶 200000.</string>
+    <string name="ambient_light_threshold_error">兀丿禺賱 毓丿丿賸丕 氐丨賷丨賸丕 賲賳 1 廿賱賶 200000.</string>
+    <string name="ambient_light_reset_defaults">丕爻鬲毓丕丿丞 丕賱賯賷賲丞 丕賱丕賮鬲乇丕囟賷丞</string>
 </resources>
+

@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ambient_delay_title">تأخير التبديل</string>
-    <string name="ambient_delay_hint">أدخل من 0 إلى 60 ثانية. الصفر يبدّل فورًا.</string>
-    <string name="custom_number_error">أدخل عددًا صحيحًا من %1$d إلى %2$d.</string>
-    <string name="ambient_delay_summary">%1$d ث</string>
+    <string name="ambient_delay_title">鬲兀禺賷乇 丕賱鬲亘丿賷賱</string>
+    <string name="ambient_delay_hint">兀丿禺賱 賲賳 0 廿賱賶 60 孬丕賳賷丞. 丕賱氐賮乇 賷亘丿賾賱 賮賵乇賸丕.</string>
+    <string name="custom_number_error">兀丿禺賱 毓丿丿賸丕 氐丨賷丨賸丕 賲賳 %1$d 廿賱賶 %2$d.</string>
+    <string name="ambient_delay_summary">%1$d 孬</string>
 </resources>
+

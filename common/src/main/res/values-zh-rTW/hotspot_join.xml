@@ -1,25 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hotspot_join_title">自動加入熱點（實驗性）</string>
-    <string name="hotspot_join_description">適用�?Android 13 以上、支援此功能的韌體，以及僅使�?5 GHz 的車載熱點。檢查只會建立私有還原備份，不會變更熱點。需要已授權�?localhost:5555 本機 ADB；不支援 TLS 無線偵錯配對�?/string>
-    <string name="hotspot_join_check">檢查熱點設定</string>
-    <string name="hotspot_join_apply">加入自動連線資訊</string>
-    <string name="hotspot_join_restore">還原已儲存的熱點</string>
-    <string name="hotspot_join_working">正在檢查或更新…取消後可能需要重新檢查以確認結果�?/string>
-    <string name="hotspot_join_confirm">停車後，請先中斷 CarPlay 連線，並在車輛設定中關閉熱點。此操作只會變更已儲存的熱點設定並讀取驗證。之後請自行開啟熱點以更新廣播。關閉熱點會中斷現有裝置的連線。請保留私有備份以供還原�?/string>
-    <string name="hotspot_join_disconnect">變更熱點前請中斷 CarPlay 連線�?/string>
-    <string name="hotspot_join_ready">支援�?5 GHz 設定。已建立完整的私有備份；尚未變更熱點�?/string>
-    <string name="hotspot_join_present">測試所需的資訊已存在。不會重複加入；TuPigPlay 無法復原先前已有的項目�?/string>
-    <string name="hotspot_join_applied">已驗證儲存的設定。請在車輛設定中開啟熱點以更新廣播，再測試自動加入。廣播與 CarPlay 是否成功仍需實車驗證�?/string>
-    <string name="hotspot_join_restored">已還原並驗證完整設定。請在車輛設定中開啟熱點�?/string>
-    <string name="hotspot_join_unsupported">�?API、韌體或頻段不受支援，或存在衝突的廠商資訊。未套用修復。請使用受支援的�?5 GHz 設定；其他頻段尚未驗證�?/string>
-    <string name="hotspot_join_off_required">必須確認熱點已關閉。請中斷其他裝置的連線，在車輛設定中關閉熱點後重試。DiPlay 不會自動重新啟動熱點�?/string>
-    <string name="hotspot_join_drift">備份後設定已變更。未覆寫任何內容。請重新檢查；待還原的備份會保留�?/string>
-    <string name="hotspot_join_firmware_changed">韌體已變更。私有備份已保留，但無法在此韌體上安全還原�?/string>
-    <string name="hotspot_join_cancelled">已在寫入前取消。請重新檢查保留的還原狀態�?/string>
-    <string name="hotspot_join_failed_restored">修復失敗或寫入後被取消。已還原原有設定並讀取驗證�?/string>
-    <string name="hotspot_join_busy">另一項熱點操作仍在執行。請稍後再檢查�?/string>
-    <string name="hotspot_join_adb_required">需要已授權�?localhost:5555 一般本�?ADB。請依車輛支援的方式啟用並授權。僅使用 TLS 無線偵錯配對無法執行此操作�?/string>
-    <string name="hotspot_join_recovery">結果或備份驗證尚未確定。請關閉熱點並重新檢查後再繼續。現有私有備份會保留；只有設定仍相符時才允許還原�?/string>
+    <string name="hotspot_join_title">鑷嫊鍔犲叆鐔遍粸锛堝椹楁€э級</string>
+    <string name="hotspot_join_description">閬╃敤鏂?Android 13 浠ヤ笂銆佹敮鎻存鍔熻兘鐨勯煂楂旓紝浠ュ強鍍呬娇鐢?5 GHz 鐨勮粖杓夌啽榛炪€傛鏌ュ彧鏈冨缓绔嬬鏈夐倓鍘熷倷浠斤紝涓嶆渻璁婃洿鐔遍粸銆傞渶瑕佸凡鎺堟瑠鐨?localhost:5555 鏈 ADB锛涗笉鏀彺 TLS 鐒＄窔鍋甸尟閰嶅皪銆?/string>
+    <string name="hotspot_join_check">妾㈡煡鐔遍粸瑷畾</string>
+    <string name="hotspot_join_apply">鍔犲叆鑷嫊閫ｇ窔璩囪▕</string>
+    <string name="hotspot_join_restore">閭勫師宸插劜瀛樼殑鐔遍粸</string>
+    <string name="hotspot_join_working">姝ｅ湪妾㈡煡鎴栨洿鏂扳€﹀彇娑堝緦鍙兘闇€瑕侀噸鏂版鏌ヤ互纰鸿獚绲愭灉銆?/string>
+    <string name="hotspot_join_confirm">鍋滆粖寰岋紝璜嬪厛涓柗 CarPlay 閫ｇ窔锛屼甫鍦ㄨ粖杓涜ō瀹氫腑闂滈枆鐔遍粸銆傛鎿嶄綔鍙渻璁婃洿宸插劜瀛樼殑鐔遍粸瑷畾涓﹁畝鍙栭璀夈€備箣寰岃珛鑷闁嬪暉鐔遍粸浠ユ洿鏂板唬鎾€傞棞闁夌啽榛炴渻涓柗鐝炬湁瑁濈疆鐨勯€ｇ窔銆傝珛淇濈暀绉佹湁鍌欎唤浠ヤ緵閭勫師銆?/string>
+    <string name="hotspot_join_disconnect">璁婃洿鐔遍粸鍓嶈珛涓柗 CarPlay 閫ｇ窔銆?/string>
+    <string name="hotspot_join_ready">鏀彺姝?5 GHz 瑷畾銆傚凡寤虹珛瀹屾暣鐨勭鏈夊倷浠斤紱灏氭湭璁婃洿鐔遍粸銆?/string>
+    <string name="hotspot_join_present">娓│鎵€闇€鐨勮硣瑷婂凡瀛樺湪銆備笉鏈冮噸瑜囧姞鍏ワ紱TuPigPlay 鐒℃硶寰╁師鍏堝墠宸叉湁鐨勯爡鐩€?/string>
+    <string name="hotspot_join_applied">宸查璀夊劜瀛樼殑瑷畾銆傝珛鍦ㄨ粖杓涜ō瀹氫腑闁嬪暉鐔遍粸浠ユ洿鏂板唬鎾紝鍐嶆脯瑭﹁嚜鍕曞姞鍏ャ€傚唬鎾垏 CarPlay 鏄惁鎴愬姛浠嶉渶瀵﹁粖椹楄瓑銆?/string>
+    <string name="hotspot_join_restored">宸查倓鍘熶甫椹楄瓑瀹屾暣瑷畾銆傝珛鍦ㄨ粖杓涜ō瀹氫腑闁嬪暉鐔遍粸銆?/string>
+    <string name="hotspot_join_unsupported">姝?API銆侀煂楂旀垨闋绘涓嶅彈鏀彺锛屾垨瀛樺湪琛濈獊鐨勫粻鍟嗚硣瑷娿€傛湭濂楃敤淇京銆傝珛浣跨敤鍙楁敮鎻寸殑绱?5 GHz 瑷畾锛涘叾浠栭牷娈靛皻鏈璀夈€?/string>
+    <string name="hotspot_join_off_required">蹇呴爤纰鸿獚鐔遍粸宸查棞闁夈€傝珛涓柗鍏朵粬瑁濈疆鐨勯€ｇ窔锛屽湪杌婅紱瑷畾涓棞闁夌啽榛炲緦閲嶈│銆侱iPlay 涓嶆渻鑷嫊閲嶆柊鍟熷嫊鐔遍粸銆?/string>
+    <string name="hotspot_join_drift">鍌欎唤寰岃ō瀹氬凡璁婃洿銆傛湭瑕嗗浠讳綍鍏у銆傝珛閲嶆柊妾㈡煡锛涘緟閭勫師鐨勫倷浠芥渻淇濈暀銆?/string>
+    <string name="hotspot_join_firmware_changed">闊岄珨宸茶畩鏇淬€傜鏈夊倷浠藉凡淇濈暀锛屼絾鐒℃硶鍦ㄦ闊岄珨涓婂畨鍏ㄩ倓鍘熴€?/string>
+    <string name="hotspot_join_cancelled">宸插湪瀵叆鍓嶅彇娑堛€傝珛閲嶆柊妾㈡煡淇濈暀鐨勯倓鍘熺媭鎱嬨€?/string>
+    <string name="hotspot_join_failed_restored">淇京澶辨晽鎴栧鍏ュ緦琚彇娑堛€傚凡閭勫師鍘熸湁瑷畾涓﹁畝鍙栭璀夈€?/string>
+    <string name="hotspot_join_busy">鍙︿竴闋呯啽榛炴搷浣滀粛鍦ㄥ煼琛屻€傝珛绋嶅緦鍐嶆鏌ャ€?/string>
+    <string name="hotspot_join_adb_required">闇€瑕佸凡鎺堟瑠鐨?localhost:5555 涓€鑸湰姗?ADB銆傝珛渚濊粖杓涙敮鎻寸殑鏂瑰紡鍟熺敤涓︽巿娆娿€傚儏浣跨敤 TLS 鐒＄窔鍋甸尟閰嶅皪鐒℃硶鍩疯姝ゆ搷浣溿€?/string>
+    <string name="hotspot_join_recovery">绲愭灉鎴栧倷浠介璀夊皻鏈⒑瀹氥€傝珛闂滈枆鐔遍粸涓﹂噸鏂版鏌ュ緦鍐嶇辜绾屻€傜従鏈夌鏈夊倷浠芥渻淇濈暀锛涘彧鏈夎ō瀹氫粛鐩哥鏅傛墠鍏佽ū閭勫師銆?/string>
 </resources>
+
 

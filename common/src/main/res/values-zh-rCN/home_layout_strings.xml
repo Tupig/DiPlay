@@ -1,4 +1,5 @@
-<resources>
-    <string name="settings_force_full_settings">强制使用完整设置页面布局</string>
-    <string name="settings_force_full_settings_hint">仅在横向使用含分类侧栏的完整设置页面布局，纵向恢复自动适配。不影响主屏幕或 CarPlay。</string>
+﻿<resources>
+    <string name="settings_force_full_settings">寮哄埗浣跨敤瀹屾暣璁剧疆椤甸潰甯冨眬</string>
+    <string name="settings_force_full_settings_hint">浠呭湪妯悜浣跨敤鍚垎绫讳晶鏍忕殑瀹屾暣璁剧疆椤甸潰甯冨眬锛岀旱鍚戞仮澶嶈嚜鍔ㄩ€傞厤銆備笉褰卞搷涓诲睆骞曟垨 CarPlay銆?/string>
 </resources>
+

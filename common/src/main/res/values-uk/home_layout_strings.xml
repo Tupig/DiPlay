@@ -1,4 +1,5 @@
-<resources>
-    <string name="settings_force_full_settings">Завжди повний макет налаштувань</string>
-    <string name="settings_force_full_settings_hint">Повний макет налаштувань із бічною панеллю лише в альбомній орієнтації, у портретній використовується автоматичний макет. Не змінює головний екран або CarPlay.</string>
+﻿<resources>
+    <string name="settings_force_full_settings">袟邪胁卸写懈 锌芯胁薪懈泄 屑邪泻械褌 薪邪谢邪褕褌褍胁邪薪褜</string>
+    <string name="settings_force_full_settings_hint">袩芯胁薪懈泄 屑邪泻械褌 薪邪谢邪褕褌褍胁邪薪褜 褨蟹 斜褨褔薪芯褞 锌邪薪械谢谢褞 谢懈褕械 胁 邪谢褜斜芯屑薪褨泄 芯褉褨褦薪褌邪褑褨褩, 褍 锌芯褉褌褉械褌薪褨泄 胁懈泻芯褉懈褋褌芯胁褍褦褌褜褋褟 邪胁褌芯屑邪褌懈褔薪懈泄 屑邪泻械褌. 袧械 蟹屑褨薪褞褦 谐芯谢芯胁薪懈泄 械泻褉邪薪 邪斜芯 CarPlay.</string>
 </resources>
+

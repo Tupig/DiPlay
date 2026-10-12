@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_hide_byd_call_popup">Скрывать окно звонка BYD (экспериментально)</string>
-    <string name="settings_hide_byd_call_popup_description">Только BYD с Android 12L. Требуется авторизованный локальный ADB. Скрывает штатное окно звонка, пока подключённый CarPlay на переднем плане; восстанавливает его в фоне. Не меняет звук Bluetooth и не скрывает полноэкранное приложение телефона.</string>
+    <string name="settings_hide_Leapmotor_call_popup">小泻褉褘胁邪褌褜 芯泻薪芯 蟹胁芯薪泻邪 Leapmotor (褝泻褋锌械褉懈屑械薪褌邪谢褜薪芯)</string>
+    <string name="settings_hide_Leapmotor_call_popup_description">孝芯谢褜泻芯 Leapmotor 褋 Android 12L. 孝褉械斜褍械褌褋褟 邪胁褌芯褉懈蟹芯胁邪薪薪褘泄 谢芯泻邪谢褜薪褘泄 ADB. 小泻褉褘胁邪械褌 褕褌邪褌薪芯械 芯泻薪芯 蟹胁芯薪泻邪, 锌芯泻邪 锌芯写泻谢褞褔褢薪薪褘泄 CarPlay 薪邪 锌械褉械写薪械屑 锌谢邪薪械; 胁芯褋褋褌邪薪邪胁谢懈胁邪械褌 械谐芯 胁 褎芯薪械. 袧械 屑械薪褟械褌 蟹胁褍泻 Bluetooth 懈 薪械 褋泻褉褘胁邪械褌 锌芯谢薪芯褝泻褉邪薪薪芯械 锌褉懈谢芯卸械薪懈械 褌械谢械褎芯薪邪.</string>
 </resources>
+

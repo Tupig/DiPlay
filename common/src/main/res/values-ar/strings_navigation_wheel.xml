@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_navigation_wheel_volume">مستوى الصوت من المقود أثناء إرشادات الملاحة (تجريبي)</string>
-    <string name="settings_navigation_wheel_volume_description">أثناء إرشادات CarPlay الصوتية، تضبط مفاتيح الصوت مسار صوت الملاحة المحدد. وفي غير ذلك تتبع سلوك وحدة السيارة. يلزم إذن خدمة تسهيل الاستخدام لمفاتيح المقود. تحتفظ المكالمات وتقريب الخريطة وعصا التحكم بالأولوية. اختُبر محليًا على Tang بمنصة 21؛ وما زال إصدار upstream يحتاج إلى اختبار في السيارة. لا يتم اعتراض التوجيه التلقائي أو مسار الوسائط.</string>
-    <string name="settings_navigation_wheel_service_required">اسمح بخدمة تسهيل الاستخدام لمفاتيح المقود في إعدادات Android، أو استخدم زر ترخيص ADB الموجود.</string>
+    <string name="settings_navigation_wheel_volume">賲爻鬲賵賶 丕賱氐賵鬲 賲賳 丕賱賲賯賵丿 兀孬賳丕亍 廿乇卮丕丿丕鬲 丕賱賲賱丕丨丞 (鬲噩乇賷亘賷)</string>
+    <string name="settings_navigation_wheel_volume_description">兀孬賳丕亍 廿乇卮丕丿丕鬲 CarPlay 丕賱氐賵鬲賷丞貙 鬲囟亘胤 賲賮丕鬲賷丨 丕賱氐賵鬲 賲爻丕乇 氐賵鬲 丕賱賲賱丕丨丞 丕賱賲丨丿丿. 賵賮賷 睾賷乇 匕賱賰 鬲鬲亘毓 爻賱賵賰 賵丨丿丞 丕賱爻賷丕乇丞. 賷賱夭賲 廿匕賳 禺丿賲丞 鬲爻賴賷賱 丕賱丕爻鬲禺丿丕賲 賱賲賮丕鬲賷丨 丕賱賲賯賵丿. 鬲丨鬲賮馗 丕賱賲賰丕賱賲丕鬲 賵鬲賯乇賷亘 丕賱禺乇賷胤丞 賵毓氐丕 丕賱鬲丨賰賲 亘丕賱兀賵賱賵賷丞. 丕禺鬲購亘乇 賲丨賱賷賸丕 毓賱賶 Tang 亘賲賳氐丞 21貨 賵賲丕 夭丕賱 廿氐丿丕乇 upstream 賷丨鬲丕噩 廿賱賶 丕禺鬲亘丕乇 賮賷 丕賱爻賷丕乇丞. 賱丕 賷鬲賲 丕毓鬲乇丕囟 丕賱鬲賵噩賷賴 丕賱鬲賱賯丕卅賷 兀賵 賲爻丕乇 丕賱賵爻丕卅胤.</string>
+    <string name="settings_navigation_wheel_service_required">丕爻賲丨 亘禺丿賲丞 鬲爻賴賷賱 丕賱丕爻鬲禺丿丕賲 賱賲賮丕鬲賷丨 丕賱賲賯賵丿 賮賷 廿毓丿丕丿丕鬲 Android貙 兀賵 丕爻鬲禺丿賲 夭乇 鬲乇禺賷氐 ADB 丕賱賲賵噩賵丿.</string>
 </resources>
+
