@@ -6,25 +6,34 @@
 #   push main              ✓                ✓          ✓          ✓            ✓（仅站点相关变更）
 #   PR（目标 main）         ✓                ✓          ✓          ✓（仅同仓）   -
 #   定时 每周一 UTC 00:00   ✓                ✓          -          ✓            -
-#   手动 auto              ✓                ✓          ✓          ✓            ✓（仅站点相关变更）
+#   手动 auto              ✓                ✓          ✓          ✓            -
 #   手动 test              ✓                ✓          -          -            -
 #   手动 build             ✓                ✓          ✓          -            -
 #   手动 security          ✓                ✓          -          ✓            -
 #   手动 deploy            ✓                ✓          -          -            ✓（始终部署）
 #   注1: fork PR 不跑 CodeQL——其令牌无 security-events 写权限，上传必失败
 #   注2: 定时不跑 build-apk（push main 已覆盖），只补 CodeQL 扫描
+#   注3: 手动 auto 不部署站点——deploy-pages 仅响应 push 站点变更与手动 deploy
 #   防重复: push 仅绑定 main，PR 分支的推送不会二次触发；同一 PR 连续推送由 concurrency 取消陈旧运行
 #
-# ── jobs 总览与依赖 ───────────────────────────────────────
+# ── jobs 总览与依赖（严格串行链：同一时刻至多一个 job 在跑）──
 #   0. resolve-version  解析 mobile 的 versionName + 检测站点相关变更
-#   1. unit-test       单元测试 + lint（质量门，build-apk 与 deploy-pages 的前置）
-#   2. build-apk       构建调试 APK（needs: resolve-version + unit-test）
-#   3. codeql-scan     CodeQL 安全扫描（与 unit-test 并行，必须自带 traced build）
-#   4. deploy-pages    部署下载站（needs: resolve-version + unit-test）
+#   1. unit-test       单元测试 + lint（质量门）
+#   2. build-apk       构建调试 APK
+#   3. codeql-scan     CodeQL 安全扫描（自带 traced build）
+#   4. deploy-pages    部署下载站
 #
-#   依赖: build-apk ← resolve-version + unit-test
-#         deploy-pages ← resolve-version + unit-test
-#         codeql-scan 与 unit-test 并行，互不阻塞
+#   依赖: resolve-version → unit-test → build-apk → codeql-scan → deploy-pages
+#         每个 job 显式 needs 前序 job，任一环节失败则整链止步。
+#
+#   串行链与手动跳级的兼容（规避 needs 跳过传播）:
+#     GitHub Actions 会把 needs 的 skipped 状态向下游连锁传播。若严格串行，
+#     手动 security（不编译）与手动 deploy（不编译不扫描）的跳级模式会被
+#     连锁跳过而失效。因此 codeql-scan / deploy-pages 的 if 首先检查
+#     needs.<job>.result ∈ {success, skipped}:
+#       - success : 前级已运行且通过，正常放行
+#       - skipped : 前级被触发条件排除（跳级场景），放行本级
+#       - failure : 前级失败，整链止步（质量/安全门禁语义不变）
 #
 # ── 单一 workflow 为什么还需要 resolve-version ─────────────
 #   GitHub Actions 的 push.paths 过滤作用于整个 workflow，无法只对某个 job 生效。
@@ -115,7 +124,7 @@ jobs:
 
           VERSION="$(sed -n 's/^[[:space:]]*versionName = "\(.*\)"$/\1/p' mobile/build.gradle.kts | head -n1)"
           # 写入输出前校验格式：非法值会污染产物命名
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
             echo "::error::无法从 mobile/build.gradle.kts 解析出合法的 versionName，实际得到 '$VERSION'"
             exit 1
           fi
@@ -141,10 +150,11 @@ jobs:
           echo "site-changed=$CHANGED" >> "$GITHUB_OUTPUT"
 
   # ═════════════════════════════════════════════════
-  # 1. 单元测试与静态检查（质量门）
+  # 1. 单元测试与静态检查（质量门，needs: resolve-version）
   # ═════════════════════════════════════════════════
   unit-test:
     name: 单元测试与静态检查
+    needs: resolve-version
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -170,9 +180,11 @@ jobs:
           path: |
             shared/build/reports/tests/
             common/build/reports/tests/
+            common/build/reports/album-artwork-ui/
             mobile/build/reports/lint-results-debug.html
             samples/home/build/reports/tests/
             samples/home/build/reports/lint-results-debug.html
+            samples/maphost/build/reports/tests/
             samples/maphost/build/reports/lint-results-debug.html
 
   # ═════════════════════════════════════════════════
@@ -208,16 +220,20 @@ jobs:
           retention-days: 7
 
   # ═════════════════════════════════════════════════
-  # 3. CodeQL 安全扫描（与 unit-test 并行）
+  # 3. CodeQL 安全扫描（串行：位于 build-apk 之后，整链安全门）
   # ═════════════════════════════════════════════════
   codeql-scan:
     name: CodeQL 安全扫描
+    needs: [resolve-version, unit-test, build-apk]
     # fork PR 的令牌无 security-events 写权限，跳过以避免上传必失败
+    # 首行放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
+    #   定时与手动 security 时 build-apk 为 skipped 放行；build 失败则整链止步
     if: |
-      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      (needs.build-apk.result == 'success' || needs.build-apk.result == 'skipped') &&
+      ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
-      (github.event_name == 'workflow_dispatch' && (inputs.type == 'auto' || inputs.type == 'security'))
+      (github.event_name == 'workflow_dispatch' && (inputs.type == 'auto' || inputs.type == 'security')))
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     permissions:
@@ -253,15 +269,19 @@ jobs:
         uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
 
   # ═════════════════════════════════════════════════
-  # 4. 部署下载站（needs: 版本号 + 质量门）
+  # 4. 部署下载站（串行链末端：需全链成功，或手动 deploy 跳级放行）
   # ═════════════════════════════════════════════════
   deploy-pages:
     name: 部署下载站
-    needs: [resolve-version, unit-test]
-    # push: 仅站点相关变更时部署；手动 deploy: 始终部署
+    needs: [resolve-version, unit-test, build-apk, codeql-scan]
+    # push: 仅站点相关变更且全链（含 CodeQL）通过时部署；手动 deploy: 始终部署
+    # 首两行放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
+    #   手动 deploy 时 build-apk 与 codeql-scan 均为 skipped 放行；任一失败则整链止步
     if: |
-      (github.event_name == 'push' && needs.resolve-version.outputs.site-changed == 'true') ||
-      (github.event_name == 'workflow_dispatch' && inputs.type == 'deploy')
+      (needs.build-apk.result == 'success' || needs.build-apk.result == 'skipped') &&
+      (needs.codeql-scan.result == 'success' || needs.codeql-scan.result == 'skipped') &&
+      ((github.event_name == 'push' && needs.resolve-version.outputs.site-changed == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.type == 'deploy'))
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
