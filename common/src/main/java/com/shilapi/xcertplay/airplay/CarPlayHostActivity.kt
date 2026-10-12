@@ -392,7 +392,7 @@ class CarPlayHostActivity : ComponentActivity() {
     private var manufacturer = "Leapmotor"
     private var model = "C11 2024"
     private var oemLabel = AirPlayPersistence.DEFAULT_OEM_LABEL
-    /** 鍔ㄦ€佹娴嬪埌鐨勮溅鍨嬩俊鎭紙杩愯鏃惰鍙栵紝鏃犵‖缂栫爜锛?*/
+    /** 动态检测到的车型信息（运行时读取，无硬编码） */
     private var vehicleInfo: LeapmotorVehicleInfo.VehicleInfo? = null
     private var fps = AirPlayDisplaySettings.DEFAULT_FPS
     private var widthPhysicalMm = AirPlayDisplaySettings.DEFAULT_WIDTH_PHYSICAL_MM
@@ -761,15 +761,15 @@ class CarPlayHostActivity : ComponentActivity() {
         mainDisplayDisableSafeArea = AirPlayPersistence.loadMainDisplayDisableSafeArea(this)
         locationPermissionAvailable = hasFineLocationPermission()
         
-        // 鍔ㄦ€佽鍙栬溅鍨嬩俊鎭紙鐢ㄤ簬 CarPlay IAP2 鏍囪瘑鍜?AirPlayConfig锛?
+        // 动态读取车型信息（用于 CarPlay IAP2 识别和 AirPlayConfig）
         try {
             vehicleInfo = LeapmotorVehicleInfo.getVehicleInfo(this)
             manufacturer = vehicleInfo!!.manufacturer
             model = vehicleInfo!!.toModelIdentifier()
-            Log.i("DiPlay-CarPlayHost", "杞﹀瀷淇℃伅鍔犺浇鎴愬姛: manufacturer=$manufacturer, model=$model")
+            Log.i("DiPlay-CarPlayHost", "车型信息加载成功: manufacturer=$manufacturer, model=$model")
         } catch (e: LeapmotorVehicleInfo.DetectionException) {
-            Log.e("DiPlay-CarPlayHost", "杞﹀瀷淇℃伅妫€娴嬪け璐? ${e.message}")
-            // 淇濈暀榛樿鍊硷紝浣嗗湪鏃ュ織涓褰曢敊璇?
+            Log.e("DiPlay-CarPlayHost", "车型信息检测失败: ${e.message}")
+            // 保留默认值，但在日志中记录错误
             vehicleInfo = null
         }
         
@@ -1127,7 +1127,7 @@ class CarPlayHostActivity : ComponentActivity() {
             return
         }
         
-        if (LeapmotorClusterLayout.supported()) {
+        if (LeapmotorClusterLayout.supported(this)) {
             ensureDiLink51ClusterPresentation(theme)
             return
         }
@@ -1186,7 +1186,7 @@ class CarPlayHostActivity : ComponentActivity() {
     }
 
     private fun ensureDiLink51ClusterPresentation(theme: LeapmotorClusterLayout.Theme) {
-        val fullMap = theme == LeapmotorClusterLayout.Theme.MAP
+        val fullMap = theme == LeapmotorClusterLayout.Theme.FULL_MAP
         val visible = !LeapmotorClusterLayout.automatic(this) || detectedCluster.mapVisible
         clusterLayers.filterKeys { it != fullMap }.values.forEach { it.setMapVisible(false) }
         var target = clusterLayers[fullMap]
@@ -1282,7 +1282,7 @@ class CarPlayHostActivity : ComponentActivity() {
         if (clusterSurface === surface) return
         // A direct handoff lets MediaCodec.setOutputSurface preserve its reference frames.
         // Clearing first would destroy the decoder and can leave stream 111 waiting for an IDR.
-        if ((!LeapmotorClusterLayout.supported() && !AdbClusterRouter.enabled(this)) || surface == null) {
+        if ((!LeapmotorClusterLayout.supported(this) && !AdbClusterRouter.enabled(this)) || surface == null) {
             clusterSurface?.let { old -> sink?.clearSurface(SCREEN_TYPE_ALT, old) }
         }
         clusterSurface = surface
@@ -1340,7 +1340,7 @@ class CarPlayHostActivity : ComponentActivity() {
             val size = ClusterMapPresentation.sizeOf(display)
             if (size.x > 0 && size.y > 0) {
                 clusterStreamOnDisplay = true
-                if (LeapmotorClusterLayout.supported()) {
+                if (LeapmotorClusterLayout.supported(this)) {
                     val plan = LeapmotorClusterLayout.plan(size.x, size.y, theme) ?: return null
                     return LeapmotorClusterLayout.streamConfig().also {
                         MapMirrors.streamAspect = it.widthPixels.toDouble() / it.heightPixels
@@ -1459,7 +1459,7 @@ class CarPlayHostActivity : ComponentActivity() {
 
         // Steering-wheel next/previous, claimed by the CarPlay screen itself. BYD gives these keys to
         // whichever window is in front, and this is the only route that reaches CarPlay without the
-        // wheel key service 鈥?which a head unit with no ADB cannot turn on at all.
+        // wheel key service — which a head unit with no ADB cannot turn on at all.
         val mediaPress = CarPlayMediaButton.forCarPlayWindow(
             event.keyCode,
             sessionActive = activeAirPlaySession != null,
@@ -2409,12 +2409,12 @@ class CarPlayHostActivity : ComponentActivity() {
         val battery = if (com.shilapi.xcertplay.hud.BydOutputSettings.batteryToIphoneActive(this)) {
             com.shilapi.xcertplay.hud.BydNavigationOutputs.batteryStatus(applicationContext).snapshot()
         } else null
-        sidePanelBattery?.text = battery?.let { "馃攱 ${Math.round(it.batteryPercent)} %  路  ${it.rangeKm} km" }.orEmpty()
+        sidePanelBattery?.text = battery?.let { "🔋 ${Math.round(it.batteryPercent)} %  ·  ${it.rangeKm} km" }.orEmpty()
         val tyres = com.shilapi.xcertplay.hud.BydTyreStatus.latest()
         sidePanelTyres?.visibility = if (tyres == null) View.GONE else View.VISIBLE
         if (tyres != null) sidePanelTyreTexts.forEachIndexed { tyre, text ->
-            val pressure = tyres.pressureKpa.getOrNull(tyre)?.let { "$it kPa" } ?: "鈥?
-            val temperature = tyres.temperatureC.getOrNull(tyre)?.let { "\n$it 掳C" }.orEmpty()
+            val pressure = tyres.pressureKpa.getOrNull(tyre)?.let { "$it kPa" } ?: "—"
+            val temperature = tyres.temperatureC.getOrNull(tyre)?.let { "\n$it °C" }.orEmpty()
             text.text = pressure + temperature
         }
     }
@@ -4813,7 +4813,7 @@ class CarPlayHostActivity : ComponentActivity() {
                 runOnUiThread {
                     val active = activeAirPlaySession
                     if (active != null && active !== session) {
-                        // 鎺㈤拡鎴栭潪娲诲姩鎻℃墜缁撴潫鏃讹紝淇濈暀褰撳墠鎾斁浼氳瘽銆?
+                        // 探针或非活动握手结束时，保留当前播放会话。
                         appendLog("Non-active AirPlay connection ended; keeping the live session")
                         return@runOnUiThread
                     }

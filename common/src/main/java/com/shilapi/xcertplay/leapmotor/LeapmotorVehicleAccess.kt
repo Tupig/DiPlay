@@ -2,13 +2,15 @@
 package com.shilapi.xcertplay
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 
 /**
  * 零跑车辆访问层
- * 
- * 替代 BydAdbAccess - 零跑无 ADB，通过系统 API / 车辆总线只读接口访问
- * 所有操作均不需要 ADB 权限
+ *
+ * 零跑 C11 无公开 Car API（android.car 不在编译类路径，车机也未开放 CarPropertyManager）。
+ * 车速、里程等车辆数据的读取在 Phase 5（#8）经 ADB 通道实现；当前提供编译可用的骨架
+ * 与系统属性读取。
  */
 object LeapmotorVehicleAccess {
     private const val TAG = "DiPlay-LeapmotorVehicleAccess"
@@ -17,7 +19,7 @@ object LeapmotorVehicleAccess {
     enum class Status {
         UNAVAILABLE,    // 车辆接口不可用
         READY,          // 可读取数据
-        ERROR(msg: String) // 错误状态
+        ERROR           // 错误状态
     }
 
     /** 车辆基础信息 */
@@ -37,7 +39,7 @@ object LeapmotorVehicleAccess {
                 vin = getSystemProperty("persist.leapmotor.vehicle.vin") ?: getSystemProperty("ro.leapmotor.vin"),
                 model = getSystemProperty("persist.leapmotor.vehicle.model") ?: getSystemProperty("ro.leapmotor.model"),
                 trim = getSystemProperty("persist.leapmotor.vehicle.trim") ?: getSystemProperty("ro.leapmotor.trim"),
-                year = getSystemProperty("persist.leapmotor.vehicle.year")?.toIntOrNull() 
+                year = getSystemProperty("persist.leapmotor.vehicle.year")?.toIntOrNull()
                     ?: getSystemProperty("ro.leapmotor.year")?.toIntOrNull(),
                 hardwareVersion = getSystemProperty("ro.hardware") ?: getSystemProperty("ro.product.device"),
                 softwareVersion = getSystemProperty("ro.build.display.id") ?: Build.DISPLAY,
@@ -48,71 +50,23 @@ object LeapmotorVehicleAccess {
         }
     }
 
-    /** 读取实时车速（km/h） - 通过 Vehicle HAL / CarPropertyManager */
+    /** 读取实时车速（km/h）；Phase 5（#8）经 ADB 通道实现。 */
     fun getVehicleSpeed(context: Context): Float? {
-        return try {
-            // 尝试通过 CarPropertyManager 读取（需要 CAR_POWER 或 CAR_INFO 权限）
-            val carPropertyManager = context.getSystemService(Context.CAR_SERVICE) as? android.car.Car
-            carPropertyManager?.let { car ->
-                val propertyManager = car.getCarPropertyManager()
-                val speed = propertyManager?.getProperty(android.car.hardware.property.CarPropertyIds.PERF_VEHICLE_SPEED)
-                speed?.let { it.value as Float / 100.0f } // 转换为 km/h
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "车速读取不可用（需 CAR 权限或 Vehicle HAL 支持）", e)
-            null
-        }
+        Log.d(TAG, "车速读取待 Phase 5（#8）经 ADB 通道实现")
+        return null
     }
 
-    /** 读取里程（km） */
-    fun getOdometer(context: Context): Long? {
-        return try {
-            val carPropertyManager = context.getSystemService(Context.CAR_SERVICE) as? android.car.Car
-            carPropertyManager?.let { car ->
-                val propertyManager = car.getCarPropertyManager()
-                propertyManager?.getProperty(android.car.hardware.property.CarPropertyIds.PERF_ODOMETER)?.value as? Long
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "里程读取不可用", e)
-            null
-        }
-    }
+    /** 读取里程（km）；Phase 5（#8）经 ADB 通道实现。 */
+    fun getOdometer(context: Context): Long? = null
 
-    /** 读取燃油/电量百分比 */
-    fun getFuelLevel(context: Context): Float? {
-        return try {
-            val carPropertyManager = context.getSystemService(Context.CAR_SERVICE) as? android.car.Car
-            carPropertyManager?.let { car ->
-                val propertyManager = car.getCarPropertyManager()
-                propertyManager?.getProperty(android.car.hardware.property.CarPropertyIds.FUEL_LEVEL_LOW)?.value as? Float
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
+    /** 读取燃油/电量百分比；Phase 5（#8）经 ADB 通道实现。 */
+    fun getFuelLevel(context: Context): Float? = null
 
-    /** 读取档位 */
-    fun getGear(context: Context): Int? {
-        return try {
-            val carPropertyManager = context.getSystemService(Context.CAR_SERVICE) as? android.car.Car
-            carPropertyManager?.let { car ->
-                val propertyManager = car.getCarPropertyManager()
-                propertyManager?.getProperty(android.car.hardware.property.CarPropertyIds.GEAR_SELECTION)?.value as? Int
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
+    /** 读取档位；Phase 5（#8）经 ADB 通道实现。 */
+    fun getGear(context: Context): Int? = null
 
-    /** 检查车辆数据接口是否可用 */
-    fun isAvailable(context: Context): Boolean {
-        return try {
-            val car = context.getSystemService(Context.CAR_SERVICE) as? android.car.Car
-            car != null
-        } catch (e: Exception) {
-            false
-        }
-    }
+    /** 检查车辆数据接口是否可用；Phase 5 接入 ADB 通道后返回实际状态。 */
+    fun isAvailable(context: Context): Boolean = false
 
     /** 读取系统属性 */
     private fun getSystemProperty(key: String): String? {
@@ -129,9 +83,9 @@ object LeapmotorVehicleAccess {
     /** 获取访问状态描述 */
     fun getStatusDescription(context: Context): String {
         return if (isAvailable(context)) {
-            "车辆数据接口可用（Car API）"
+            "车辆数据接口可用"
         } else {
-            "车辆数据接口不可用（零跑车机未开放 Car API 或无权限）"
+            "车辆数据接口待 Phase 5 接入（零跑经 ADB 读取）"
         }
     }
 }

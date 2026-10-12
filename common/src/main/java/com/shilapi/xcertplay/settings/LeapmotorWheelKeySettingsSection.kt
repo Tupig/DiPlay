@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: AGPL-3.0-only
+// SPDX-License-Identifier: AGPL-3.0-only
 package com.shilapi.xcertplay.settings
 
 import android.content.Context
@@ -9,54 +9,60 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import com.shilapi.xcertplay.wheel.LeapmotorWheelKeys
+import com.shilapi.xcertplay.LeapmotorWheelKeys
 import com.shilapi.xcertplay.LeapmotorWheelSettings
-import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
-import com.shilapi.xcertplay.wheel.WheelKeyService
+import com.shilapi.xcertplay.LeapmotorC11Settings
+import com.shilapi.xcertplay.WheelKeyService
 import com.shilapi.xcertplay.WheelZoomSettings
 import com.shilapi.xcertplay.host.R
 import kotlin.math.roundToInt
 
 /**
- * 闆惰窇 C11 鏂瑰悜鐩樻寜閿缃晫闈? * 
- * 鎻愪緵锛? * 1. 棰勮閫夋嫨锛堥粯璁?澶囬€夛級
- * 2. 鎸夐敭瀛︿範妯″紡
- * 3. 褰撳墠鏄犲皠鏄剧ず
- * 4. 鍔熻兘寮€鍏筹紙缂╂斁銆佹憞鏉嗐€丼iri锛? * 5. 妫€娴嬪埌鐨勬寜閿棩蹇? */
+ * 零跑 C11 方向盘按键设置界面
+ * 
+ * 提供：
+ * 1. 预设选择（默认/备选）
+ * 2. 按键学习模式
+ * 3. 当前映射显示
+ * 4. 功能开关（缩放、摇杆、Siri）
+ * 5. 检测到的按键日志
+ */
 object LeapmotorWheelKeySettingsSection {
 
     private const val TAG = "DiPlay-LeapmotorWheelKeySettings"
 
-    /** 鍒涘缓闆惰窇鏂瑰悜鐩樻寜閿缃垎绫?*/
+    /** 创建零跑方向盘按键设置分类 */
     fun createLeapmotorWheelKeySection(
         context: Context,
         parent: LinearLayout,
         theme: SettingsTheme,
         onSettingsChanged: () -> Unit,
     ) {
-        // 鏍囬
+        // 标题
         parent.addView(SettingsWidgets.createCategoryHeader(
             context, context.getString(R.string.leapmotor_wheel_keys_title), theme
         ))
 
-        // 1. 棰勮閫夋嫨
+        // 1. 预设选择
         addPresetSelector(context, parent, theme, onSettingsChanged)
 
-        // 2. 鍔熻兘寮€鍏?        addFeatureSwitches(context, parent, theme, onSettingsChanged)
+        // 2. 功能开关
+        addFeatureSwitches(context, parent, theme, onSettingsChanged)
 
-        // 3. 褰撳墠鎸夐敭鏄犲皠鏄剧ず
+        // 3. 当前按键映射显示
         addKeyMappingDisplay(context, parent, theme)
 
-        // 4. 鎸夐敭瀛︿範鎸夐挳
+        // 4. 按键学习按钮
         addKeyLearningButtons(context, parent, theme, onSettingsChanged)
 
-        // 5. 妫€娴嬪埌鐨勬寜閿棩蹇?        addDetectedKeysLog(context, parent, theme)
+        // 5. 检测到的按键日志
+        addDetectedKeysLog(context, parent, theme)
 
-        // 6. 閲嶇疆鎸夐挳
+        // 6. 重置按钮
         addResetButton(context, parent, theme, onSettingsChanged)
     }
 
-    /** 1. 棰勮閫夋嫨鍣?*/
+    /** 1. 预设选择器 */
     private fun addPresetSelector(
         context: Context,
         parent: LinearLayout,
@@ -78,16 +84,16 @@ object LeapmotorWheelKeySettingsSection {
                 LeapmotorWheelSettings.applyPresetToWheelZoomSettings(context)
                 WheelKeyService.settingsChanged()
                 onSettingsChanged()
-                Log.i(TAG, "鍒囨崲棰勮: ${newPreset.name}")
+                Log.i(TAG, "切换预设: ${newPreset.name}")
             },
         )
         parent.addView(result.container)
 
-        // 棰勮璇存槑
+        // 预设说明
         val desc = TextView(context).apply {
             text = when (currentPreset) {
-                LeapmotorWheelSettings.Preset.DEFAULT -> "榛樿棰勮锛氶€傞厤澶ч儴鍒嗛厤缃殑闆惰窇 C11 鏂瑰悜鐩?
-                LeapmotorWheelSettings.Preset.ALTERNATIVE -> "澶囬€夐璁撅細閮ㄥ垎杞﹀瀷鏂瑰悜鐩橀敭鍊间笉鍚岋紝濡傜‘璁ら敭涓?DPAD_CENTER"
+                LeapmotorWheelSettings.Preset.DEFAULT -> "默认预设：适配大部分配置的零跑 C11 方向盘"
+                LeapmotorWheelSettings.Preset.ALTERNATIVE -> "备选预设：部分车型方向盘键值不同，如确认键为 DPAD_CENTER"
             }
             textSize = 13f
             setTextColor(theme.textSecondary)
@@ -96,14 +102,14 @@ object LeapmotorWheelKeySettingsSection {
         parent.addView(desc)
     }
 
-    /** 2. 鍔熻兘寮€鍏?*/
+    /** 2. 功能开关 */
     private fun addFeatureSwitches(
         context: Context,
         parent: LinearLayout,
         theme: SettingsTheme,
         onSettingsChanged: () -> Unit,
     ) {
-        // 缂╂斁鍔熻兘
+        // 缩放功能
         addSwitchRow(context, parent, theme,
             title = context.getString(R.string.leapmotor_wheel_zoom_title),
             summary = context.getString(R.string.leapmotor_wheel_zoom_summary),
@@ -115,12 +121,12 @@ object LeapmotorWheelKeySettingsSection {
             }
         )
 
-        // 缂╂斁琛屼负
+        // 缩放行为
         addChoiceRow(context, parent, theme,
             title = context.getString(R.string.leapmotor_wheel_zoom_behaviour_title),
             summary = context.getString(R.string.leapmotor_wheel_zoom_behaviour_summary),
-            options = arrayOf("鍒囨崲妯″紡", "瀹氭椂妯″紡"),
-            labels = arrayOf("鎸夋ā寮忛敭鍒囨崲寮€鍏?, "寮€鍚悗 5 绉掓棤鎿嶄綔鑷姩鍏抽棴"),
+            options = arrayOf("切换模式", "定时模式"),
+            labels = arrayOf("按模式键切换开关", "开启后 5 秒无操作自动关闭"),
             checked = WheelZoomSettings.behaviour(context).ordinal,
             onChange = { index ->
                 WheelZoomSettings.setBehaviour(context, WheelZoomSettings.Behaviour.values()[index])
@@ -129,7 +135,7 @@ object LeapmotorWheelKeySettingsSection {
             }
         )
 
-        // 鎽囨潌鍔熻兘
+        // 摇杆功能
         addSwitchRow(context, parent, theme,
             title = context.getString(R.string.leapmotor_wheel_joystick_title),
             summary = context.getString(R.string.leapmotor_wheel_joystick_summary),
@@ -141,7 +147,7 @@ object LeapmotorWheelKeySettingsSection {
             }
         )
 
-        // 鎽囨潌鑷姩鍏抽棴
+        // 摇杆自动关闭
         addSwitchRow(context, parent, theme,
             title = context.getString(R.string.leapmotor_wheel_joystick_auto_off_title),
             summary = context.getString(R.string.leapmotor_wheel_joystick_auto_off_summary),
@@ -153,7 +159,7 @@ object LeapmotorWheelKeySettingsSection {
             }
         )
 
-        // Siri 鎸夐敭
+        // Siri 按键
         addSwitchRow(context, parent, theme,
             title = context.getString(R.string.leapmotor_wheel_siri_title),
             summary = context.getString(R.string.leapmotor_wheel_siri_summary),
@@ -166,7 +172,7 @@ object LeapmotorWheelKeySettingsSection {
         )
     }
 
-    /** 3. 褰撳墠鎸夐敭鏄犲皠鏄剧ず */
+    /** 3. 当前按键映射显示 */
     private fun addKeyMappingDisplay(
         context: Context,
         parent: LinearLayout,
@@ -207,7 +213,7 @@ object LeapmotorWheelKeySettingsSection {
         }
     }
 
-    /** 4. 鎸夐敭瀛︿範鎸夐挳 */
+    /** 4. 按键学习按钮 */
     private fun addKeyLearningButtons(
         context: Context,
         parent: LinearLayout,
@@ -219,7 +225,8 @@ object LeapmotorWheelKeySettingsSection {
         )
         parent.addView(header)
 
-        // 瀛︿範瑙掕壊鐨勬寜閽?        val roles = arrayOf(
+        // 学习角色的按钮
+        val roles = arrayOf(
             WheelZoomSettings.Role.MODE to context.getString(R.string.leapmotor_wheel_role_mode),
             WheelZoomSettings.Role.ZOOM_IN to context.getString(R.string.leapmotor_wheel_role_zoom_in),
             WheelZoomSettings.Role.ZOOM_OUT to context.getString(R.string.leapmotor_wheel_role_zoom_out),
@@ -238,7 +245,7 @@ object LeapmotorWheelKeySettingsSection {
         roles.forEach { (role, label) ->
             val btn = SettingsWidgets.createButton(
                 context,
-                text = "瀛︿範: $label",
+                text = "学习: $label",
                 theme = theme,
                 onClick = {
                     startLearning(context, role, label, onSettingsChanged)
@@ -247,14 +254,14 @@ object LeapmotorWheelKeySettingsSection {
             container.addView(btn)
         }
 
-        // 鍙栨秷瀛︿範鎸夐挳
+        // 取消学习按钮
         val cancelBtn = SettingsWidgets.createButton(
             context,
             text = context.getString(R.string.leapmotor_wheel_cancel_learning),
             theme = theme,
             onClick = {
                 WheelKeyService.cancelLearning()
-                Toast.makeText(context, "宸插彇娑堝涔?, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "已取消学习", Toast.LENGTH_SHORT).show()
             },
         )
         container.addView(cancelBtn)
@@ -262,7 +269,7 @@ object LeapmotorWheelKeySettingsSection {
         parent.addView(container)
     }
 
-    /** 寮€濮嬪涔犳寚瀹氳鑹茬殑鎸夐敭 */
+    /** 开始学习指定角色的按键 */
     private fun startLearning(
         context: Context,
         role: WheelZoomSettings.Role,
@@ -271,26 +278,26 @@ object LeapmotorWheelKeySettingsSection {
     ) {
         val success = WheelKeyService.learn(
             role = role,
-            cancelled = { Log.i(TAG, "瀛︿範鍙栨秷: $label") },
+            cancelled = { Log.i(TAG, "学习取消: $label") },
             refused = { takenRole ->
-                Toast.makeText(context, "璇ユ寜閿凡琚?$takenRole 鍗犵敤", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "该按键已被 $takenRole 占用", Toast.LENGTH_SHORT).show()
             },
             done = { assignedRole, key ->
                 runOnUiThread {
-                    Toast.makeText(context, "$label 宸茶缃负: ${key.code}/${key.scanCode}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "$label 已设置为: ${key.code}/${key.scanCode}", Toast.LENGTH_LONG).show()
                     onSettingsChanged()
                 }
             },
         )
 
         if (success) {
-            Toast.makeText(context, "璇峰湪 10 绉掑唴鎸変笅鏂瑰悜鐩樹笂瑕佽涓恒€?label銆嶇殑鎸夐敭", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "请在 10 秒内按下方向盘上要设为「$label」的按键", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(context, "鏃犳硶寮€濮嬪涔狅細鏈嶅姟鏈繍琛屾垨鍔熻兘鏈惎鐢?, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "无法开始学习：服务未运行或功能未启用", Toast.LENGTH_SHORT).show()
         }
     }
 
-    /** 5. 妫€娴嬪埌鐨勬寜閿棩蹇?*/
+    /** 5. 检测到的按键日志 */
     private fun addDetectedKeysLog(
         context: Context,
         parent: LinearLayout,
@@ -301,10 +308,11 @@ object LeapmotorWheelKeySettingsSection {
         )
         parent.addView(header)
 
-        // 杩欓噷鏄剧ず鏈€杩戞娴嬪埌鐨勬寜閿紙闇€瑕佸湪 WheelKeyService 涓褰曪級
-        // 绠€鍖栫増锛氭樉绀鸿鏄?        val info = TextView(context).apply {
-            text = "鏂瑰悜鐩樻寜閿寜涓嬫椂浼氬湪姝よ褰?KeyCode/ScanCode锛岀敤浜庣‘璁ゆ槧灏勫叧绯汇€俓n" +
-                   "璇峰湪銆岃缃?鈫?璇婃柇 鈫?淇濆瓨璇婃柇鎶ュ憡銆嶆煡鐪嬪畬鏁存棩蹇椼€?
+        // 这里显示最近检测到的按键（需要在 WheelKeyService 中记录）
+        // 简化版：显示说明
+        val info = TextView(context).apply {
+            text = "方向盘按键按下时会在此记录 KeyCode/ScanCode，用于确认映射关系。\n" +
+                   "请在「设置 → 诊断 → 保存诊断报告」查看完整日志。"
             textSize = 13f
             setTextColor(theme.textSecondary)
             setPadding(theme.dp(context, 16), theme.dp(context, 8), theme.dp(context, 16), theme.dp(context, 12))
@@ -312,7 +320,7 @@ object LeapmotorWheelKeySettingsSection {
         parent.addView(info)
     }
 
-    /** 6. 閲嶇疆鎸夐挳 */
+    /** 6. 重置按钮 */
     private fun addResetButton(
         context: Context,
         parent: LinearLayout,
@@ -326,21 +334,21 @@ object LeapmotorWheelKeySettingsSection {
             onClick = {
                 new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.leapmotor_wheel_reset_title))
-                    .setMessage("灏嗛噸缃墍鏈夋柟鍚戠洏鎸夐敭鏄犲皠涓哄綋鍓嶉璁鹃粯璁ゅ€硷紝纭畾鍚楋紵")
-                    .setPositiveButton("纭畾") { _, _ ->
+                    .setMessage("将重置所有方向盘按键映射为当前预设默认值，确定吗？")
+                    .setPositiveButton("确定") { _, _ ->
                         LeapmotorWheelSettings.resetToDefault(context)
                         WheelKeyService.settingsChanged()
                         onSettingsChanged()
-                        Toast.makeText(context, "宸查噸缃负榛樿棰勮", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "已重置为默认预设", Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton("鍙栨秷", null)
+                    .setNegativeButton("取消", null)
                     .show()
             },
         )
         parent.addView(btn)
     }
 
-    // ===== 杈呭姪鏂规硶 =====
+    // ===== 辅助方法 =====
 
     private fun addSwitchRow(
         context: Context,
@@ -392,7 +400,7 @@ object LeapmotorWheelKeySettingsSection {
         parent.addView(desc)
     }
 
-    /** 杩愯鍦?UI 绾跨▼ */
+    /** 运行在 UI 线程 */
     private fun runOnUiThread(action: () -> Unit) {
         if (Thread.currentThread().isInstanceOf<android.os.Looper>()) {
             action()

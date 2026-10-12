@@ -55,11 +55,13 @@ import com.shilapi.xcertplay.backup.SettingsBackupEndpoint
 import com.shilapi.xcertplay.backup.SettingsBackupServer
 import com.shilapi.xcertplay.backup.SettingsQrCode
 import com.shilapi.xcertplay.compat.closeCompat
-import com.shilapi.xcertplay.leapmotor.LeapmotorVehicleAccess
-import com.shilapi.xcertplay.leapmotor.LeapmotorNavigationOutputs
-import com.shilapi.xcertplay.leapmotor.LeapmotorVehicleField
-import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
-import com.shilapi.xcertplay.leapmotor.LeapmotorVehicleCapabilities
+import com.shilapi.xcertplay.hud.BydAdbAccess
+import com.shilapi.xcertplay.hud.BydFieldSource
+import com.shilapi.xcertplay.hud.BydNavigationOutputs
+import com.shilapi.xcertplay.hud.BydVehicleCapabilities
+import com.shilapi.xcertplay.hud.BydVehicleField
+import com.shilapi.xcertplay.hud.BydVehicleFieldStore
+import com.shilapi.xcertplay.hud.BydVehicleProbeOutcome
 import com.shilapi.xcertplay.telecom.PhoneAudioRoute
 
 import com.shilapi.xcertplay.host.R
@@ -214,13 +216,13 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private var pendingRailScrollY: Int? = null
     private var pendingRailFocus = false
     private var bydVehicleAdvancedExpanded = false
-    private var adbAccessState: LeapmotorVehicleAccess.State? = null
+    private var adbAccessState: BydAdbAccess.State? = null
     private var adbCheckInProgress = false
     private var adbCheckMayAsk = false
     private var adbCheckFailed = false
     private var vehicleProbeAuthorizationInProgress = false
     private var vehicleProbeInProgress = false
-    private var vehicleProbeOutcome: LeapmotorVehicleProbeOutcome? = null
+    private var vehicleProbeOutcome: BydVehicleProbeOutcome? = null
     private var adbCheckGeneration = 0
     private var adbStatus: TextView? = null
     private var availableUpdate: UpdateRelease? = null
@@ -251,29 +253,29 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private var automaticVehicleValidationStarted = false
     private var automaticVehicleValidationInProgress = false
     private var automaticVehicleValidationPending = false
-    private var pendingVehicleReplacement: LeapmotorVehicleCapabilities? = null
+    private var pendingVehicleReplacement: BydVehicleCapabilities? = null
     // The saved snapshot [pendingVehicleReplacement] was compared with.
-    private var pendingVehicleReplacementExpected: LeapmotorVehicleCapabilities? = null
-    private var pendingVehicleLostFields: Set<LeapmotorVehicleField> = emptySet()
-    private var defaultVehicleStatus: LeapmotorVehicleAccess.Status? = null
+    private var pendingVehicleReplacementExpected: BydVehicleCapabilities? = null
+    private var pendingVehicleLostFields: Set<BydVehicleField> = emptySet()
+    private var defaultVehicleStatus: BydAdbAccess.Status? = null
     private var vehicleDataReconnectPending = false
     private val automaticVehicleValidation = Runnable {
         automaticVehicleValidationPending = false
         validateSavedVehicleConfigurationAutomatically()
     }
     private data class VehicleProbeAttempt(
-        val outcome: LeapmotorVehicleProbeOutcome,
-        val heldCandidate: LeapmotorVehicleCapabilities? = null,
-        val lostFields: Set<LeapmotorVehicleField> = emptySet(),
+        val outcome: BydVehicleProbeOutcome,
+        val heldCandidate: BydVehicleCapabilities? = null,
+        val lostFields: Set<BydVehicleField> = emptySet(),
         val snapshotChanged: Boolean = false,
         val allowedOnlyOnce: Boolean = false,
     )
 
     private data class VehicleValidationAttempt(
-        val status: LeapmotorVehicleAccess.Status,
-        val outcome: LeapmotorVehicleProbeOutcome? = null,
-        val heldCandidate: LeapmotorVehicleCapabilities? = null,
-        val lostFields: Set<LeapmotorVehicleField> = emptySet(),
+        val status: BydAdbAccess.Status,
+        val outcome: BydVehicleProbeOutcome? = null,
+        val heldCandidate: BydVehicleCapabilities? = null,
+        val lostFields: Set<BydVehicleField> = emptySet(),
         val snapshotChanged: Boolean = false,
         val savedFieldsReadable: Boolean = false,
     )
@@ -363,7 +365,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         refreshAppearance()
         rememberLaunchAppearance()
         languagePreferenceAtCreate = AppLocale.preference(this)
-        com.shilapi.xcertplay.hud.LeapmotorNavigationOutputs.onAppOpened(applicationContext)
+        BydNavigationOutputs.onAppOpened(applicationContext)
         PhoneAudioRoute.attach(applicationContext)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (Build.VERSION.SDK_INT >= 28) {
@@ -1853,7 +1855,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             toggle(card, getString(R.string.adapt_pip_resolution), getString(R.string.adapt_pip_resolution_description), AirPlayPersistence.loadAdaptPipResolution(this)) {
                 AirPlayPersistence.saveAdaptPipResolution(this, it)
             }
-            card.addView(button("${getString(R.string.settings_interface_size)} 路 ${InterfaceSize.displayName(this, InterfaceSize.preference(this))}", false) {
+            card.addView(button("${getString(R.string.settings_interface_size)} · ${InterfaceSize.displayName(this, InterfaceSize.preference(this))}", false) {
                 InterfaceSize.showPicker(this)
             }, matchButton(12, 60))
             card.addView(label(getString(R.string.settings_interface_size_hint), 14, MUTED))
@@ -2097,7 +2099,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                     }
                 }
                 if (clusterDisplay != null || adbCluster) {
-                    if (LeapmotorClusterLayout.supported() && !adbCluster) {
+                    if (LeapmotorClusterLayout.supported(this) && !adbCluster) {
                         val automatic = LeapmotorClusterLayout.automatic(this)
                         toggle(card, getString(R.string.follow_instrument_theme_and_map_card),
                             getString(R.string.show_the_side_map_only_when_its_card_is_open_and_switch_to), automatic) {
@@ -2144,7 +2146,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                                 // DiLink 5.1 layout (always the map), are set up at connection, so they reconnect.
                                 val controller = CarPlayBackgroundSession.snapshot()?.controller
                                 if (customCard || CarPlayClusterDisplay.usesCustomTurnCard(next) ||
-                                    LeapmotorClusterLayout.supported() || controller == null) {
+                                    LeapmotorClusterLayout.supported(this) || controller == null) {
                                     markReconnectNeeded()
                                 } else controller.showDashboardContent(next.url) { applied ->
                                     runOnUiThread {
@@ -2232,7 +2234,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                                 setPadding(0, dp(8), 0, dp(6))
                             })
                             if (AirPlayPersistence.loadClusterSmallWindowMode(this) == 2) {
-                                val adbMode = LeapmotorNavigationOutputs.clusterNaviMode()
+                                val adbMode = BydNavigationOutputs.clusterNaviMode()
                                 if (adbMode != null) {
                                     card.addView(label(getString(R.string.cluster_small_window_adb_ok, adbMode.label), 14, MUTED)
                                         .apply { setPadding(0, dp(4), 0, dp(4)) })
@@ -2969,7 +2971,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         val choices = if (wide) row() else column()
         DiLinkGeneration.entries.forEachIndexed { index, generation ->
             val chosen = generation == selected
-            choices.addView(button("${if (chosen) "鉁? " else ""}${dilinkLabel(generation)}", chosen) {
+            choices.addView(button("${if (chosen) "✓ " else ""}${dilinkLabel(generation)}", chosen) {
                 DiLinkGeneration.save(this, generation)
                 render()
             }, if (wide) LinearLayout.LayoutParams(0, dp(60), 1f).apply {
@@ -3130,7 +3132,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             choices.addView(option, if (wide) LinearLayout.LayoutParams(0, -2, 1f).apply {
                 if (index > 0) marginStart = dp(16)
             } else LinearLayout.LayoutParams(-1, -2))
-            option.addView(button("${if (mode == candidate) "鉁? " else ""}${titles[index]}", mode == candidate) {
+            option.addView(button("${if (mode == candidate) "✓ " else ""}${titles[index]}", mode == candidate) {
                 if (candidate == WirelessHotspotMode.MANUAL) {
                     pendingCarHotspotSetup = true
                     render()
@@ -3366,7 +3368,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             fun updateSecurityControl() {
                 val hasPassword = password.text.isNotEmpty()
                 val title = if (hasPassword) securityTitles[securityModes.indexOf(protectedSecurity)] else getString(R.string.open)
-                securityControl.text = "${getString(R.string.security)} 路 $title"
+                securityControl.text = "${getString(R.string.security)} · $title"
                 securityControl.isEnabled = hasPassword
             }
             securityControl = button("", false) {
@@ -3413,7 +3415,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         dialog.show()
     }
 
-    // "Left 20 %", "Centre 路 default", "Down 10 %": a signed step reads as a direction and a distance.
+    // "Left 20 %", "Centre · default", "Down 10 %": a signed step reads as a direction and a distance.
     private fun markerStepLabel(step: Int, negative: String, positive: String): String = when {
         step == 0 -> getString(R.string.marker_centre_default)
         step < 0 -> "$negative ${-step * CarPlayClusterDisplay.MARKER_STEP_PERCENT} %"
@@ -3746,7 +3748,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private fun wheelMapZoomAvailable(): Boolean {
         if (!AirPlayPersistence.loadClusterMapEnabled(this)) return false
         val adbCluster = AdbClusterRouter.enabled(this)
-        if (LeapmotorClusterLayout.supported() && !adbCluster) return false
+        if (LeapmotorClusterLayout.supported(this) && !adbCluster) return false
         return adbCluster || ClusterMapPresentation.findDisplay(this) != null
     }
 
@@ -3797,7 +3799,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             }.takeIf { joystick }
             val names = listOfNotNull(zoomName, joystickName)
             if (names.isEmpty()) continue
-            wheelKeyAssignButton(card, role, names.joinToString(" 路 ") { getString(it) })
+            wheelKeyAssignButton(card, role, names.joinToString(" · ") { getString(it) })
         }
     }
 
@@ -3939,12 +3941,12 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             LeapmotorOutputSettings.clusterSong(this), enabled = !adbSwitchChangePending) {
             LeapmotorOutputSettings.setClusterSong(this, it)
             if (it) checkAdbState(mayAsk = true)
-            LeapmotorNavigationOutputs.clusterSongChanged(it)
+            BydNavigationOutputs.clusterSongChanged(it)
         }
         toggle(card, getString(R.string.cluster_song_on_change), getString(R.string.cluster_song_on_change_description),
             LeapmotorOutputSettings.clusterSongOnChange(this), enabled = !adbSwitchChangePending) {
             LeapmotorOutputSettings.setClusterSongOnChange(this, it)
-            LeapmotorNavigationOutputs.clusterSongOnChangeChanged()
+            BydNavigationOutputs.clusterSongOnChangeChanged()
         }
         toggle(card, getString(R.string.carplay_call_controls_experimental),
             getString(R.string.carplay_call_controls_experimental_description),
@@ -3969,7 +3971,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private fun applyCarPlayCalls(enabled: Boolean) {
         LeapmotorOutputSettings.setCarPlayCalls(this, enabled)
         if (enabled) checkAdbState(mayAsk = true)
-        LeapmotorNavigationOutputs.carPlayCallsChanged(enabled)
+        BydNavigationOutputs.carPlayCallsChanged(enabled)
     }
 
     private fun advancedVehicleData(card: LinearLayout) {
@@ -4007,7 +4009,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         }
         val healthy = capabilities != null && !adbCheckFailed && vehicleProbeOutcome?.error == null &&
             pendingVehicleLostFields.isEmpty() &&
-            (adbAccessState == null || adbAccessState == LeapmotorVehicleAccess.State.READY)
+            (adbAccessState == null || adbAccessState == BydAdbAccess.State.READY)
         card.addView(label(adbText, 14, if (healthy) MUTED else WARNING)
             .apply { setPadding(0, dp(12), 0, 0) })
         if (capabilities != null) {
@@ -4035,9 +4037,9 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         }
         val needsUserAction = capabilities == null || adbCheckFailed || vehicleProbeOutcome?.error != null ||
             pendingVehicleLostFields.isNotEmpty() ||
-            adbAccessState in setOf(LeapmotorVehicleAccess.State.NOT_APPROVED, LeapmotorVehicleAccess.State.ADB_OFF, LeapmotorVehicleAccess.State.PAIRING_ONLY)
+            adbAccessState in setOf(BydAdbAccess.State.NOT_APPROVED, BydAdbAccess.State.ADB_OFF, BydAdbAccess.State.PAIRING_ONLY)
         if (needsUserAction) {
-            val title = if (adbAccessState == LeapmotorVehicleAccess.State.NOT_APPROVED) {
+            val title = if (adbAccessState == BydAdbAccess.State.NOT_APPROVED) {
                 R.string.request_adb_authorization
             } else if (capabilities == null) {
                 R.string.probe_adb_and_vehicle_data
@@ -4061,11 +4063,11 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             else -> adbLinkStatusText(requireNotNull(adbAccessState))
         }
         val healthy = !adbCheckFailed && vehicleProbeOutcome?.error == null &&
-            (adbAccessState == null || adbAccessState == LeapmotorVehicleAccess.State.READY)
+            (adbAccessState == null || adbAccessState == BydAdbAccess.State.READY)
         card.addView(label(adbText, 14, if (healthy) MUTED else WARNING)
             .apply { setPadding(0, dp(12), 0, 0) })
         val busy = vehicleProbeAuthorizationInProgress || adbCheckInProgress || vehicleProbeInProgress
-        if (!busy && adbAccessState == LeapmotorVehicleAccess.State.READY) {
+        if (!busy && adbAccessState == BydAdbAccess.State.READY) {
             defaultVehicleStatus?.let { showDefaultVehicleReadings(card, it) }
         }
         vehicleProbeOutcome?.error?.let {
@@ -4081,7 +4083,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     }
 
     /** The last default-mode reads; a value an enabled switch needs is a warning when missing. */
-    private fun showDefaultVehicleReadings(card: LinearLayout, status: LeapmotorVehicleAccess.Status) {
+    private fun showDefaultVehicleReadings(card: LinearLayout, status: BydAdbAccess.Status) {
         fun reading(value: String?, unreadable: Int, needed: Boolean) {
             val text = value ?: getString(unreadable).takeIf { needed } ?: return
             card.addView(label(text, 14, if (value != null) MUTED else WARNING))
@@ -4118,7 +4120,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             if (vehicleDataReconnectPending) checkAdbState(mayAsk = true)
             return
         }
-        if (LeapmotorVehicleFieldStore.load(this) == null) {
+        if (BydVehicleFieldStore.load(this) == null) {
             probeVehicleData(mayAsk = true, activateLegacyModeOnSuccess = true)
             return
         }
@@ -4136,16 +4138,16 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     // Probe results are saved before they are shown, so the saved snapshot is the newest without
     // trusting the clock.
-    private fun displayedVehicleCapabilities(): LeapmotorVehicleCapabilities? =
-        LeapmotorVehicleFieldStore.load(this) ?: vehicleProbeOutcome?.capabilities
+    private fun displayedVehicleCapabilities(): BydVehicleCapabilities? =
+        BydVehicleFieldStore.load(this) ?: vehicleProbeOutcome?.capabilities
 
-    private fun localizedVehicleFields(fields: Set<LeapmotorVehicleField>): String = fields.map { field ->
+    private fun localizedVehicleFields(fields: Set<BydVehicleField>): String = fields.map { field ->
         getString(when (field) {
-            LeapmotorVehicleField.SPEED -> R.string.vehicle_field_speed
-            LeapmotorVehicleField.GEAR -> R.string.vehicle_field_gear
-            LeapmotorVehicleField.SOC, LeapmotorVehicleField.RANGE, LeapmotorVehicleField.REMAINING_KWH ->
+            BydVehicleField.SPEED -> R.string.vehicle_field_speed
+            BydVehicleField.GEAR -> R.string.vehicle_field_gear
+            BydVehicleField.SOC, BydVehicleField.RANGE, BydVehicleField.REMAINING_KWH ->
                 R.string.vehicle_field_battery
-            LeapmotorVehicleField.BMS_STATE -> R.string.vehicle_field_charging
+            BydVehicleField.BMS_STATE -> R.string.vehicle_field_charging
         })
     }.distinct().joinToString()
 
@@ -4153,7 +4155,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         val candidate = pendingVehicleReplacement ?: return
         // Never over a snapshot saved since the comparison; a failed write is shown, not thrown.
         val error = runCatching {
-            LeapmotorVehicleFieldStore.replaceAnyway(applicationContext, pendingVehicleReplacementExpected, candidate)
+            BydVehicleFieldStore.replaceAnyway(applicationContext, pendingVehicleReplacementExpected, candidate)
         }.fold(
             onSuccess = { replaced -> if (replaced) null else getString(R.string.vehicle_probe_snapshot_changed) },
             onFailure = { it.message ?: it.javaClass.simpleName },
@@ -4161,17 +4163,17 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         Log.i(BYD_VEHICLE_TAG, "user replaced saved vehicle data error=${error ?: "none"}")
         pendingVehicleReplacement = null
         pendingVehicleLostFields = emptySet()
-        vehicleProbeOutcome = error?.let { LeapmotorVehicleProbeOutcome(LeapmotorVehicleAccess.State.READY, error = it) }
+        vehicleProbeOutcome = error?.let { BydVehicleProbeOutcome(BydAdbAccess.State.READY, error = it) }
         render()
     }
 
-    private fun showVehicleProbeResults(card: LinearLayout, capabilities: LeapmotorVehicleCapabilities) {
-        val catalogFields = capabilities.fields.values.count { it.address?.source == LeapmotorVehicleField.Source.FIRMWARE }
+    private fun showVehicleProbeResults(card: LinearLayout, capabilities: BydVehicleCapabilities) {
+        val catalogFields = capabilities.fields.values.count { it.address?.source == BydFieldSource.FIRMWARE }
         card.addView(label(getString(if (capabilities.catalogAvailable)
             R.string.vehicle_probe_catalog_ready else R.string.vehicle_probe_catalog_fallback, catalogFields),
             14, if (capabilities.catalogAvailable) MUTED else WARNING).apply { setPadding(0, dp(14), 0, 0) })
 
-        val speed = capabilities.result(LeapmotorVehicleField.SPEED)
+        val speed = capabilities.result(BydVehicleField.SPEED)
         val speedValue = speed.value
         val speedText = when {
             speedValue != null -> getString(R.string.adb_vehicle_speed_reading, speedValue.roundToInt())
@@ -4179,7 +4181,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             else -> getString(R.string.adb_vehicle_speed_unreadable)
         }
         card.addView(label(speedText, 14, if (speed.supported) MUTED else WARNING))
-        val gear = capabilities.result(LeapmotorVehicleField.GEAR)
+        val gear = capabilities.result(BydVehicleField.GEAR)
         val gearValue = gear.value
         val gearText = when {
             gearValue != null -> getString(R.string.adb_vehicle_gear_reading, gearLetter(gearValue.toInt()))
@@ -4189,9 +4191,9 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         card.addView(label(gearText, 14, if (gear.supported) MUTED else WARNING))
 
         if (capabilities.batterySupported) {
-            val percentValue = capabilities.result(LeapmotorVehicleField.SOC).value
-            val rangeValue = capabilities.result(LeapmotorVehicleField.RANGE).value
-            val energy = capabilities.result(LeapmotorVehicleField.REMAINING_KWH).value
+            val percentValue = capabilities.result(BydVehicleField.SOC).value
+            val rangeValue = capabilities.result(BydVehicleField.RANGE).value
+            val energy = capabilities.result(BydVehicleField.REMAINING_KWH).value
             card.addView(label(if (percentValue == null || rangeValue == null) {
                 getString(R.string.vehicle_probe_cached_supported, getString(R.string.vehicle_field_battery))
             } else if (energy != null) {
@@ -4204,7 +4206,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         } else {
             card.addView(label(getString(R.string.adb_battery_unreadable), 14, WARNING))
         }
-        val charging = capabilities.result(LeapmotorVehicleField.BMS_STATE)
+        val charging = capabilities.result(BydVehicleField.BMS_STATE)
         val chargingValue = charging.value
         val chargingText = when {
             chargingValue != null -> getString(R.string.vehicle_probe_charging_state, chargingValue.toInt())
@@ -4214,7 +4216,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         card.addView(label(chargingText, 14, if (charging.supported) MUTED else WARNING))
     }
 
-    private fun showVehicleDataSettings(card: LinearLayout, capabilities: LeapmotorVehicleCapabilities?) {
+    private fun showVehicleDataSettings(card: LinearLayout, capabilities: BydVehicleCapabilities?) {
         toggle(card, getString(R.string.bt_suspend_during_carplay), getString(R.string.bt_suspend_during_carplay_description),
             AirPlayPersistence.loadBtSuspendDuringCarplay(this), enabled = !adbSwitchChangePending) {
             AirPlayPersistence.saveBtSuspendDuringCarplay(this, it)
@@ -4297,7 +4299,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         backend.execute("diplay-adb-state") {
             val result = runCatching {
                 if (legacy) {
-                    LeapmotorVehicleAccess.Status(backend.checkState(applicationContext, mayAsk))
+                    BydAdbAccess.Status(backend.checkState(applicationContext, mayAsk))
                 } else {
                     // The default battery path must publish its first sample before CarPlay reconnects.
                     backend.check(applicationContext, mayAsk)
@@ -4314,12 +4316,12 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                 val status = result.getOrNull()
                 adbAccessState = status?.state
                 if (!legacy) defaultVehicleStatus = status
-                if (!legacy && adbAccessState == LeapmotorVehicleAccess.State.READY) {
+                if (!legacy && adbAccessState == BydAdbAccess.State.READY) {
                     vehicleProbeOutcome = null
                 }
                 render()
                 // Unreadable data keeps the current connection; the page shows what is missing.
-                if (!legacy && vehicleDataReconnectPending && status?.state == LeapmotorVehicleAccess.State.READY &&
+                if (!legacy && vehicleDataReconnectPending && status?.state == BydAdbAccess.State.READY &&
                     enabledVehicleDataReadable(null, status)) {
                     vehicleDataReconnectPending = false
                     reconnectForVehicleSetting()
@@ -4350,8 +4352,8 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             val app = applicationContext
             val attempt = runCatching {
                 val access = backend.checkState(app, mayAsk)
-                if (access != LeapmotorVehicleAccess.State.READY) {
-                    VehicleProbeAttempt(LeapmotorVehicleProbeOutcome(access))
+                if (access != BydAdbAccess.State.READY) {
+                    VehicleProbeAttempt(BydVehicleProbeOutcome(access))
                 } else {
                     runOnUiThread {
                         if (generation == vehicleProbeGeneration && !isFinishing && !isDestroyed) {
@@ -4361,7 +4363,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                         }
                     }
                     var candidate = backend.probe(app, persist = false)
-                    if (candidate.access == LeapmotorVehicleAccess.State.NOT_APPROVED) {
+                    if (candidate.access == BydAdbAccess.State.NOT_APPROVED) {
                         // adbd confirms "Always allow" before it saves the key, so this new connection can be early.
                         Log.i(BYD_VEHICLE_TAG, "probe connection not approved yet; retrying once")
                         Thread.sleep(ADB_KEY_SAVE_WAIT_MILLIS)
@@ -4369,7 +4371,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                     }
                     val candidateCapabilities = candidate.capabilities
                     when {
-                        candidate.access == LeapmotorVehicleAccess.State.NOT_APPROVED -> VehicleProbeAttempt(
+                        candidate.access == BydAdbAccess.State.NOT_APPROVED -> VehicleProbeAttempt(
                             outcome = candidate,
                             allowedOnlyOnce = true,
                         )
@@ -4379,13 +4381,13 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                             val replacement = synchronized(vehicleOperationLock) {
                                 if (generation != vehicleProbeGeneration ||
                                     LeapmotorOutputSettings.legacyVehicleProbe(app) != expectedLegacyMode) null
-                                else LeapmotorVehicleFieldStore.replaceAutomatically(
+                                else BydVehicleFieldStore.replaceAutomatically(
                                     app,
                                     expectedSnapshot,
                                     candidateCapabilities,
                                 )
                             } ?: return@runCatching VehicleProbeAttempt(
-                                outcome = LeapmotorVehicleProbeOutcome(candidate.access),
+                                outcome = BydVehicleProbeOutcome(candidate.access),
                                 snapshotChanged = true,
                             )
                             when {
@@ -4395,7 +4397,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                                     snapshotChanged = true,
                                 )
                                 else -> VehicleProbeAttempt(
-                                    outcome = LeapmotorVehicleProbeOutcome(candidate.access),
+                                    outcome = BydVehicleProbeOutcome(candidate.access),
                                     heldCandidate = candidateCapabilities,
                                     lostFields = replacement.lostFields,
                                 )
@@ -4405,8 +4407,8 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                 }
             }.getOrElse { error ->
                 VehicleProbeAttempt(
-                    LeapmotorVehicleProbeOutcome(
-                        LeapmotorVehicleAccess.State.READY,
+                    BydVehicleProbeOutcome(
+                        BydAdbAccess.State.READY,
                         error = error.message ?: error.javaClass.simpleName,
                     ),
                 )
@@ -4459,7 +4461,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
      */
     private fun validateSavedVehicleConfigurationAutomatically() {
         if (!LeapmotorOutputSettings.legacyVehicleProbe(this)) return
-        val saved = LeapmotorVehicleFieldStore.load(applicationContext) ?: return
+        val saved = BydVehicleFieldStore.load(applicationContext) ?: return
         if (adbSwitchChangePending || vehicleAdbWorkInProgress()) {
             automaticVehicleValidationPending = true
             return
@@ -4480,12 +4482,12 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             val app = applicationContext
             val validation = runCatching {
                 var status = backend.check(app, mayAsk = false)
-                var outcome: LeapmotorVehicleProbeOutcome? = null
-                var heldCandidate: LeapmotorVehicleCapabilities? = null
-                var lostFields: Set<LeapmotorVehicleField> = emptySet()
+                var outcome: BydVehicleProbeOutcome? = null
+                var heldCandidate: BydVehicleCapabilities? = null
+                var lostFields: Set<BydVehicleField> = emptySet()
                 var snapshotChanged = false
-                var readable = status.state == LeapmotorVehicleAccess.State.READY && enabledVehicleDataReadable(saved, status)
-                if (status.state == LeapmotorVehicleAccess.State.READY && !enabledVehicleDataReadable(saved, status)) {
+                var readable = status.state == BydAdbAccess.State.READY && enabledVehicleDataReadable(saved, status)
+                if (status.state == BydAdbAccess.State.READY && !enabledVehicleDataReadable(saved, status)) {
                     Log.w(BYD_VEHICLE_TAG, "saved vehicle fields unreadable; validating once more")
                     try {
                         Thread.sleep(VEHICLE_VALIDATION_RETRY_MILLIS)
@@ -4500,8 +4502,8 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                         )
                     }
                     status = backend.check(app, mayAsk = false)
-                    readable = status.state == LeapmotorVehicleAccess.State.READY && enabledVehicleDataReadable(saved, status)
-                    if (status.state == LeapmotorVehicleAccess.State.READY && !readable) {
+                    readable = status.state == BydAdbAccess.State.READY && enabledVehicleDataReadable(saved, status)
+                    if (status.state == BydAdbAccess.State.READY && !readable) {
                         if (generation != vehicleValidationGeneration) {
                             return@runCatching VehicleValidationAttempt(
                                 status = status,
@@ -4520,7 +4522,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                         candidate.capabilities?.let { next ->
                             val replacement = synchronized(vehicleOperationLock) {
                                 if (generation != vehicleValidationGeneration) null
-                                else LeapmotorVehicleFieldStore.replaceAutomatically(app, saved, next)
+                                else BydVehicleFieldStore.replaceAutomatically(app, saved, next)
                             } ?: return@runCatching VehicleValidationAttempt(
                                 status = status,
                                 snapshotChanged = true,
@@ -4534,7 +4536,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                                 else -> {
                                     heldCandidate = next
                                     lostFields = replacement.lostFields
-                                    outcome = LeapmotorVehicleProbeOutcome(candidate.access)
+                                    outcome = BydVehicleProbeOutcome(candidate.access)
                                 }
                             }
                         }
@@ -4607,13 +4609,13 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     private fun cancelAutomaticVehicleValidationForUserOperation(
         resumeAfter: Boolean,
-    ): LeapmotorVehicleCapabilities? = synchronized(vehicleOperationLock) {
+    ): BydVehicleCapabilities? = synchronized(vehicleOperationLock) {
         handler.removeCallbacks(automaticVehicleValidation)
         automaticVehicleValidationPending = resumeAfter
         if (resumeAfter) automaticVehicleValidationStarted = false
         vehicleValidationGeneration++
         automaticVehicleValidationInProgress = false
-        LeapmotorVehicleFieldStore.load(applicationContext)
+        BydVehicleFieldStore.load(applicationContext)
     }
 
     private fun runPendingAutomaticVehicleValidation() {
@@ -4625,8 +4627,8 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     /** Whether [status] has every reading an enabled switch needs; null [capabilities] is default mode. */
     private fun enabledVehicleDataReadable(
-        capabilities: LeapmotorVehicleCapabilities?,
-        status: LeapmotorVehicleAccess.Status,
+        capabilities: BydVehicleCapabilities?,
+        status: BydAdbAccess.Status,
     ): Boolean {
         if (LeapmotorOutputSettings.batteryToIphone(this) && capabilities?.batterySupported != false &&
             (status.batteryPercent == null || status.rangeKm == null)) return false
@@ -4636,11 +4638,11 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         return true
     }
 
-    private fun adbLinkStatusText(state: LeapmotorVehicleAccess.State): String = when (state) {
-        LeapmotorVehicleAccess.State.READY -> getString(R.string.adb_access_ready)
-        LeapmotorVehicleAccess.State.NOT_APPROVED -> getString(R.string.adb_enabled_not_approved)
-        LeapmotorVehicleAccess.State.ADB_OFF -> getString(R.string.adb_off)
-        LeapmotorVehicleAccess.State.PAIRING_ONLY -> getString(R.string.adb_pairing_only)
+    private fun adbLinkStatusText(state: BydAdbAccess.State): String = when (state) {
+        BydAdbAccess.State.READY -> getString(R.string.adb_access_ready)
+        BydAdbAccess.State.NOT_APPROVED -> getString(R.string.adb_enabled_not_approved)
+        BydAdbAccess.State.ADB_OFF -> getString(R.string.adb_off)
+        BydAdbAccess.State.PAIRING_ONLY -> getString(R.string.adb_pairing_only)
     }
 
     private fun gearLetter(value: Int): String = when (value) {
@@ -5054,7 +5056,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             carButtonSaved()
         }, matchButton(10, 60))
         val name = AirPlayPersistence.loadOemLabel(this)
-        parent.addView(button("${getString(R.string.car_button_name)} 路 $name", false) {
+        parent.addView(button("${getString(R.string.car_button_name)} · $name", false) {
             textInput(getString(R.string.car_button_name), name, secret = false) {
                 AirPlayPersistence.saveOemLabel(this, it)
                 refreshCarButton()
@@ -5090,7 +5092,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     private fun scheduleTimeControl(parent: LinearLayout, start: Boolean) {
         val title = getString(if (start) R.string.carplay_night_start else R.string.carplay_night_end)
-        fun labelFor(minute: Int) = "$title 路 ${String.format(Locale.getDefault(), "%02d:%02d", minute / 60, minute % 60)}"
+        fun labelFor(minute: Int) = "$title · ${String.format(Locale.getDefault(), "%02d:%02d", minute / 60, minute % 60)}"
         val initial = AirPlayPersistence.loadCarPlayNightSchedule(this)
         val control = button(labelFor(if (start) initial.startMinute else initial.endMinute), false) {}
         control.setOnClickListener {
@@ -5168,7 +5170,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         appDialogBuilder().setTitle(getString(R.string.choose_your_iphone))
             .setItems(devices.map { device ->
                 val name = device.name ?: getString(R.string.paired_device)
-                if (devices.count { it.name == device.name } > 1) "$name 路 ${device.address.takeLast(5)}" else name
+                if (devices.count { it.name == device.name } > 1) "$name · ${device.address.takeLast(5)}" else name
             }.toTypedArray()) { _, index ->
                 val device = devices[index]
                 DiPlayPreferences.savePhone(this, device.address, device.name ?: "iPhone")
@@ -5296,7 +5298,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         Thread({
             val result = runCatching {
                 val report = buildString {
-                    appendLine("DiPlay ${version()} 路 private beta diagnostic report")
+                    appendLine("DiPlay ${version()} · private beta diagnostic report")
                     appendLine("Android ${Build.VERSION.RELEASE} / API ${Build.VERSION.SDK_INT}")
                     appendLine("Head unit: ${Build.MANUFACTURER} ${Build.MODEL}")
                     appendLine(
@@ -5339,16 +5341,16 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                             "wheelSpeed=${LeapmotorOutputSettings.wheelSpeedToIphone(appContext)} " +
                             "parkedVideo=${LeapmotorOutputSettings.videoWhileParked(appContext)}",
                     )
-                    val bydCapabilities = LeapmotorVehicleFieldStore.load(appContext)
+                    val bydCapabilities = BydVehicleFieldStore.load(appContext)
                     if (bydCapabilities == null) {
                         appendLine("no saved successful probe")
                     } else {
                         appendLine(
                             "catalog=${bydCapabilities.catalogAvailable} detectedAt=${bydCapabilities.detectedAtMillis} " +
                                 "savedFirmware=${bydCapabilities.firmwareKey} " +
-                                "currentFirmware=${LeapmotorVehicleFieldStore.firmwareKey()}",
+                                "currentFirmware=${BydVehicleFieldStore.firmwareKey()}",
                         )
-                        for (field in LeapmotorVehicleField.entries) {
+                        for (field in BydVehicleField.entries) {
                             val probe = bydCapabilities.result(field)
                             appendLine("${field.name}: supported=${probe.supported} " +
                                 (probe.address?.let { "tx=${it.transaction} dev=${it.device} fid=${it.fid} source=${it.source}" }
@@ -5526,7 +5528,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             getString(R.string.language_section_title), R.drawable.ic_dp_language) { card ->
             card.addView(label(getString(R.string.language_hint), 14, MUTED))
             val current = AppLocale.preference(this)
-            val languageButton = button("${getString(R.string.language_app_language)} 路 ${AppLocale.displayName(this, current)}", false) { }
+            val languageButton = button("${getString(R.string.language_app_language)} · ${AppLocale.displayName(this, current)}", false) { }
             languageButton.setOnClickListener { AppLocale.showPicker(this) }
             card.addView(languageButton, matchButton(12, 60))
         }
@@ -5626,7 +5628,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             AmbientColorMode.SMART -> getString(R.string.settings_ambient_smart)
         }
         val speed = when (value.speed) { AmbientColorSpeed.SLOW -> getString(R.string.settings_ambient_slow); AmbientColorSpeed.STANDARD -> getString(R.string.settings_ambient_standard); AmbientColorSpeed.FAST -> getString(R.string.settings_ambient_fast) }
-        return getString(R.string.settings_ambient_configuration) + " 路 " + getString(R.string.settings_ambient_summary, getString(if (value.enabled) R.string.settings_ambient_enabled else R.string.settings_ambient_disabled), mode, speed, value.selectedColors.size, value.brightness)
+        return getString(R.string.settings_ambient_configuration) + " · " + getString(R.string.settings_ambient_summary, getString(if (value.enabled) R.string.settings_ambient_enabled else R.string.settings_ambient_disabled), mode, speed, value.selectedColors.size, value.brightness)
     }
 
     private fun showAmbientConfiguration() {
@@ -5716,7 +5718,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private fun choice(parent: LinearLayout, title: String, options: List<String>, current: Int, reconnects: Boolean = true,
         announcesReconnect: Boolean = reconnects, enabled: Boolean = true, save: (Int) -> Unit) {
         var selection = current
-        val button = button("$title 路 ${options[selection]}", false) {}.apply { isEnabled = enabled }
+        val button = button("$title · ${options[selection]}", false) {}.apply { isEnabled = enabled }
         button.setOnClickListener {
             var pendingSelection = selection
             appDialogBuilder().setTitle(title)
@@ -5725,7 +5727,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                     if (pendingSelection != selection) {
                         selection = pendingSelection
                         save(selection)
-                        button.text = "$title 路 ${options[selection]}"
+                        button.text = "$title · ${options[selection]}"
                         if (reconnects && CarPlayBackgroundSession.hasSession()) {
                             connect(AirPlayPersistence.loadWirelessEnabled(this))
                         }
@@ -5886,14 +5888,14 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         setOnClickListener { click() }
     }
 
-    // For an action whose label happens to contain the separator, such as "Turn on 鈥?路 ADB".
+    // For an action whose label happens to contain the separator, such as "Turn on … · ADB".
     private fun actionButton(title: String, primary: Boolean, click: () -> Unit) =
         button(title, primary, click).apply { action = true; text = title }
 
     /**
-     * Text in the "Title 路 Value" form opens a choice, so it reads as a setting row:
+     * Text in the "Title · Value" form opens a choice, so it reads as a setting row:
      * start-aligned, muted value, chevron. Any other text stays a centred action button.
-     * The plain text is unchanged, so callers and tests keep matching "Title 路 Value".
+     * The plain text is unchanged, so callers and tests keep matching "Title · Value".
      */
     private class SettingButton(
         context: android.content.Context,

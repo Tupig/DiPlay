@@ -22,9 +22,8 @@ import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.glance.CarPlayGlance
 import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.media.NavigationPlayback
-import com.shilapi.xcertplay.wheel.LeapmotorWheelKeys
+import com.shilapi.xcertplay.hud.BydNavigationOutputs
 import com.shilapi.xcertplay.LeapmotorWheelSettings
-import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
 
 /**
  * Optional: steering-wheel keys zoom CarPlay's dashboard map and work as a CarPlay joystick. BYD's window
@@ -127,7 +126,7 @@ class WheelKeyService : AccessibilityService() {
     override fun onKeyEvent(event: KeyEvent): Boolean {
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
         
-        // 闆惰窇 C11 鏂瑰悜鐩樻寜閿娴嬫棩蹇楋紙浠呭湪闆惰窇杞﹀瀷涓婏級
+        // 零跑 C11 方向盘按键检测日志（仅在零跑车型上）
         if (LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(this)) {
             LeapmotorWheelKeys.logDetectedKey(event, this)
         }
@@ -308,7 +307,7 @@ class WheelKeyService : AccessibilityService() {
             if (on) Toast.makeText(this, "$text\n${getString(R.string.wheel_joystick_hint)}", Toast.LENGTH_LONG).show()
             else Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         }
-        LeapmotorNavigationOutputs.dashboardNote(text)
+        BydNavigationOutputs.dashboardNote(text)
     }
 
     private fun clearLearning(notify: Boolean = true) {
@@ -345,9 +344,9 @@ class WheelKeyService : AccessibilityService() {
             Toast.makeText(this, if (zoomOn) R.string.wheel_zoom_mode_on else R.string.wheel_zoom_mode_off, Toast.LENGTH_SHORT).show()
         }
         if (zoomOn) {
-            LeapmotorNavigationOutputs.dashboardNote(this, "馃攳 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
+            BydNavigationOutputs.dashboardNote("🔍 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
         } else {
-            LeapmotorNavigationOutputs.dashboardNote(this, "馃攰 ${getString(R.string.wheel_zoom_note_volume)}")
+            BydNavigationOutputs.dashboardNote("🔊 ${getString(R.string.wheel_zoom_note_volume)}")
         }
     }
 
@@ -470,7 +469,7 @@ class WheelKeyService : AccessibilityService() {
          * puts it back over the car's adb, already allowed, when it is still not running a few seconds after
          * a DiPlay screen opens or comes back to the front, so the keys work without a visit to the settings.
          * The front check matters when the service stays unbound after the retries at startup: the keys
-         * stayed on "Allowed, starting鈥? with the car's adb working until DiPlay was restarted (#606).
+         * stayed on "Allowed, starting…" with the car's adb working until DiPlay was restarted (#606).
          */
         fun restoreIfNeeded(context: Context) {
             val app = context.applicationContext
@@ -495,7 +494,7 @@ class WheelKeyService : AccessibilityService() {
 
         /**
          * At boot the car's adb can come up after DiPlay, and a single early attempt left the keys on
-         * "Allowed, starting鈥? until DiPlay was force-stopped (#606, #619). Unreachable adb, or a service
+         * "Allowed, starting…" until DiPlay was force-stopped (#606, #619). Unreachable adb, or a service
          * that the rewritten list did not bind yet, is tried again; a key the driver has not approved is not.
          */
         internal fun restoreWithRetries(
@@ -522,7 +521,7 @@ class WheelKeyService : AccessibilityService() {
                 .apply()
         }
 
-        /** One line for the diagnostic report: why the keys may still read "Allowed, starting鈥?. */
+        /** One line for the diagnostic report: why the keys may still read "Allowed, starting…". */
         fun report(context: Context): String {
             val prefs = context.getSharedPreferences(RESTORE_PREFS, Context.MODE_PRIVATE)
             val at = prefs.getLong("at", 0L)
@@ -559,7 +558,7 @@ class WheelKeyService : AccessibilityService() {
 // CarPlay's iAP2 call state can be active even when the head unit leaves Android's mode normal.
 // Native Bluetooth calls also use a call/communication audio mode.
 internal fun inCall(context: Context): Boolean =
-    LeapmotorNavigationOutputs.carPlayCall() != null ||
+    BydNavigationOutputs.carPlayCall() != null ||
         (context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager)?.mode.let { it != null && it != AudioManager.MODE_NORMAL }
 
 /** Use the input-device ID for a held press; saved assignments still use the stable device name. */
@@ -801,13 +800,13 @@ object WheelZoomSettings {
         return active.firstOrNull { it != role && (it == Role.SIRI || role == Role.SIRI) && key(context, it) == key }
     }
 
-    /** 妫€娴嬫槸鍚︿负闆惰窇 C11 2024 杞﹀瀷 */
+    /** 检测是否为零跑 C11 2024 车型 */
     private fun isLeapmotorC11(context: Context): Boolean {
         return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context)
     }
 
     fun key(context: Context, role: Role): WheelKey? {
-        // 闆惰窇 C11 浼樺厛浣跨敤闆惰窇棰勮
+        // 零跑 C11 优先使用零跑预设
         if (isLeapmotorC11(context)) {
             return LeapmotorWheelSettings.getKeyForRole(context, role)
         }
@@ -821,7 +820,7 @@ object WheelZoomSettings {
 
     /** The zoom or joystick role with [key]; [isSiriKey] checks the Siri role, which has its own switch. */
     fun roleOf(context: Context, key: WheelKey): Role? {
-        // 闆惰窇 C11 浼樺厛浣跨敤闆惰窇棰勮
+        // 零跑 C11 优先使用零跑预设
         if (isLeapmotorC11(context)) {
             val keyMap = LeapmotorWheelSettings.getKeyMap(context)
             return LeapmotorWheelKeys.LeapmotorKey.entries.firstOrNull { leapKey ->

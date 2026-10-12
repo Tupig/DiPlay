@@ -21,7 +21,6 @@ import androidx.core.graphics.drawable.toBitmap
 import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.compat.AudioFocusRequestCompat
 import com.shilapi.xcertplay.host.R
-import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
 import com.shilapi.xcertplay.media.CarPlayNowPlaying
 import com.shilapi.xcertplay.orchestration.CarPlayController
 import java.util.concurrent.Executors
@@ -406,7 +405,7 @@ internal object CarPlayMediaKeys {
     }
 
     private val callback = CarPlayMediaCallback(
-        experimentalDiLink3Keys = { appContext?.let(BydOutputSettings::carPlayCallControls) == true },
+        experimentalDiLink3Keys = { appContext?.let(LeapmotorOutputSettings::carPlayCallControls) == true },
         send = ::send,
     )
 
@@ -512,7 +511,7 @@ internal object CarPlayMediaKeys {
 }
 
 /**
- * Media-session input 鈫?CarPlay presses. Hardware keys arrive as button events and keep the toggle;
+ * Media-session input → CarPlay presses. Hardware keys arrive as button events and keep the toggle;
  * media controllers (not hardware keys) call [onPlay] and [onPause] with an explicit intent.
  */
 internal class CarPlayMediaCallback(
