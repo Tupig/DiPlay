@@ -1,38 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- ==================== 核心基础权限 ==================== -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- Optional, user-authorized startup of the car's own hotspot. -->
+    <!-- 修改系统设置（热点、蓝牙等） -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 读取系统设置 -->
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
 
+    <!-- ==================== 前台服务权限 ==================== -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- Optional, user-authorized installation of a released update APK. -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Optional: diagnostic reports in the visible Downloads/DiPlay folder on Android 9.
-         Android 10+ needs no permission for this, so it is never requested there. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+
+    <!-- ==================== 蓝牙权限（Android 12+） ==================== -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" tools:ignore="ProtectedPermissions" />
+
+    <!-- ==================== 附近设备权限（Android 12+，替代部分位置权限） ==================== -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:maxSdkVersion="33" tools:ignore="ManifestOrder" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+        tools:targetApi="33" />
+
+    <!-- ==================== 位置权限 ==================== -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- ==================== 麦克风/音频权限 ==================== -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" tools:ignore="ProtectedPermissions" />
+
+    <!-- ==================== 相机权限（二维码扫描、设置备份） ==================== -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!-- ==================== 存储权限 ==================== -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
-    <!-- Optional: the dashboard map as a card over the home screen. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+
+    <!-- ==================== USB 权限 ==================== -->
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
+    <uses-feature android:name="android.hardware.usb.host" android:required="false" />
+    <uses-feature android:name="android.hardware.usb.accessory" android:required="false" />
+
+    <!-- ==================== 网络/热点/WiFi 权限 ==================== -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.WIFI_DIRECT" tools:ignore="ProtectedPermissions" />
+
+    <!-- ==================== 系统级权限 ==================== -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Optional, owner-enabled Usage Access for the verified DiLink 5.1 cluster profile. -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.DUMP" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
-    <!-- The centre card also follows whichever launcher is the default home. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+
+    <!-- ==================== 通知权限 ==================== -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- ==================== 媒体/投屏权限 ==================== -->
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.PROJECT_MEDIA" tools:ignore="ProtectedPermissions" />
+
+    <!-- ==================== 电话/通话权限（CarPlay 通话） ==================== -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.USE_SIP" />
+
+    <!-- ==================== 振动/唤醒权限 ==================== -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- ==================== 查询意图（替换 BYD 为零跑相关） ==================== -->
     <queries>
-        <package android:name="com.byd.carsettings" />
+        <!-- 零跑车机设置应用 -->
+        <package android:name="com.leapmotor.carsettings" />
+        <package android:name="com.leapmotor.settings" />
+        <!-- 系统设置 -->
+        <package android:name="com.android.settings" />
+        <!-- APK 安装器 -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="content" android:mimeType="application/vnd.android.package-archive" />
         </intent>
+        <!-- 桌面启动器 -->
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
         </intent>
+        <!-- 文件选择器 -->
         <intent>
             <action android:name="android.intent.action.OPEN_DOCUMENT" />
             <data android:mimeType="*/*" />
+        </intent>
+        <!-- 图片选择器 -->
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <!-- 蓝牙设备选择 -->
+        <intent>
+            <action android:name="android.bluetooth.devicepicker.action.LAUNCH" />
+        </intent>
+        <!-- WiFi 设置 -->
+        <intent>
+            <action android:name="android.settings.WIFI_SETTINGS" />
+        </intent>
+        <!-- 蓝牙设置 -->
+        <intent>
+            <action android:name="android.settings.BLUETOOTH_SETTINGS" />
         </intent>
     </queries>
     <application>

@@ -22,8 +22,9 @@ import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.glance.CarPlayGlance
 import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.media.NavigationPlayback
-import com.shilapi.xcertplay.hud.BydNavigationOutputs
-import com.shilapi.xcertplay.hud.BydOutputSettings
+import com.shilapi.xcertplay.LeapmotorWheelKeys
+import com.shilapi.xcertplay.LeapmotorWheelSettings
+import com.shilapi.xcertplay.LeapmotorC11Settings
 
 /**
  * Optional: steering-wheel keys zoom CarPlay's dashboard map and work as a CarPlay joystick. BYD's window
@@ -125,6 +126,12 @@ class WheelKeyService : AccessibilityService() {
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
+        
+        // 零跑 C11 方向盘按键检测日志（仅在零跑车型上）
+        if (LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(this)) {
+            LeapmotorWheelKeys.logDetectedKey(event, this)
+        }
+        
         val down = event.action == KeyEvent.ACTION_DOWN
         val physicalKey = PhysicalWheelKey(event.deviceId, event.keyCode, event.scanCode)
         if (keys.hasConsumedPress(physicalKey)) {
@@ -138,7 +145,7 @@ class WheelKeyService : AccessibilityService() {
         }
         if (navigationKeys.owns(event.keyCode, event.deviceId, event.downTime)) return navigationKey(event)
         if (CarPlayCallKeys.onKey(this, event.keyCode, down)) return true
-        if (BydOutputSettings.carPlayCallControls(this) &&
+        if (LeapmotorOutputSettings.carPlayCallControls(this) &&
             CarPlayMediaButton.opensSiriWhileCarPlay(event.keyCode) && session() != null) {
             if (!down) Log.i(TAG, "CarPlay voice key ${event.keyCode}: Siri sent=${CarPlayBackgroundSession.snapshot()?.controller?.requestSiri() == true}")
             return true
@@ -301,7 +308,7 @@ class WheelKeyService : AccessibilityService() {
             if (on) Toast.makeText(this, "$text\n${getString(R.string.wheel_joystick_hint)}", Toast.LENGTH_LONG).show()
             else Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         }
-        BydNavigationOutputs.dashboardNote(text)
+        LeapmotorNavigationOutputs.dashboardNote(text)
     }
 
     private fun clearLearning(notify: Boolean = true) {
@@ -338,9 +345,9 @@ class WheelKeyService : AccessibilityService() {
             Toast.makeText(this, if (zoomOn) R.string.wheel_zoom_mode_on else R.string.wheel_zoom_mode_off, Toast.LENGTH_SHORT).show()
         }
         if (zoomOn) {
-            BydNavigationOutputs.dashboardNote("🔍 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
+            LeapmotorNavigationOutputs.dashboardNote(this, "🔍 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
         } else {
-            BydNavigationOutputs.dashboardNote("🔊 ${getString(R.string.wheel_zoom_note_volume)}")
+            LeapmotorNavigationOutputs.dashboardNote(this, "🔊 ${getString(R.string.wheel_zoom_note_volume)}")
         }
     }
 
@@ -444,8 +451,8 @@ class WheelKeyService : AccessibilityService() {
          * watcher for other apps' calls, which runs only while something keeps DiPlay alive.
          */
         internal fun wanted(context: Context): Boolean = WheelZoomSettings.anyEnabled(context) ||
-            BydOutputSettings.carPlayCallControls(context) || NavigationWheelSettings.restoreAllowed(context) ||
-            BydOutputSettings.phoneAudioRouteApps(context)
+            LeapmotorOutputSettings.carPlayCallControls(context) || NavigationWheelSettings.restoreAllowed(context) ||
+            LeapmotorOutputSettings.phoneAudioRouteApps(context)
 
         /**
          * Android takes the service off the allowed list when the app is force-stopped (BYD's system does
@@ -542,7 +549,7 @@ class WheelKeyService : AccessibilityService() {
 // CarPlay's iAP2 call state can be active even when the head unit leaves Android's mode normal.
 // Native Bluetooth calls also use a call/communication audio mode.
 internal fun inCall(context: Context): Boolean =
-    BydNavigationOutputs.carPlayCall() != null ||
+    LeapmotorNavigationOutputs.carPlayCall() != null ||
         (context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager)?.mode.let { it != null && it != AudioManager.MODE_NORMAL }
 
 /** Use the input-device ID for a held press; saved assignments still use the stable device name. */
@@ -784,8 +791,18 @@ object WheelZoomSettings {
         return active.firstOrNull { it != role && (it == Role.SIRI || role == Role.SIRI) && key(context, it) == key }
     }
 
-    fun key(context: Context, role: Role): WheelKey? =
-        WheelKey.decode(prefs(context).getString("key_${role.name}", null)) ?: role.defaultKey
+    /** 检测是否为零跑 C11 2024 车型 */
+    private fun isLeapmotorC11(context: Context): Boolean {
+        return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context)
+    }
+
+    fun key(context: Context, role: Role): WheelKey? {
+        // 零跑 C11 优先使用零跑预设
+        if (isLeapmotorC11(context)) {
+            return LeapmotorWheelSettings.getKeyForRole(context, role)
+        }
+        return WheelKey.decode(prefs(context).getString("key_${role.name}", null)) ?: role.defaultKey
+    }
 
     fun assign(context: Context, role: Role, key: WheelKey) {
         prefs(context).edit().putString("key_${role.name}", key.encode()).apply()
@@ -793,8 +810,28 @@ object WheelZoomSettings {
     }
 
     /** The zoom or joystick role with [key]; [isSiriKey] checks the Siri role, which has its own switch. */
-    fun roleOf(context: Context, key: WheelKey): Role? =
-        Role.entries.firstOrNull { it != Role.SIRI && key(context, it) == key }
+    fun roleOf(context: Context, key: WheelKey): Role? {
+        // 零跑 C11 优先使用零跑预设
+        if (isLeapmotorC11(context)) {
+            val keyMap = LeapmotorWheelSettings.getKeyMap(context)
+            return LeapmotorWheelKeys.LeapmotorKey.entries.firstOrNull { leapKey ->
+                keyMap[leapKey] == key
+            }?.let { leapKey ->
+                when (leapKey) {
+                    LeapmotorWheelKeys.LeapmotorKey.MODE_CONFIRM -> Role.MODE
+                    LeapmotorWheelKeys.LeapmotorKey.VOLUME_UP -> Role.ZOOM_IN
+                    LeapmotorWheelKeys.LeapmotorKey.VOLUME_DOWN -> Role.ZOOM_OUT
+                    LeapmotorWheelKeys.LeapmotorKey.MEDIA_PLAY_PAUSE -> Role.JOYSTICK
+                    LeapmotorWheelKeys.LeapmotorKey.MEDIA_PREVIOUS -> Role.PREVIOUS
+                    LeapmotorWheelKeys.LeapmotorKey.MEDIA_NEXT -> Role.NEXT
+                    LeapmotorWheelKeys.LeapmotorKey.MEDIA_PLAY_PAUSE -> Role.SELECT
+                    LeapmotorWheelKeys.LeapmotorKey.VOICE_ASSIST -> Role.SIRI
+                    else -> null
+                }
+            }
+        }
+        return Role.entries.firstOrNull { it != Role.SIRI && key(context, it) == key }
+    }
 
     private fun prefs(context: Context) = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 }

@@ -1,36 +1,45 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 package com.shilapi.xcertplay
 
 import android.content.Context
-import com.shilapi.xcertplay.hud.BydAdbAccess
-import com.shilapi.xcertplay.hud.BydVehicleCapabilityProbe
-import com.shilapi.xcertplay.hud.BydVehicleProbeOutcome
 
-/** Test seam for the blocking ADB work launched by the host settings page. */
-internal interface BydVehicleSettingsBackend {
-    fun check(context: Context, mayAsk: Boolean): BydAdbAccess.Status
-    fun checkState(context: Context, mayAsk: Boolean): BydAdbAccess.State
-    fun probe(context: Context, persist: Boolean): BydVehicleProbeOutcome
+/**
+ * 零跑车辆设置后端接口
+ * 替代 BydVehicleSettingsBackend - 零跑无 ADB，通过系统 API 访问车辆数据
+ */
+internal interface LeapmotorVehicleSettingsBackend {
+    fun check(context: Context, mayAsk: Boolean): LeapmotorVehicleAccess.Status
+    fun checkState(context: Context, mayAsk: Boolean): LeapmotorVehicleAccess.State
+    fun probe(context: Context, persist: Boolean): LeapmotorVehicleProbeOutcome
     fun execute(name: String, block: () -> Unit)
 }
 
-internal object AndroidBydVehicleSettingsBackend : BydVehicleSettingsBackend {
-    override fun check(context: Context, mayAsk: Boolean) = BydAdbAccess.check(context, mayAsk)
-
-    override fun checkState(context: Context, mayAsk: Boolean) = BydAdbAccess.checkState(context, mayAsk)
-
+internal object AndroidLeapmotorVehicleSettingsBackend : LeapmotorVehicleSettingsBackend {
+    override fun check(context: Context, mayAsk: Boolean) = LeapmotorVehicleAccess.getStatus(context, mayAsk)
+    
+    override fun checkState(context: Context, mayAsk: Boolean) = LeapmotorVehicleAccess.getState(context, mayAsk)
+    
     override fun probe(context: Context, persist: Boolean) =
-        BydVehicleCapabilityProbe.probe(context, persist)
-
+        LeapmotorVehicleCapabilityProbe.probe(context, persist)
+    
     override fun execute(name: String, block: () -> Unit) {
         Thread(block, name).start()
     }
 }
 
-/** Replaced only by Robolectric tests; production always uses [AndroidBydVehicleSettingsBackend]. */
-internal object BydVehicleSettingsBackendProvider {
-    @Volatile var current: BydVehicleSettingsBackend = AndroidBydVehicleSettingsBackend
+/** Replaced only by Robolectric tests; production always uses [AndroidLeapmotorVehicleSettingsBackend]. */
+internal object LeapmotorVehicleSettingsBackendProvider {
+    @Volatile var current: LeapmotorVehicleSettingsBackend = AndroidLeapmotorVehicleSettingsBackend
 
     fun reset() {
-        current = AndroidBydVehicleSettingsBackend
+        current = AndroidLeapmotorVehicleSettingsBackend
     }
 }
+
+// 兼容旧代码
+@Deprecated("使用 LeapmotorVehicleSettingsBackend")
+typealias BydVehicleSettingsBackend = LeapmotorVehicleSettingsBackend
+@Deprecated("使用 AndroidLeapmotorVehicleSettingsBackend")
+typealias AndroidBydVehicleSettingsBackend = AndroidLeapmotorVehicleSettingsBackend
+@Deprecated("使用 LeapmotorVehicleSettingsBackendProvider")
+typealias BydVehicleSettingsBackendProvider = LeapmotorVehicleSettingsBackendProvider

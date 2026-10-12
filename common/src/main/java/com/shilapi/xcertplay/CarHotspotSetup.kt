@@ -6,16 +6,20 @@ import android.provider.Settings
 import android.util.Log
 import com.shilapi.xcertplay.adb.AdbKeys
 import com.shilapi.xcertplay.adb.LocalAdb
-import com.shilapi.xcertplay.hud.BydOutputSettings
+import com.shilapi.xcertplay.LeapmotorOutputSettings
 import com.shilapi.xcertplay.network.CarHotspotSettings
 import com.shilapi.xcertplay.orchestration.ManualHotspotValidation
 
 /** Each grant is requested explicitly from settings; startup never calls this authorization path. */
 internal object CarHotspotSetup {
-    // Older BYD units report QUALCOMM/qti and have no supported navigation-output service.
-    fun isBydHeadUnit(context: Context): Boolean = BydOutputSettings.navigationAvailable(context) || runCatching {
-        context.packageManager.getApplicationInfo("com.byd.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
+    // 零跑车机检测：通过车辆数据接口或包名检测
+    fun isLeapmotorHeadUnit(context: Context): Boolean = LeapmotorOutputSettings.clusterNavigation(context) || runCatching {
+        context.packageManager.getApplicationInfo("com.leapmotor.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
     }.getOrDefault(false)
+
+    // 兼容旧代码
+    @Deprecated("使用 isLeapmotorHeadUnit")
+    fun isBydHeadUnit(context: Context): Boolean = isLeapmotorHeadUnit(context)
 
     enum class Permission(val appOp: String) {
         HOTSPOT("WRITE_SETTINGS"), BOOT_LAUNCH("SYSTEM_ALERT_WINDOW");

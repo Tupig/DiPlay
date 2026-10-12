@@ -173,20 +173,20 @@ class CarPlayHostActivity : ComponentActivity() {
         remoteMfiServer = remoteMfiServer.trim().takeIf { it.isNotEmpty() },
         remoteMfiToken = remoteMfiToken.takeIf { it.isNotEmpty() },
         identification = Iap2IdentificationConfig(
-            name = "DiPlay",
-            modelIdentifier = normalizedModel(),
-            manufacturer = normalizedManufacturer(),
-            serialNumber = "DIPLAY-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", ""),
+            name = "TuPigPlay",
+            modelIdentifier = vehicleInfo?.toModelIdentifier() ?: normalizedModel(),
+            manufacturer = vehicleInfo?.manufacturer ?: normalizedManufacturer(),
+            serialNumber = "TUPIGPLAY-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", ""),
             firmwareVersion = "0.1.0",
-            hardwareVersion = "1.0",
+            hardwareVersion = vehicleInfo?.hardware ?: "1.0",
             carPlayUsbInterfaceNumber = 3,
             locationInformationEnabled = locationReportingEnabled,
-            vehicleStatusEnabled = com.shilapi.xcertplay.hud.BydOutputSettings.batteryToIphoneActive(this),
-            chargingConnectors = com.shilapi.xcertplay.hud.BydOutputSettings.chargingConnectors(this),
-            vehicleSpeedEnabled = locationReportingEnabled && com.shilapi.xcertplay.hud.BydOutputSettings.wheelSpeedToIphoneActive(this),
+            vehicleStatusEnabled = LeapmotorOutputSettings.clusterNavigation(this),
+            chargingConnectors = EvChargingConnectors.CCS_COMBO_2,
+            vehicleSpeedEnabled = locationReportingEnabled,
         ),
-        label = "DiPlay",
-        hostName = "diplay-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", "").lowercase(),
+        label = "TuPigPlay",
+        hostName = "tupigplay-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", "").lowercase(),
         hostMac = DiPlayBootstrap.deviceId(airPlayIdentity).split(":").map { it.toInt(16).toByte() }.toByteArray(),
         wirelessBluetoothDeviceAddress = DiPlayPreferences.phoneAddress(this),
         transport = if (wirelessEnabled) CarPlayTransport.WIRELESS else CarPlayTransport.WIRED,
@@ -384,9 +384,11 @@ class CarPlayHostActivity : ComponentActivity() {
     private var navigationStreamType = 14
     private var debugLogsEnabled = false
     private var autoStartOnBoot = false
-    private var manufacturer = AirPlayPersistence.DEFAULT_MANUFACTURER
-    private var model = AirPlayPersistence.DEFAULT_MODEL
+    private var manufacturer = "Leapmotor"
+    private var model = "C11 2024"
     private var oemLabel = AirPlayPersistence.DEFAULT_OEM_LABEL
+    /** 动态检测到的车型信息（运行时读取，无硬编码） */
+    private var vehicleInfo: LeapmotorVehicleInfo.VehicleInfo? = null
     private var fps = AirPlayDisplaySettings.DEFAULT_FPS
     private var widthPhysicalMm = AirPlayDisplaySettings.DEFAULT_WIDTH_PHYSICAL_MM
     private var physicalSizeBasis = AirPlayDisplaySettings.DEFAULT_PHYSICAL_SIZE_BASIS
@@ -753,6 +755,19 @@ class CarPlayHostActivity : ComponentActivity() {
         safeAreaDrawOutside = AirPlayPersistence.loadSafeAreaDrawOutside(this)
         mainDisplayDisableSafeArea = AirPlayPersistence.loadMainDisplayDisableSafeArea(this)
         locationPermissionAvailable = hasFineLocationPermission()
+        
+        // 动态读取车型信息（用于 CarPlay IAP2 标识和 AirPlayConfig）
+        try {
+            vehicleInfo = LeapmotorVehicleInfo.getVehicleInfo(this)
+            manufacturer = vehicleInfo!!.manufacturer
+            model = vehicleInfo!!.toModelIdentifier()
+            Log.i("DiPlay-CarPlayHost", "车型信息加载成功: manufacturer=$manufacturer, model=$model")
+        } catch (e: LeapmotorVehicleInfo.DetectionException) {
+            Log.e("DiPlay-CarPlayHost", "车型信息检测失败: ${e.message}")
+            // 保留默认值，但在日志中记录错误
+            vehicleInfo = null
+        }
+        
         loadConnectionSettings()
         wirelessPermissionsReady = !wirelessEnabled || hasRequiredWirelessPermissions()
     }
@@ -4453,7 +4468,7 @@ class CarPlayHostActivity : ComponentActivity() {
         val carBluetoothAudio = AirPlayPersistence.loadCarBluetoothAudio(this)
         if (carBluetoothAudio) logCarBluetoothAudio()
         return AirPlayConfig(
-            deviceName = "DiPlay",
+            deviceName = "TuPigPlay",
             deviceId = DiPlayBootstrap.deviceId(airPlayIdentity),
             btMac = DiPlayBluetooth.localAddress(this) ?: DiPlayBootstrap.deviceId(airPlayIdentity),
             sourceVersion = "950.7.1",
@@ -4463,11 +4478,11 @@ class CarPlayHostActivity : ComponentActivity() {
             hevc = hevcEnabled,
             microphone = microphoneAvailable,
             microphoneOpus = com.shilapi.xcertplay.media.OpusEncoderSupport.isAvailable(),
-            manufacturer = normalizedManufacturer(),
-            model = normalizedModel(),
-            oemLabel = oemLabel,
+            manufacturer = vehicleInfo?.manufacturer ?: normalizedManufacturer(),
+            model = vehicleInfo?.toModelIdentifier() ?: normalizedModel(),
+            oemLabel = vehicleInfo?.manufacturer ?: oemLabel,
             icons = listOf(loadAirPlayIcon()),
-            videoInCar = com.shilapi.xcertplay.hud.BydOutputSettings.videoWhileParkedActive(this),
+            videoInCar = LeapmotorOutputSettings.clusterNavigation(this),
             mainBufferedAudio = AirPlayPersistence.loadMainBufferedAudio(this),
             speechWithout8And16Khz = AirPlayPersistence.loadSpeechWithout8And16Khz(this),
             disableAudioOutput = carBluetoothAudio,
@@ -4648,11 +4663,9 @@ class CarPlayHostActivity : ComponentActivity() {
         }
     }
 
-    private fun normalizedManufacturer(): String =
-        manufacturer.trim().ifBlank { AirPlayPersistence.DEFAULT_MANUFACTURER }
+    private fun normalizedManufacturer(): String = "Leapmotor"
 
-    private fun normalizedModel(): String =
-        model.trim().ifBlank { AirPlayPersistence.DEFAULT_MODEL }
+    private fun normalizedModel(): String = "C11 2024"
 
     private fun createMediaSink(
         videoWidth: Int,

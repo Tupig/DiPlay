@@ -7,15 +7,15 @@ import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.shilapi.xcertplay.hud.BydNavigationOutputs
-import com.shilapi.xcertplay.hud.BydOutputSettings
+import com.shilapi.xcertplay.LeapmotorNavigationOutputs
+import com.shilapi.xcertplay.LeapmotorOutputSettings
 import com.shilapi.xcertplay.hud.CarPlayCallKeyPolicy
 import com.shilapi.xcertplay.orchestration.CarPlayController
 
 /**
  * The steering wheel's call keys during a CarPlay call (see [CarPlayCallKeyPolicy]): the call key answers,
  * the hang-up and multifunction keys end or decline the call. The call key comes as a key event, to the
- * wheel key service or to the CarPlay screen; the hang-up keys only as BYD's hang-up broadcast.
+ * wheel key service or to the CarPlay screen; the hang-up keys only as Leapmotor's hang-up broadcast.
  */
 internal object CarPlayCallKeys {
     private const val TAG = "DiPlay-CallKeys"
@@ -33,11 +33,11 @@ internal object CarPlayCallKeys {
             val app = context.applicationContext
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
-                    if (!BydOutputSettings.carPlayCallControls(context)) return
+                    if (!LeapmotorOutputSettings.carPlayCallControls(context)) return
                     val keyCode = intent.getIntExtra(CarPlayCallKeyPolicy.EXTRA_KEYCODE, -1)
                     val controller = currentController()
                     val action = CarPlayCallKeyPolicy.onHangUpBroadcast(
-                        keyCode, BydNavigationOutputs.carPlayCall(), controller.hasSession(),
+                        keyCode, LeapmotorNavigationOutputs.carPlayCall(), controller.hasSession(),
                     )
                     if (action == CarPlayCallKeyPolicy.Action.END) {
                         val sent = controller?.endCall() == true
@@ -61,8 +61,8 @@ internal object CarPlayCallKeys {
 
     /** Returns true when the key belongs to a CarPlay call and must not reach the car. */
     fun onKey(context: Context, keyCode: Int, down: Boolean, controller: CarPlayController? = currentController()): Boolean {
-        if (!BydOutputSettings.carPlayCallControls(context)) return false
-        val action = CarPlayCallKeyPolicy.onKey(keyCode, down, BydNavigationOutputs.carPlayCall(), controller.hasSession())
+        if (!LeapmotorOutputSettings.carPlayCallControls(context)) return false
+        val action = CarPlayCallKeyPolicy.onKey(keyCode, down, LeapmotorNavigationOutputs.carPlayCall(), controller.hasSession())
         when (action) {
             CarPlayCallKeyPolicy.Action.PASS -> return false
             CarPlayCallKeyPolicy.Action.CONSUME -> Unit
@@ -81,7 +81,7 @@ internal object CarPlayCallKeys {
 
     private fun returnToCarPlay(app: Context) {
         handler.postDelayed({
-            if (!BydOutputSettings.carPlayCallControls(app) || !currentController().hasSession()) return@postDelayed
+            if (!LeapmotorOutputSettings.carPlayCallControls(app) || !currentController().hasSession()) return@postDelayed
             runCatching {
                 app.startActivity(
                     Intent(app, CarPlayHostActivity::class.java)

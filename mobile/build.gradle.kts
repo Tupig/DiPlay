@@ -10,7 +10,7 @@ val localAuthenticationAssets = providers.environmentVariable("DIPLAY_AUTH_ASSET
 // Optional local-only override for a head-unit whitelist experiment. Unset in CI, so ordinary
 // builds keep the default identity. When set it is the final package name: the debug suffix is
 // dropped so the APK carries exactly the requested applicationId.
-// Usage: ./gradlew :mobile:assembleDebug -PdiplayApplicationId=com.example.app
+// Usage: ./gradlew :mobile:assembleRelease -PdiplayApplicationId=com.ximalaya.ting.android.car
 val overrideApplicationId = providers.gradleProperty("diplayApplicationId").orNull
 
 android {
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.shihab.diplay"
+        applicationId = overrideApplicationId ?: "com.shihab.diplay"
         minSdk = 25
         targetSdk = 37
         versionCode = 37
@@ -53,6 +53,8 @@ android {
                 enable = false
             }
             signingConfig = signingConfigs.getByName("release")
+            // 零跑白名单包名构建：指定 -PdiplayApplicationId 时使用指定包名，去掉后缀
+            applicationIdSuffix = if (overrideApplicationId != null) "" else ""
         }
     }
     compileOptions {
