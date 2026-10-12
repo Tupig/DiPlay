@@ -1,9 +1,44 @@
 # TuPigPlay 零跑 C11 2024 (8295P) 适配项目 - 交接文档
 
-> **项目状态**：核心架构完成 ~85%，**存在编译阻塞项**（见「给下一个 Agent 的建议」第 1 条）
-> **最后更新**：2026-10-12
+> **项目状态**：核心架构完成 ~85%，**但当前代码无法编译**（84 处残留引用，详见「🔴 编译阻塞项」）
+> **最后更新**：2026-10-12（文档 v1.3）
 > **当前分支**：`main`（接手前先执行 `git pull` 同步本文档）
 > **远程仓库**：https://github.com/Tupig/DiPlay（独立维护，禁止回推上游）
+
+---
+
+## 🧭 接手必读（30 秒导航）
+
+| 你想做什么 | 看哪一节 |
+|-----------|---------|
+| **代码为什么编不过？怎么修？** | [🔴 编译阻塞项](#-编译阻塞项已用-grep-核实接手后第一优先级) ← **第一优先级** |
+| 按什么顺序干活？ | [🎯 接手顺序](#-给下一个-agent 的建议接手顺序务必按此优先级) |
+| 项目整体进度？ | [📋 项目概况](#-项目概况) → [✅ 已完成](#-已完成核心工作-phase-1-3-7-完成-85) → [🔧 待完成](#-当前进行中--待完成任务) |
+| 关键代码在哪？ | [📦 关键文件清单](#-关键文件清单-下一个-agent-必看) → [📁 目录结构](#-关键目录结构) |
+| 有什么坑？ | [⚠️ 已知风险](#️已知风险注意事项) + [🔴 章节内的 4 个修复陷阱](#已确认的修复陷阱) |
+| 要遵守什么规矩？ | [📋 强制性工作规范](#-强制性工作规范必须遵守)（Issue/Git/文档/CI） + [📚 文档规范](#-文档规范对标-githubdesktop2chinese强制) |
+| 怎么同步上游？ | [🔄 上游同步工作流](#-上游同步工作流单向同步禁止回推) |
+| 交接前 checklist | [✅ 入职 Checklist](#-下一个-agent-入职-checklist) |
+
+---
+
+## 📑 目录
+
+1. [📋 项目概况](#-项目概况)
+2. [✅ 已完成核心工作](#-已完成核心工作-phase-1-3-7-完成-85)
+3. [🎨 锯齿与延迟优化](#-锯齿与延迟优化-最新完成-)
+4. [🔴 编译阻塞项（第一优先级）](#-编译阻塞项已用-grep-核实接手后第一优先级)
+5. [🔧 当前进行中 / 待完成任务](#-当前进行中--待完成任务)
+6. [📦 关键文件清单](#-关键文件清单-下一个-agent-必看)
+7. [🚀 行动清单](#-下一个-agent-立即可执行的行动清单)
+8. [📁 关键目录结构](#-关键目录结构)
+9. [⚠️ 已知风险 / 注意事项](#️已知风险注意事项)
+10. [📞 关键联系 / 参考](#-关键联系参考)
+11. [📋 强制性工作规范](#-强制性工作规范必须遵守)
+12. [✅ 入职 Checklist](#-下一个-agent-入职-checklist)
+13. [🔄 上游同步工作流](#-上游同步工作流单向同步禁止回推)
+14. [📚 文档规范（对标 GitHubDesktop2Chinese）](#-文档规范对标-githubdesktop2chinese强制)
+15. [🎯 接手顺序与建议](#-给下一个-agent 的建议接手顺序务必按此优先级)
 
 ---
 
@@ -102,6 +137,125 @@ common/src/main/java/com/shilapi/xcertplay/
 
 ---
 
+## 🔴 编译阻塞项（已用 grep 核实，接手后第一优先级）
+
+> ⚠️ **数据已核实（2026-10-12）**：`common/src/main/.../hud/` 目录已删空（0 文件），但全仓库仍有 **84 处 `com.shilapi.xcertplay.hud.Byd*` 引用，分布在 34 个 .kt 文件**，全部指向已删除的类 → **当前代码必定编译失败**。
+>
+> 核实命令：`git grep -n "com.shilapi.xcertplay.hud.Byd" -- "*.kt"`
+
+### 受影响文件（34 个，按引用数排序）
+
+| 模块/文件 | 引用数 |
+|-----------|--------|
+| `common/.../airplay/CarPlayHostActivity.kt` | 25 |
+| `common/src/test/.../BydVehicleDataSettingsTest.kt` | 10 |
+| `common/.../carplay/AdbClusterActivity.kt` | 4 |
+| `common/src/test/.../BydSettingsReconnectTest.kt` | 4 |
+| `common/.../core/DiPlayActivity.kt` | 3 |
+| `common/src/test/.../BydAdbSettingsUiTest.kt` | 3 |
+| `common/src/test/.../CarHotspotSwitchTest.kt` | 3 |
+| `common/.../carplay/AdbClusterRouter.kt` | 2 |
+| `common/src/test/.../CarPlayCallControlsOptInTest.kt` | 2 |
+| `common/src/test/.../WheelKeyServiceTest.kt` | 2 |
+| `shared/.../media/AmbientMusicController.kt` | 2 |
+| `shared/.../orchestration/CarPlayController.kt` | 2 |
+| 其余 22 个文件（各 1 处） | 22 |
+
+<details>
+<summary>其余 22 个文件完整清单（点开查看）</summary>
+
+- `common/.../airplay/AirPlayPersistence.kt`
+- `common/.../cluster/ClusterMapPresentation.kt`
+- `common/.../cluster/ClusterSpeedometerView.kt`
+- `common/.../core/DiPlaySessionService.kt`
+- `common/src/test/.../BydCallPopupLifecycleTest.kt`
+- `common/src/test/.../CarHotspotSetupTest.kt`
+- `common/src/test/.../CarPlayControllerUsbServiceTest.kt`
+- `common/src/test/.../CarPlayHostDisplaySizeTest.kt`
+- `common/src/test/.../CarProfileRuntimeTest.kt`
+- `common/src/test/.../ClusterMapPresentationTest.kt`
+- `common/src/test/.../DiPlayAuthenticationTest.kt`
+- `common/src/test/.../OemLabelTest.kt`
+- `common/src/test/.../SmoothVideoHostLifecycleTest.kt`
+- `common/src/test/.../WheelMediaKeyWindowTest.kt`
+- `common/src/test/.../WheelSiriWindowTest.kt`
+- `shared/.../glance/CarPlayGlance.kt`
+- `shared/.../media/AmbientLampSession.kt`
+- `shared/.../media/AndroidMediaSink.kt`
+- `shared/.../network/WifiScanPause.kt`
+- `shared/.../telecom/PhoneAudioRoute.kt`
+- `shared/src/test/.../glance/CarPlayGlanceTest.kt`
+- `shared/src/test/.../media/AmbientLampSessionTest.kt`
+
+</details>
+
+### 被引用的 24 个已删除类（按频次）
+
+| 已删除类 | 引用数 | 是否有 Leapmotor 替代 |
+|----------|--------|----------------------|
+| `BydNavigationOutputs` | 18 | ✅ `leapmotor/LeapmotorNavigationOutputs.kt`（已存在） |
+| `BydOutputSettings` | 16 | ✅ `leapmotor/LeapmotorOutputSettings.kt` |
+| `BydOemClusterNavi` | 6 | ⚠️ 未找到同名替代，需查 `LeapmotorClusterBridge`/`LocalizedOptions` |
+| `BydClusterNaviMode` | 6 | ✅ `LeapmotorClusterNaviMode`（`LocalizedOptions.kt:71` 有 typealias） |
+| `BydCarPlayCall` | 4 | ✅ `leapmotor/LeapmotorCarPlayCall.kt` |
+| `BydTyreStatus` | 4 | ❌ 未找到，需新建或改造 |
+| `BydVehicleFieldStore` | 4 | ✅ 可能对应 `LeapmotorVehicleDataStore.kt` |
+| `BydAmbientLightPolicy` | 3 | ❌ 未找到 |
+| `BydAdbAccess` | 3 | ⚠️ 查 `LeapmotorVehicleAccess.kt` |
+| `BydVehicleProbeOutcome` | 2 | ❌ 未找到 |
+| `BydCallPopupGuard` | 2 | ⚠️ `shared/hud/BydCallPopupLease.java` 仍在（见下方陷阱） |
+| `BydHudRouteState` | 2 | ❌ 未找到 |
+| `BydVehicleCapabilities` | 2 | ✅ `leapmotor/LeapmotorVehicleCapabilities.kt` |
+| `BydBluetoothSuspend` | 2 | ⚠️ `shared/hud/BluetoothSuspendLease.kt` 仍在 |
+| 其余 10 个类（各 1 处） | 10 | `BydClusterSpeedReader`、`BydAmbientLightClient`、`BydAdbShell`、`BydBatteryStatus`、`BydFieldProbeResult`、`BydOemClusterHold`（typealias 已有）、`BydBootStartRepair`、`BydVehicleField`、`BydReadAddress`、`BydFieldSource` |
+
+### 已确认的修复陷阱
+
+| 陷阱 | 说明 |
+|------|------|
+| ❌ **typealias 救不了全限定名** | `LocalizedOptions.kt:71,74` 虽有 `typealias BydClusterNaviMode = LeapmotorClusterNaviMode`，但它在 `com.shilapi.xcertplay` 包；引用写的是 `com.shilapi.xcertplay.hud.BydClusterNaviMode`（带 `.hud` 前缀）→ **全限定引用依然解析失败** |
+| ❌ **不能盲目批量 Byd→Leapmotor** | 类名不一一对应（如 `BydVehicleFieldStore` → `LeapmotorVehicleDataStore`），必须逐类映射 |
+| ❌ **包路径也要改** | `DiPlayActivity.kt:365` 已出现半改状态：`com.shilapi.xcertplay.hud.LeapmotorNavigationOutputs`（类名改了、包路径还留在 `hud`）→ 同样编译失败 |
+| ⚠️ **hud 包未删空** | `shared/src/main/.../hud/` 仍有 15 个文件（含 `BydCallPopupLease.java`、`BydCallPopupTool.java` 两个 Byd 前缀 Java 文件），`shared/src/test/.../hud/` 还有 46 个 `Byd*Test.kt` 引用已删类 |
+| ⚠️ **测试文件名仍带 Byd** | `common/src/test/` 下有 `BydAdbSettingsUiTest.kt` 等 5 个文件类名未改 |
+
+### 推荐修复步骤
+
+```bash
+# 1. 先生成完整引用清单，逐条过
+git grep -n "com.shilapi.xcertplay.hud.Byd" -- "*.kt"
+
+# 2. 建立 24 个类的映射表（已删除类 → leapmotor/ 或新建），无替代的先建空壳
+#    原则：优先改用 leapmotor/ 现有类；功能确实需要的补实现；纯测试的先 @Ignore
+
+# 3. 逐文件替换（禁止无脑全局替换），每改 5 个文件尝试编译一次
+
+# 4. 处理 shared/src/test/.../hud/ 的 46 个 Byd*Test.kt：
+#    引用已删类的先 @Ignore("类已迁移至 leapmotor 包")，后续按 Phase 7 清理
+
+# 5. 全部改完后清理 LocalizedOptions.kt 中失效的 typealias
+```
+
+### 验收标准
+
+```bash
+git grep -c "com.shilapi.xcertplay.hud.Byd" -- "*.kt"   # 必须输出 0 条
+./build_leapmotor.sh ximalaya                             # 构建通过
+```
+
+### 其他已核实的编译问题（调查中断，接手后需继续排查）
+
+| 问题 | 核实结果 |
+|------|----------|
+| **目录与 package 不一致** | `leapmotor/LeapmotorClusterLayout.kt` 第 2 行是 `package com.shilapi.xcertplay`（非 `.leapmotor`）；`airplay/CarPlayHostActivity.kt` 第 1 行也是 `package com.shilapi.xcertplay`（非 `.airplay`）→ 目录重构时只移了文件、没改 package |
+| **import 路径找不到类** | `ClusterMapPresentation.kt:28` 写的是 `import com.shilapi.xcertplay.cluster.LeapmotorClusterLayout`，但类实际声明在 `com.shilapi.xcertplay` 包 → 编译失败 |
+| **重复定义** | `LeapmotorClusterLayout.kt` 内 `enum class Theme` 出现 **2 次**、`fun automatic` 出现 **2 次**（重构时正则改了两遍）→ 编译失败 |
+| **中文乱码** | `LeapmotorClusterLayout.kt` 枚举标签已乱码：`FULL_MAP("鍏ㄥ睆鍦板浘 路 Full Map")` → 文件编码损坏，需从 git 历史恢复正确中文 |
+
+> ⚠️ **上述问题仅是抽查 2 个文件的结果**，建议接手后系统性检查：所有 `*/leapmotor/*.kt`、`*/cluster/*.kt` 等移动过文件的 package 声明与 import 是否一致（目录重构涉及 102 个文件，commit `dcec5740`）。
+
+---
+
 ## 🔧 当前进行中 / 待完成任务
 
 ### Phase 4: 三屏显示适配 (进行中 ~70%)
@@ -187,17 +341,17 @@ private fun ensureCopilotPresentation() {
 ## 🚀 下一个 Agent 立即可执行的行动清单
 
 ### 立即执行 (P0)
-1. **完善副驾屏集成** - 在 `CarPlayHostActivity.ensureClusterPresentation()` 中完善 `Theme.COPILOT` 分支
-2. **推送当前代码** - `git push origin main` (网络已恢复)
-2. **真机测试副驾屏** - 验证 `CopilotDisplayPresentation.findDisplay()` 能否发现副驾屏
+1. **修复编译**（最大阻塞）— 按「🔴 编译阻塞项」章节处理 84 处 `hud.Byd*` 残留引用 + 目录/package 不一致 + 重复定义，直到 `./build_leapmotor.sh ximalaya` 通过
+2. **完善副驾屏集成** - 在 `CarPlayHostActivity.ensureClusterPresentation()` 中完善 `Theme.COPILOT` 分支
+3. **真机测试副驾屏** - 验证 `CopilotDisplayPresentation.findDisplay()` 能否发现副驾屏
 
 ### 短期完成 (P1)
 1. **Phase 5 ADB 功能** - 实现 `LeapmotorVehicleAccess.getVehicleSpeed()` 等 ADB 读取
 2. **完善副驾屏设置** - 在设置界面添加副驾屏开关、内容选择
-3. **Phase 6 文档合并** - 双语文档合并
+3. **Phase 6 文档合并** - 双语文档合并 + 按「📚 文档规范」补齐 README/.github
 
 ### 中期完成 (P2)
-1. **Phase 8 构建验证** - 运行 `./build_leapmotor.sh ximalaya` 构建 APK
+1. **Phase 8 构建验证** - 运行 `./build_leapmotor.sh ximalaya` 构建 Release APK
 2. **真机全流程测试** - 无线/有线 CarPlay、方向盘按键、三屏显示、锯齿/延迟体验
 
 ---
@@ -239,16 +393,6 @@ H:\DiPlay-Merge\main-repo\
 - **参考 APK**：`docs/apk-reference/PaopaoDesktop-1.28.168-20002370.apk` (方向盘/仪表盘实现参考)
 - **双语文档风格参考**：https://github.com/Tupig/GitHubDesktop2Chinese
 - **白名单包名**：喜马拉雅 `com.ximalaya.ting.android.car` / B站 `com.bilibili.bilithings` / QQ音乐 `com.tencent.qqmusiccar`
-
----
-
-## 🎯 给下一个 Agent 的建议
-
-> **从 Phase 4.3 副驾屏集成开始**，这是当前最大的功能缺口。仪表盘和中控已完善，副驾屏 `CopilotDisplayPresentation` 代码已写好，只需在 `CarPlayHostActivity.ensureClusterPresentation()` 的 `Theme.COPILOT` 分支完善集成逻辑。
->
-> 然后推进 **Phase 5 ADB 功能**，利用零跑已开启 ADB 的优势，实现热点自动开启、USB自动确认、车速读取等核心差异化功能。
->
-> 所有基础设施 (版本管理、构建脚本、目录结构、代码清理) 已完备，可专注业务功能开发。
 
 ---
 
@@ -513,16 +657,24 @@ upstream  禁用推送到上游 (push)
 
 ## 🎯 给下一个 Agent 的建议（接手顺序，务必按此优先级）
 
-> 1. **先修编译**：`CarPlayHostActivity.kt` 中仍残留 `com.shilapi.xcertplay.hud.BydNavigationOutputs` / `BydClusterNaviMode` 引用（约 1058、1127、1267 行），这些类已删除，会直接编译失败；`LeapmotorClusterLayout.kt` 有重复代码块且 package 声明与所在目录不一致，需一并修复。
-> 2. **再补 Phase 4.3**：完善 `CarPlayHostActivity` 中 `ensureCopilotPresentation()` / `Theme.COPILOT` 的副驾屏集成，真机验证 `CopilotDisplayPresentation.findDisplay()`。
-> 3. **然后 Phase 5 ADB**：利用零跑已开启 ADB，实现热点自动开启、USB 自动确认、车速读取（`LeapmotorVehicleAccess.getVehicleSpeed()`）。
-> 4. **最后 Phase 6/8**：按本文档「📚 文档规范」章节重写 README、补齐 `.github/` 模板与工作流、合并双语文档，然后构建验证。
+> **第 1 步：先修编译**（最大阻塞，工作量约半天~1天）
+> 全仓库 **84 处 `com.shilapi.xcertplay.hud.Byd*` 引用、34 个文件**指向已删除的类，**当前必定编译失败**。详见「🔴 编译阻塞项」章节的完整清单、24 个类的映射表、4 个修复陷阱和验收标准。
+> 另有 4 个已核实的其他编译问题：目录与 package 不一致、import 路径找不到类、`LeapmotorClusterLayout.kt` 重复定义、中文乱码。**注意：不能盲目批量替换，必须逐类映射。**
+>
+> **第 2 步：补 Phase 4.3 副驾屏集成**（当前最大功能缺口）
+> 仪表盘和中控已完善，副驾屏 `CopilotDisplayPresentation` 代码已写好，只需在 `CarPlayHostActivity.ensureClusterPresentation()` 的 `Theme.COPILOT` 分支完善集成逻辑，并真机验证 `CopilotDisplayPresentation.findDisplay()` 能否发现副驾屏。
+>
+> **第 3 步：推进 Phase 5 ADB 功能**
+> 利用零跑已开启 ADB 的优势，实现热点自动开启、USB 自动确认、车速读取（`LeapmotorVehicleAccess.getVehicleSpeed()`）等核心差异化功能。
+>
+> **第 4 步：Phase 6/8 文档与构建**
+> 按本文档「📚 文档规范」章节重写 README、补齐 `.github/` 模板与工作流、合并双语文档，然后构建验证 + 真机全流程测试。
 >
 > 所有基础设施（版本管理、构建脚本、目录结构、代码清理）已完备，可专注业务功能开发。
 > **记住：任何问题都要创建 GitHub Issue 追踪；一切文档与工作流看齐 GitHub 模板规范。**
 
 ---
 
-**文档版本**：v1.2
+**文档版本**：v1.3
 **最后更新**：2026-10-12
 **维护要求**：随进度持续更新本文档，未完成事项不得删除，完成后标注 ✅ 并注明对应 commit
