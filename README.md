@@ -55,9 +55,7 @@ If a problem remains, reproduce it on **0.2.18**, then use **Settings → Diagno
 | Release notes | [CHANGELOG.md](CHANGELOG.md) |
 | Credits and licenses | [THIRD_PARTY_NOTICES.md](docs/THIRD_PARTY_NOTICES.md) |
 
-The standard navigation widget needs a launcher that supports Android widgets; the BYD built-in home screen does not accept arbitrary widgets. The floating map and embedded map require **CarPlay cluster map** to be enabled. Some head units may still stutter or fail to apply the icon-size setting.
-
-The app and release website are available in English, Arabic, Russian, Ukrainian, Spanish, Simplified Chinese and Traditional Chinese (Taiwan). Traditional Chinese uses Taiwan wording; the app also recognizes Hong Kong/Macao and explicit Hant selections without claiming separate regional translations. Choose the app language in Settings; on Android 13+, it stays synchronized with Android’s per-app language setting. Source code, build instructions and licenses ship with each release.
+The app is available in English, Arabic, Russian, Ukrainian, Spanish, Simplified Chinese, Traditional Chinese (Taiwan), and Japanese. The release website currently supports the first seven languages. Traditional Chinese uses Taiwan wording; the app also recognizes Hong Kong/Macao and explicit Hant selections without claiming separate regional translations. Choose the app language in Settings; on Android 13+, it stays synchronized with Android’s per-app language setting.
 
 ## Source and credits
 

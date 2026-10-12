@@ -797,7 +797,16 @@
     <string name="settings_speech_without_low_rates_description">Por USB, el iPhone puede enviar las indicaciones de navegaci贸n y las respuestas habladas de Siri con calidad telef贸nica de 8 kHz. Esta opci贸n deja de ofrecer 8 y 16 kHz para ese audio y el iPhone elige una frecuencia mayor. Si las indicaciones dejan de o铆rse, desact铆vala. Reconecta CarPlay.</string>
     <string name="bluetooth_connections_not_real">El Bluetooth de Android de esta unidad principal indica una conexi贸n, pero nada llega al iPhone: incluso la conexi贸n a un servicio que no existe tiene 茅xito. Aqu铆 el Bluetooth lo gestiona un m贸dulo propio del fabricante que las apps no pueden usar, por lo que CarPlay inal谩mbrico no puede funcionar en esta unidad principal. Prueba una conexi贸n USB.</string>
     <string name="settings_fce_cluster_guidance">Indicaciones en el cuadro FCE (experimental)</string>
-    <string name="settings_fce_cluster_guidance_description">Muestra las flechas de CarPlay y la distancia al pr贸ximo giro en la vista de navegaci贸n del cuadro de instrumentos en unidades FCE, escribiendo en el servicio del veh铆culo de la unidad. Probado solo en un coche; desact铆valo si el cuadro se comporta de forma inesperada.</string>
+    <string name="settings_fce_cluster_guidance_description">Muestra las flechas de CarPlay y la distancia al próximo giro en la vista de navegación del cuadro de instrumentos en unidades FCE, escribiendo en el servicio del vehículo de la unidad. Probado solo en un coche; desactívalo si el cuadro se comporta de forma inesperada.</string>
+    <string name="settings_cluster_music">Música en el cuadro (experimental)</string>
+    <string name="settings_cluster_music_description">Muestra la portada cuadrada sobre el mapa del cuadro. Elige portada temporal (8 segundos) o permanente; el título y artista siempre aparecen sobre ella durante 8 segundos al cambiar de canción. La posición y el tamaño se aplican al instante. Requiere proyección al cuadro y datos del iPhone.</string>
+    <string name="settings_cluster_music_mode">Visibilidad de la portada</string>
+    <string name="settings_cluster_music_temporary">Temporal · 8 segundos</string>
+    <string name="settings_cluster_music_permanent">Permanente</string>
+    <string name="settings_cluster_music_horizontal">Tarjeta musical · posición horizontal</string>
+    <string name="settings_cluster_music_vertical">Tarjeta musical · posición vertical</string>
+    <string name="settings_cluster_music_size">Tarjeta musical · tamaño</string>
+    <string name="settings_cluster_music_unknown">Artista desconocido</string>
 </resources>
 
 

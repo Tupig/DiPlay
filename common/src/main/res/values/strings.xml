@@ -898,33 +898,16 @@
     <string name="settings_speech_without_low_rates_description">Over USB the iPhone can send navigation prompts and Siri鈥檚 spoken replies as 8 kHz phone-quality audio. This stops offering 8 and 16 kHz for that audio so the iPhone picks a higher rate. If prompts go silent, turn it off. Reconnects CarPlay.</string>
     <string name="bluetooth_connections_not_real">This head unit鈥檚 Android Bluetooth reports a connection, but nothing reaches the iPhone: even a connection to a service that does not exist succeeds. Bluetooth here is handled by the maker鈥檚 own module, which apps cannot use, so wireless CarPlay cannot work on this head unit. Try a USB connection.</string>
     <string name="settings_fce_cluster_guidance">Guidance in the FCE cluster (experimental)</string>
-    <string name="settings_fce_cluster_guidance_description">Shows CarPlay arrows and the next-turn distance in the instrument cluster's navigation view on FCE head units, by writing to the head unit's vehicle service. Tested on one car only; turn it off if the cluster behaves unexpectedly.</string>
-
-    <!-- 闆惰窇 C11 鏂瑰悜鐩樻寜閿缃?-->
-    <string name="leapmotor_wheel_keys_title">闆惰窇鏂瑰悜鐩樻寜閿?/string>
-    <string name="leapmotor_wheel_zoom_title">鍚敤鍦板浘缂╂斁</string>
-    <string name="leapmotor_wheel_zoom_summary">浣跨敤鏂瑰悜鐩樻寜閿缉鏀句华琛ㄧ洏 CarPlay 鍦板浘銆傛ā寮忛敭鍦ㄩ煶閲忔帶鍒跺拰鍦板浘缂╂斁涔嬮棿鍒囨崲銆?/string>
-    <string name="leapmotor_wheel_zoom_behaviour_title">缂╂斁琛屼负</string>
-    <string name="leapmotor_wheel_zoom_behaviour_summary">鍒囨崲妯″紡锛氭寜妯″紡閿紑鍏筹紱瀹氭椂妯″紡锛? 绉掓棤鎿嶄綔鑷姩鍏抽棴銆?/string>
-    <string name="leapmotor_wheel_joystick_title">鍚敤鎽囨潌妯″紡</string>
-    <string name="leapmotor_wheel_joystick_summary">浣跨敤鏂瑰悜鐩樻寜閿湪 CarPlay 涓诲睆瀵艰埅锛堜笂涓嬪乏鍙炽€佺‘璁ゃ€佽繑鍥烇級銆?/string>
-    <string name="leapmotor_wheel_joystick_auto_off_title">鎽囨潌鑷姩鍏抽棴</string>
-    <string name="leapmotor_wheel_joystick_auto_off_summary">15 绉掓棤鎿嶄綔鎴栧紑濮嬪鑸椂锛屾寜閿仮澶嶆帶鍒堕煶涔愬拰闊抽噺銆?/string>
-    <string name="leapmotor_wheel_siri_title">鍚敤 Siri 鎸夐敭</string>
-    <string name="leapmotor_wheel_siri_summary">浣跨敤鏂瑰悜鐩樻寜閿湪 CarPlay 鐣岄潰鍞ら啋 Siri銆傞€氳瘽鏃朵繚鐣欒溅杈嗗師鏈夊姛鑳姐€?/string>
-    <string name="leapmotor_wheel_current_mapping">褰撳墠鎸夐敭鏄犲皠</string>
-    <string name="leapmotor_wheel_learning_title">鎸夐敭瀛︿範</string>
-    <string name="leapmotor_wheel_cancel_learning">鍙栨秷瀛︿範</string>
-    <string name="leapmotor_wheel_detected_keys">妫€娴嬪埌鐨勬寜閿棩蹇?/string>
-    <string name="leapmotor_wheel_reset_title">閲嶇疆涓洪粯璁ら璁?/string>
-    <string name="leapmotor_wheel_role_mode">妯″紡閿?/string>
-    <string name="leapmotor_wheel_role_zoom_in">鏀惧ぇ/闊抽噺+</string>
-    <string name="leapmotor_wheel_role_zoom_out">缂╁皬/闊抽噺-</string>
-    <string name="leapmotor_wheel_role_joystick">鎽囨潌寮€鍏?/string>
-    <string name="leapmotor_wheel_role_previous">涓婁竴鏇?宸?/string>
-    <string name="leapmotor_wheel_role_next">涓嬩竴鏇?鍙?/string>
-    <string name="leapmotor_wheel_role_select">纭/閫変腑</string>
-    <string name="leapmotor_wheel_role_siri">Siri/璇煶</string>
+    <string name="settings_fce_cluster_guidance_description">Shows CarPlay arrows and the next-turn distance in the instrument cluster’s navigation view on FCE head units, by writing to the head unit’s vehicle service. Tested on one car only; turn it off if the cluster behaves unexpectedly.</string>
+    <string name="settings_cluster_music">Music on cluster (experimental)</string>
+    <string name="settings_cluster_music_description">Show a square album cover over the cluster map. Choose temporary (8 seconds) or permanent artwork; the title and artist always appear over the cover for 8 seconds when the song changes. Position and size apply immediately. Requires cluster projection and iPhone metadata.</string>
+    <string name="settings_cluster_music_mode">Album cover visibility</string>
+    <string name="settings_cluster_music_temporary">Temporary · 8 seconds</string>
+    <string name="settings_cluster_music_permanent">Permanent</string>
+    <string name="settings_cluster_music_horizontal">Music card · horizontal position</string>
+    <string name="settings_cluster_music_vertical">Music card · vertical position</string>
+    <string name="settings_cluster_music_size">Music card · size</string>
+    <string name="settings_cluster_music_unknown">Unknown artist</string>
 </resources>
 
 
