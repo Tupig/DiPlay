@@ -15,6 +15,21 @@ before you report a change as done:
 
 Set `ANDROID_HOME` or `local.properties` if Gradle cannot find the SDK.
 
+## Issue tracking
+
+Every requirement, open question and defect MUST have its own GitHub issue before work on it
+starts. Never batch several concerns into one issue.
+
+1. Create one independent issue per item: a new requirement (`type:feature`, `type:chore` or
+   `type:docs`), an open question (`question`), or a defect (`type:bug`).
+2. Each issue needs a clear title, a detailed description (background, scope, acceptance
+   criteria), a `priority:*` label (plus a `module:*` label when it fits), and an assignee who
+   owns the outcome.
+3. Name branches after the issue — `fix/<issue>-<slug>` or `feat/<issue>-<slug>` — and put
+   `Closes #<issue>` in the PR description.
+4. When new findings extend an issue's scope, comment on the issue; do not silently grow the
+   branch.
+
 ## Adding or moving a setting
 
 The Settings screen is grouped by driver goal, not by implementation.
