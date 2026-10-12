@@ -34,11 +34,14 @@ internal data class CarPlaySurfaceBounds(val left: Int, val top: Int, val width:
 
 /**
  * Smooth video's starting delay over the link's base delay; it then adjusts to the frames the decoder
- * releases. On my Tang the Qualcomm decoder released a frame only after about two more had been queued
- * (p90 69-77 ms at about 56 fps, runs A1/A2 in docs/SMOOTH_WIRELESS.md), so it starts at three frame
- * intervals plus 40 ms: 90 ms at 60 fps.
+ * releases. Optimized for lower latency: reduced base delay and frame intervals.
  */
-internal fun smoothVideoDelayMillis(fps: Int): Int = 40 + 3_000 / fps.coerceIn(30, 60)
+internal fun smoothVideoDelayMillis(fps: Int): Int = 20 + 2_000 / fps.coerceIn(30, 60)
+
+/**
+ * Low latency video delay - for non-smooth video mode, minimal delay.
+ */
+internal fun lowLatencyVideoDelayMillis(fps: Int): Int = 10 + 1_000 / fps.coerceIn(30, 60)
 
 /**
  * A retained background session can be adopted only when its sink's pacing matches the video view this

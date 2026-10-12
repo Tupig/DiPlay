@@ -82,6 +82,7 @@ import com.shilapi.xcertplay.airplay.AirPlayDisplayConfig
 import com.shilapi.xcertplay.airplay.AirPlayIdentity
 import com.shilapi.xcertplay.airplay.AirPlayIcon
 import com.shilapi.xcertplay.airplay.CarPlayClusterDisplay
+import com.shilapi.xcertplay.cluster.CopilotDisplayPresentation
 import com.shilapi.xcertplay.airplay.AirPlaySafeArea
 import com.shilapi.xcertplay.airplay.AirPlaySession
 import com.shilapi.xcertplay.airplay.AirPlaySessionListener
@@ -90,6 +91,8 @@ import com.shilapi.xcertplay.airplay.SafeAreaRect
 import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.location.AndroidCarPlayLocationProvider
 import com.shilapi.xcertplay.media.AndroidMediaSink
+import com.shilapi.xcertplay.airplay.CarPlayVideoSurface.lowLatencyVideoDelayMillis
+import com.shilapi.xcertplay.airplay.CarPlayVideoSurface.smoothVideoDelayMillis
 import com.shilapi.xcertplay.media.CarPlayTouchMapper
 import com.shilapi.xcertplay.media.CarPlayVideoLayout
 import com.shilapi.xcertplay.mfi.RemoteMfiAuthenticationClient
@@ -349,6 +352,8 @@ class CarPlayHostActivity : ComponentActivity() {
     private var detectedCluster = ClusterActivityState.Snapshot(null, false)
     // Keep one surface per layer alive, including while its map card is hidden.
     private val clusterLayers = mutableMapOf<Boolean, ClusterMapPresentation>()
+    private var copilotPresentation: CopilotDisplayPresentation? = null
+    private var copilotSurface: Surface? = null
     private var clusterTurnGuidance: com.shilapi.xcertplay.hud.ClusterTurnGuidance? = null
     private val clusterTurnOverlayListener: (com.shilapi.xcertplay.hud.ClusterTurnGuidance?) -> Unit = { guidance ->
         runOnUiThread {
@@ -1115,6 +1120,13 @@ class CarPlayHostActivity : ComponentActivity() {
         }
         ClusterActivityOutput.stop(this)
         val theme = effectiveClusterTheme()
+        
+        // Handle COPILOT theme for copilot display
+        if (theme == LeapmotorClusterLayout.Theme.COPILOT) {
+            ensureCopilotPresentation()
+            return
+        }
+        
         if (LeapmotorClusterLayout.supported()) {
             ensureDiLink51ClusterPresentation(theme)
             return
@@ -1144,6 +1156,32 @@ class CarPlayHostActivity : ComponentActivity() {
         } catch (error: RuntimeException) {
             Log.w(ClusterMapPresentation.TAG, "cluster presentation failed", error)
             appendLog("Cluster map: presentation failed ${error.javaClass.simpleName}: ${error.message}")
+        }
+    }
+
+    private fun ensureCopilotPresentation() {
+        if (copilotPresentation != null) return
+        val display = CopilotDisplayPresentation.findDisplay(this) ?: run {
+            appendLog("Copilot display: no copilot projection display among ${CopilotDisplayPresentation.describeDisplays(this)}")
+            return
+        }
+        val presentation = CopilotDisplayPresentation(this, display) { surface ->
+            runOnUiThread { copilotSurface = surface }
+        }
+        presentation.setOnDismissListener {
+            if (copilotPresentation === presentation) {
+                copilotPresentation = null
+                copilotSurface = null
+            }
+        }
+        try {
+            presentation.show()
+            copilotPresentation = presentation
+            Log.i(CopilotDisplayPresentation.TAG, "copilot presentation shown display=${display.displayId} name=${display.name}")
+            appendLog("Copilot display: presentation shown display=${display.displayId} name=${display.name}")
+        } catch (error: RuntimeException) {
+            Log.w(CopilotDisplayPresentation.TAG, "copilot presentation failed", error)
+            appendLog("Copilot display: presentation failed ${error.javaClass.simpleName}: ${error.message}")
         }
     }
 
@@ -1221,6 +1259,7 @@ class CarPlayHostActivity : ComponentActivity() {
         }
     }
     private fun dismissClusterPresentation() {
+        dismissCopilotPresentation()
         ClusterActivityOutput.stop(this)
         val presentations = (clusterLayers.values + listOfNotNull(clusterPresentation)).distinct()
         clusterLayers.clear()
@@ -1230,6 +1269,13 @@ class CarPlayHostActivity : ComponentActivity() {
         presentations.forEach { runCatching { it.dismiss() } }
         com.shilapi.xcertplay.hud.BydNavigationOutputs.setClusterMapShown(false)
         controller?.setDashboardMapOutputVisible(false)
+    }
+
+    private fun dismissCopilotPresentation() {
+        copilotPresentation?.dismiss()
+        copilotPresentation = null
+        copilotSurface?.let { sink?.clearSurface(SCREEN_TYPE_ALT, it) }
+        copilotSurface = null
     }
 
     private fun onClusterSurface(surface: Surface?) {
@@ -1604,6 +1650,13 @@ class CarPlayHostActivity : ComponentActivity() {
         val video = TextureView(this).apply {
             isOpaque = false
             surfaceTextureListener = textureListener
+            // 锯齿优化：启用抗锯齿和双线性过滤
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            if (Build.VERSION.SDK_INT >= 29) {
+                setForceAntiAliasing(true)
+            }
+            // 启用双线性过滤减少锯齿
+            setFilterQuality(FilterQuality.HIGH)
         }
         pictureBinding = CarPlayPicture.Binding(video)
         val gestureLayer = View(this).apply {
@@ -4701,7 +4754,7 @@ class CarPlayHostActivity : ComponentActivity() {
             callEchoCancellation = AirPlayPersistence.loadCallEchoCancellation(this),
             callVoiceFilter = AirPlayPersistence.loadCallVoiceFilter(this),
             // Only a SurfaceView honours release timestamps; smooth video always selects one.
-            videoPacingDelayMillis = if (smoothVideo) smoothVideoDelayMillis(fps) else 0,
+            videoPacingDelayMillis = if (smoothVideo) smoothVideoDelayMillis(fps) else lowLatencyVideoDelayMillis(fps),
             mainVideoFrameRate = fps,
             vendorLowLatencyDecoder = AirPlayPersistence.loadLowLatencyDecoder(this),
             mtkDecoderTuningEnabled = AirPlayPersistence.loadMtkDecoderTuning(this),
@@ -5677,8 +5730,8 @@ class CarPlayHostActivity : ComponentActivity() {
             "Using SurfaceView video output: smooth video, frames shown at the iPhone's frame time + a delay " +
                 "starting at ${smoothVideoDelayMillis(fps)} ms; picture adjustments unavailable"
         } else if (directVideoOutput) {
-            "Using SurfaceView video output: direct video output, frames shown as soon as they are decoded; " +
-                "picture adjustments unavailable"
+            "Using SurfaceView video output: direct video output, frames shown as soon as they are decoded " +
+                "(low latency ${lowLatencyVideoDelayMillis(fps)} ms); picture adjustments unavailable"
         } else {
             "Using SurfaceView video output: window has no hardware acceleration; picture adjustments unavailable"
         })

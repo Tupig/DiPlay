@@ -72,8 +72,14 @@ internal class ClusterMapPresentation(
                 leftMargin = plan.left; topMargin = plan.top
             }
         if (plan != null) {
-            val textureView = TextureView(context)
-            fun transform() {
+            val textureView = TextureView(context).apply {
+                // 锯齿优化：启用抗锯齿和高质量过滤
+                if (Build.VERSION.SDK_INT >= 29) {
+                    setForceAntiAliasing(true)
+                }
+                setFilterQuality(FilterQuality.HIGH)
+                setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            }
                 textureView.setTransform(Matrix().apply {
                     setScale(LeapmotorClusterLayout.STREAM_WIDTH.toFloat() / plan.width,
                         LeapmotorClusterLayout.STREAM_HEIGHT.toFloat() / plan.height)
