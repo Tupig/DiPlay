@@ -1,12 +1,11 @@
-﻿<resources>
-    <string name="contrib_audio_home_channel_preview_unavailable">姝よ澶囨棤娉曡瘯鍚?Android 闊抽娴?%1$d銆?/string>
-    <string name="contrib_audio_home_choice_summary">%1$s 路 %2$s</string>
-    <string name="contrib_audio_home_media_channel_label">濯掍綋闊抽娴?/string>
-    <string name="contrib_audio_home_nav_channel_label">瀵艰埅闊抽娴?/string>
-    <string name="contrib_audio_home_nav_channel_note">0 琛ㄧず鑷姩璺敱銆?鈥?0 鐢ㄤ簬閫夋嫨浼犵粺闊抽娴佺紪鍙凤紝鍖呮嫭杞︽満鏀寔鐨勫巶鍟嗘墿灞曡緭鍑恒€傜偣閫夋暟鍊煎彲璇曞惉銆傛洿鏀瑰湪閲嶆柊杩炴帴鍚庣敓鏁堛€?/string>
-    <string name="contrib_audio_home_toggle_audio_focus">闊抽鐒︾偣</string>
-    <string name="contrib_audio_home_toggle_audio_focus_desc">CarPlay 濯掍綋鍚戠郴缁熺敵璇烽煶棰戠劍鐐癸紱瀵艰埅鎾姤涓嶄細鍘嬩綆闊充箰銆傝嫢寮€鍚悗娌℃湁澹伴煶锛堥儴鍒嗚溅鏈虹劍鐐瑰鐞嗗紓甯革級锛岃鍏抽棴鏈紑鍏炽€傛洿鏀瑰湪閲嶆柊杩炴帴鍚庣敓鏁堛€?/string>
-    <string name="audio_focus_auto_yield">鏆傛椂澶卞幓闊抽鐒︾偣鏃堕潤闊冲獟浣?/string>
-    <string name="audio_focus_auto_yield_desc">鍚敤闊抽鐒︾偣鍚庯紝鍦?Android 闊抽琚墦鏂紙鍖呮嫭鏉ョ數锛夋椂闈欓煶濯掍綋锛岄噸鏂拌幏寰楃劍鐐瑰悗鎭㈠銆傚鏋滆溅鏈轰笉鎭㈠闊抽鐒︾偣锛岃鍏抽棴姝ら€夐」銆傛洿鏀瑰湪閲嶆柊杩炴帴鍚庣敓鏁堛€?/string>
+<resources>
+    <string name="contrib_audio_home_channel_preview_unavailable">此设备无法试听 Android 音频流 %1$d。</string>
+    <string name="contrib_audio_home_choice_summary">%1$s · %2$s</string>
+    <string name="contrib_audio_home_media_channel_label">媒体音频流</string>
+    <string name="contrib_audio_home_nav_channel_label">导航音频流</string>
+    <string name="contrib_audio_home_nav_channel_note">0 表示自动路由。1–20 用于选择传统音频流编号，包括车机支持的厂商扩展输出。点选数值可试听。更改在重新连接后生效。</string>
+    <string name="contrib_audio_home_toggle_audio_focus">音频焦点</string>
+    <string name="contrib_audio_home_toggle_audio_focus_desc">CarPlay 媒体向系统申请音频焦点；导航播报不会压低音乐。若开启后没有声音（部分车机焦点处理异常），请关闭本开关。更改在重新连接后生效。</string>
+    <string name="audio_focus_auto_yield">暂时失去音频焦点时静音媒体</string>
+    <string name="audio_focus_auto_yield_desc">启用音频焦点后，在 Android 音频被打断（包括来电）时静音媒体，重新获得焦点后恢复。如果车机不恢复音频焦点，请关闭此选项。更改在重新连接后生效。</string>
 </resources>
-

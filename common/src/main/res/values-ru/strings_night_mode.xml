@@ -1,24 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="carplay_night_mode">袛薪械胁薪芯泄/薪芯褔薪芯泄 褉械卸懈屑 CarPlay</string>
-    <string name="settings_app_appearance">袨褎芯褉屑谢械薪懈械 锌褉懈谢芯卸械薪懈褟</string>
-    <string name="settings_app_appearance_dark">孝褢屑薪芯械</string>
-    <string name="settings_app_appearance_light">小胁械褌谢芯械</string>
-    <string name="settings_app_appearance_auto">袗胁褌芯</string>
-    <string name="settings_app_appearance_description">袗胁褌芯 褋谢械写褍械褌 褋芯褏褉邪薪褢薪薪芯泄 薪邪褋褌褉芯泄泻械 写薪械胁薪芯谐芯/薪芯褔薪芯谐芯 褉械卸懈屑邪 CarPlay, 邪 锌芯泻邪 CarPlay 芯褌泻褉褘褌 鈥?褌械泻褍褖械屑褍 褉械蟹褍谢褜褌邪褌褍. 小胁械褌谢芯械 懈 褌褢屑薪芯械 芯褎芯褉屑谢械薪懈械 芯褋褌邪褞褌褋褟 褎懈泻褋懈褉芯胁邪薪薪褘屑懈 懈 薪械 褌褉械斜褍褞褌 锌械褉械锌芯写泻谢褞褔械薪懈褟.</string>
-    <string name="settings_switch_to_light_appearance">袩械褉械泻谢褞褔懈褌褜 薪邪 褋胁械褌谢芯械 芯褎芯褉屑谢械薪懈械</string>
-    <string name="settings_switch_to_dark_appearance">袩械褉械泻谢褞褔懈褌褜 薪邪 褌褢屑薪芯械 芯褎芯褉屑谢械薪懈械</string>
-    <string name="carplay_night_system">袣邪泻 胁 褋懈褋褌械屑械 Android</string>
-    <string name="carplay_night_ambient">袩芯 芯泻褉褍卸邪褞褖械屑褍 芯褋胁械褖械薪懈褞</string>
-    <string name="carplay_night_day">袙褋械谐写邪 写薪械胁薪芯泄</string>
-    <string name="carplay_night_night">袙褋械谐写邪 薪芯褔薪芯泄</string>
-    <string name="carplay_night_schedule">袩芯 褉邪褋锌懈褋邪薪懈褞</string>
-    <string name="carplay_night_start">袧邪褔邪谢芯 薪芯褔薪芯谐芯 褉械卸懈屑邪</string>
-    <string name="carplay_night_end">袣芯薪械褑 薪芯褔薪芯谐芯 褉械卸懈屑邪</string>
-    <string name="carplay_night_schedule_hint">袠褋锌芯谢褜蟹褍械褌褋褟 屑械褋褌薪芯械 胁褉械屑褟 谐芯谢芯胁薪芯谐芯 褍褋褌褉芯泄褋褌胁邪. 袙褉械屑褟 薪邪褔邪谢邪 懈 泻芯薪褑邪 写芯谢卸薪芯 褉邪蟹谢懈褔邪褌褜褋褟; 锌械褉懈芯写 屑芯卸械褌 锌械褉械褏芯写懈褌褜 褔械褉械蟹 锌芯谢薪芯褔褜.</string>
-    <string name="carplay_night_schedule_same_time">袙褉械屑褟 薪邪褔邪谢邪 懈 泻芯薪褑邪 写芯谢卸薪芯 褉邪蟹谢懈褔邪褌褜褋褟.</string>
-    <string name="carplay_night_hint">小芯褏褉邪薪懈褌械 懈 胁械褉薪懈褌械褋褜 胁 CarPlay.</string>
-    <string name="carplay_night_ambient_hint">袠褋锌芯谢褜蟹褍褞褌褋褟 锌芯褉芯谐 懈 蟹邪写械褉卸泻邪 薪懈卸械. 袘械蟹 写邪褌褔懈泻邪 褋胁械褌邪 懈褋锌芯谢褜蟹褍褞褌褋褟 薪邪褋褌褉芯泄泻懈 Android.</string>
-    <string name="carplay_night_time_note">袝褋谢懈 胁 薪邪褋褌褉芯泄泻邪褏 芯褎芯褉屑谢械薪懈褟 胁薪褍褌褉懈 CarPlay 胁褘斜褉邪薪 邪胁褌芯屑邪褌懈褔械褋泻懈泄 褉械卸懈屑, CarPlay 褌邪泻卸械 褍褔懈褌褘胁邪械褌 胁褉械屑褟 iPhone. 袛邪卸械 械褋谢懈 胁褘斜褉邪薪 褉械卸懈屑 芦袙褋械谐写邪 写薪械胁薪芯泄禄, 薪芯褔褜褞 CarPlay 屑芯卸械褌 芯褌芯斜褉邪卸邪褌褜褋褟 胁 褌褢屑薪芯屑 芯褎芯褉屑谢械薪懈懈.</string>
+    <string name="carplay_night_mode">Дневной/ночной режим CarPlay</string>
+    <string name="settings_app_appearance">Оформление приложения</string>
+    <string name="settings_app_appearance_dark">Тёмное</string>
+    <string name="settings_app_appearance_light">Светлое</string>
+    <string name="settings_app_appearance_auto">Авто</string>
+    <string name="settings_app_appearance_description">Авто следует сохранённой настройке дневного/ночного режима CarPlay, а пока CarPlay открыт — текущему результату. Светлое и тёмное оформление остаются фиксированными и не требуют переподключения.</string>
+    <string name="settings_switch_to_light_appearance">Переключить на светлое оформление</string>
+    <string name="settings_switch_to_dark_appearance">Переключить на тёмное оформление</string>
+    <string name="carplay_night_system">Как в системе Android</string>
+    <string name="carplay_night_ambient">По окружающему освещению</string>
+    <string name="carplay_night_day">Всегда дневной</string>
+    <string name="carplay_night_night">Всегда ночной</string>
+    <string name="carplay_night_schedule">По расписанию</string>
+    <string name="carplay_night_start">Начало ночного режима</string>
+    <string name="carplay_night_end">Конец ночного режима</string>
+    <string name="carplay_night_schedule_hint">Используется местное время головного устройства. Время начала и конца должно различаться; период может переходить через полночь.</string>
+    <string name="carplay_night_schedule_same_time">Время начала и конца должно различаться.</string>
+    <string name="carplay_night_hint">Сохраните и вернитесь в CarPlay.</string>
+    <string name="carplay_night_ambient_hint">Используются порог и задержка ниже. Без датчика света используются настройки Android.</string>
+    <string name="carplay_night_time_note">Если в настройках оформления внутри CarPlay выбран автоматический режим, CarPlay также учитывает время iPhone. Даже если выбран режим «Всегда дневной», ночью CarPlay может отображаться в тёмном оформлении.</string>
 </resources>
-

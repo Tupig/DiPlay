@@ -1,24 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="carplay_night_mode">CarPlay 鏃ュ妯″紡</string>
-    <string name="settings_app_appearance">搴旂敤澶栬</string>
-    <string name="settings_app_appearance_dark">娣辫壊</string>
-    <string name="settings_app_appearance_light">娴呰壊</string>
-    <string name="settings_app_appearance_auto">鑷姩</string>
-    <string name="settings_app_appearance_description">鑷姩妯″紡璺熼殢宸蹭繚瀛樼殑 CarPlay 鏃ュ璁剧疆锛汣arPlay 鎵撳紑鏃跺垯璺熼殢瀹炴椂缁撴灉銆傛祬鑹插拰娣辫壊妯″紡淇濇寔鍥哄畾锛屾棤闇€閲嶆柊杩炴帴銆?/string>
-    <string name="settings_switch_to_light_appearance">鍒囨崲鍒版祬鑹插瑙?/string>
-    <string name="settings_switch_to_dark_appearance">鍒囨崲鍒版繁鑹插瑙?/string>
-    <string name="carplay_night_system">璺熼殢 Android 绯荤粺</string>
-    <string name="carplay_night_ambient">鑷姩锛堢幆澧冨厜锛?/string>
-    <string name="carplay_night_day">鍥哄畾鏃ラ棿</string>
-    <string name="carplay_night_night">鍥哄畾澶滈棿</string>
-    <string name="carplay_night_schedule">瀹氭椂鍒囨崲</string>
-    <string name="carplay_night_start">澶滈棿寮€濮?/string>
-    <string name="carplay_night_end">澶滈棿缁撴潫</string>
-    <string name="carplay_night_schedule_hint">浣跨敤杞︽満鏈湴鏃堕棿銆傚紑濮嬪拰缁撴潫鏃堕棿椤讳笉鍚岋紝鍙缃法鍗堝鏃舵銆?/string>
-    <string name="carplay_night_schedule_same_time">寮€濮嬪拰缁撴潫鏃堕棿涓嶈兘鐩稿悓銆?/string>
-    <string name="carplay_night_hint">淇濆瓨鍚庤繑鍥?CarPlay 鍗冲彲搴旂敤銆?/string>
-    <string name="carplay_night_ambient_hint">鑷姩妯″紡浣跨敤涓嬫柟鐨勯棬妲涘拰寤惰繜锛涙棤鍏夌嚎浼犳劅鍣ㄦ椂璺熼殢 Android銆?/string>
-    <string name="carplay_night_time_note">CarPlay 澶栬璁句负鑷姩鏃朵篃浼氬弬鑰?iPhone 鏃堕棿锛屽闂撮€夋嫨鍥哄畾鏃ラ棿浠嶅彲鑳芥樉绀烘繁鑹层€?/string>
+    <string name="carplay_night_mode">CarPlay 日夜模式</string>
+    <string name="settings_app_appearance">应用外观</string>
+    <string name="settings_app_appearance_dark">深色</string>
+    <string name="settings_app_appearance_light">浅色</string>
+    <string name="settings_app_appearance_auto">自动</string>
+    <string name="settings_app_appearance_description">自动模式跟随已保存的 CarPlay 日夜设置；CarPlay 打开时则跟随实时结果。浅色和深色模式保持固定，无需重新连接。</string>
+    <string name="settings_switch_to_light_appearance">切换到浅色外观</string>
+    <string name="settings_switch_to_dark_appearance">切换到深色外观</string>
+    <string name="carplay_night_system">跟随 Android 系统</string>
+    <string name="carplay_night_ambient">自动（环境光）</string>
+    <string name="carplay_night_day">固定日间</string>
+    <string name="carplay_night_night">固定夜间</string>
+    <string name="carplay_night_schedule">定时切换</string>
+    <string name="carplay_night_start">夜间开始</string>
+    <string name="carplay_night_end">夜间结束</string>
+    <string name="carplay_night_schedule_hint">使用车机本地时间。开始和结束时间须不同，可设置跨午夜时段。</string>
+    <string name="carplay_night_schedule_same_time">开始和结束时间不能相同。</string>
+    <string name="carplay_night_hint">保存后返回 CarPlay 即可应用。</string>
+    <string name="carplay_night_ambient_hint">自动模式使用下方的门槛和延迟；无光线传感器时跟随 Android。</string>
+    <string name="carplay_night_time_note">CarPlay 外观设为自动时也会参考 iPhone 时间，夜间选择固定日间仍可能显示深色。</string>
 </resources>
-

@@ -1,8 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ambient_delay_title">袟邪褌褉懈屑泻邪 锌械褉械屑懈泻邪薪薪褟</string>
-    <string name="ambient_delay_hint">袙胁械写褨褌褜 胁褨写 0 写芯 60 褋械泻褍薪写. 袧褍谢褜 鈥?屑懈褌褌褦胁械 锌械褉械屑懈泻邪薪薪褟.</string>
-    <string name="custom_number_error">袙胁械写褨褌褜 褑褨谢械 褔懈褋谢芯 胁褨写 %1$d 写芯 %2$d.</string>
-    <string name="ambient_delay_summary">%1$d 褋</string>
+    <string name="ambient_delay_title">Затримка перемикання</string>
+    <string name="ambient_delay_hint">Введіть від 0 до 60 секунд. Нуль — миттєве перемикання.</string>
+    <string name="custom_number_error">Введіть ціле число від %1$d до %2$d.</string>
+    <string name="ambient_delay_summary">%1$d с</string>
 </resources>
-

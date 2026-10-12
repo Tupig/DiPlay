@@ -1,12 +1,11 @@
-﻿<resources>
-    <string name="contrib_audio_home_channel_preview_unavailable">姝よ缃劇娉曡│鑱?Android 闊宠▕涓叉祦 %1$d銆?/string>
-    <string name="contrib_audio_home_choice_summary">%1$s 路 %2$s</string>
-    <string name="contrib_audio_home_media_channel_label">濯掗珨闊宠▕涓叉祦</string>
-    <string name="contrib_audio_home_nav_channel_label">灏庤埅闊宠▕涓叉祦</string>
-    <string name="contrib_audio_home_nav_channel_note">0 琛ㄧず鑷嫊璺敱銆?鈥?0 鐢ㄦ柤閬告搰鍌崇当闊宠▕涓叉祦绶ㄨ櫉锛屽寘鎷粖姗熸敮鎻寸殑寤犲晢鎿村厖杓稿嚭銆傞粸閬告暩鍊煎嵆鍙│鑱姐€傝畩鏇存渻鍦ㄩ噸鏂伴€ｆ帴寰岀敓鏁堛€?/string>
-    <string name="contrib_audio_home_toggle_audio_focus">闊宠▕鐒﹂粸</string>
-    <string name="contrib_audio_home_toggle_audio_focus_desc">CarPlay 濯掗珨鏈冨悜绯荤当瑕佹眰闊宠▕鐒﹂粸锛涘皫鑸挱鍫变笉鏈冮檷浣庨煶妯傞煶閲忋€傝嫢闁嬪暉寰屾矑鏈夎伈闊筹紙閮ㄥ垎杌婃鐨勯煶瑷婄劍榛炶檿鐞嗗彲鑳界暟甯革級锛岃珛闂滈枆姝ら伕闋呫€傝畩鏇存渻鍦ㄩ噸鏂伴€ｆ帴寰岀敓鏁堛€?/string>
-    <string name="audio_focus_auto_yield">鏆檪澶卞幓闊宠▕鐒﹂粸鏅傞潨闊冲獟楂?/string>
-    <string name="audio_focus_auto_yield_desc">鍟熺敤闊宠▕鐒﹂粸寰岋紝鍦?Android 闊宠▕琚墦鏂凤紙鍖呮嫭渚嗛浕锛夋檪闈滈煶濯掗珨锛岄噸鏂扮嵅寰楃劍榛炲緦鎭㈠京銆傚鏋滆粖姗熶笉鎭㈠京闊宠▕鐒﹂粸锛岃珛闂滈枆姝ら伕闋呫€傝畩鏇存渻鍦ㄩ噸鏂伴€ｆ帴寰岀敓鏁堛€?/string>
+<resources>
+    <string name="contrib_audio_home_channel_preview_unavailable">此裝置無法試聽 Android 音訊串流 %1$d。</string>
+    <string name="contrib_audio_home_choice_summary">%1$s · %2$s</string>
+    <string name="contrib_audio_home_media_channel_label">媒體音訊串流</string>
+    <string name="contrib_audio_home_nav_channel_label">導航音訊串流</string>
+    <string name="contrib_audio_home_nav_channel_note">0 表示自動路由。1–20 用於選擇傳統音訊串流編號，包括車機支援的廠商擴充輸出。點選數值即可試聽。變更會在重新連接後生效。</string>
+    <string name="contrib_audio_home_toggle_audio_focus">音訊焦點</string>
+    <string name="contrib_audio_home_toggle_audio_focus_desc">CarPlay 媒體會向系統要求音訊焦點；導航播報不會降低音樂音量。若開啟後沒有聲音（部分車機的音訊焦點處理可能異常），請關閉此選項。變更會在重新連接後生效。</string>
+    <string name="audio_focus_auto_yield">暫時失去音訊焦點時靜音媒體</string>
+    <string name="audio_focus_auto_yield_desc">啟用音訊焦點後，在 Android 音訊被打斷（包括來電）時靜音媒體，重新獲得焦點後恢復。如果車機不恢復音訊焦點，請關閉此選項。變更會在重新連接後生效。</string>
 </resources>
-

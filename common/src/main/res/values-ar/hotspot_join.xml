@@ -1,26 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hotspot_join_title">丕賱丕賳囟賲丕賲 丕賱鬲賱賯丕卅賷 賱賳賯胤丞 丕賱丕鬲氐丕賱 (鬲噩乇賷亘賷)</string>
-    <string name="hotspot_join_description">廿氐賱丕丨 丕禺鬲賷丕乇賷 賱賱亘乇丕賲噩 丕賱孬丕亘鬲丞 丕賱賲丿毓賵賲丞 亘賳馗丕賲 Android 13 兀賵 兀丨丿孬 賵賳賯胤丞 丕鬲氐丕賱 爻賷丕乇丞 鬲毓賲賱 毓賱賶 5 GHz 賮賯胤. 賷噩賴夭 丕賱賮丨氐 賳爻禺丞 禺丕氐丞 賱賱丕爻鬲毓丕丿丞 丿賵賳 鬲睾賷賷乇 賳賯胤丞 丕賱丕鬲氐丕賱. 賷鬲胤賱亘 ADB 賲丨賱賷賸丕 賲氐乇丨賸丕 毓賱賶 localhost:5555貨 丕賯鬲乇丕賳 鬲氐丨賷丨 丕賱兀禺胤丕亍 丕賱賱丕爻賱賰賷 毓亘乇 TLS 睾賷乇 賲丿毓賵賲.</string>
-    <string name="hotspot_join_check">賮丨氐 廿氐賱丕丨 賳賯胤丞 丕賱丕鬲氐丕賱</string>
-    <string name="hotspot_join_apply">廿囟丕賮丞 賲毓賱賵賲丕鬲 丕賱丕賳囟賲丕賲 丕賱鬲賱賯丕卅賷</string>
-    <string name="hotspot_join_restore">丕爻鬲毓丕丿丞 賳賯胤丞 丕賱丕鬲氐丕賱 丕賱賲丨賮賵馗丞</string>
-    <string name="hotspot_join_working">噩丕乇賺 丕賱賮丨氐 兀賵 丕賱鬲丨丿賷孬鈥?賯丿 賷鬲胤賱亘 丕賱廿賱睾丕亍 賮丨氐賸丕 噩丿賷丿賸丕 賱賱鬲丨賯賯 賲賳 丕賱賳鬲賷噩丞.</string>
-    <string name="hotspot_join_confirm">兀孬賳丕亍 丕賱賵賯賵賮貙 丕賮氐賱 CarPlay 賵兀賵賯賮 賳賯胤丞 丕賱丕鬲氐丕賱 賲賳 廿毓丿丕丿丕鬲 丕賱爻賷丕乇丞 兀賵賱賸丕. 賷睾賷乇 賴匕丕 丕賱廿噩乇丕亍 廿毓丿丕丿丕鬲 賳賯胤丞 丕賱丕鬲氐丕賱 丕賱賲丨賮賵馗丞 賮賯胤 賵賷鬲丨賯賯 賲賳 賯乇丕亍鬲賴丕. 卮睾賱 賳賯胤丞 丕賱丕鬲氐丕賱 亘賳賮爻賰 亘毓丿 匕賱賰 賱鬲丨丿賷孬 亘孬賴丕. 爻鬲賳賮氐賱 丕賱兀噩賴夭丞 丕賱賲鬲氐賱丞 毓賳丿 廿賷賯丕賮賴丕. 丕丨鬲賮馗 亘丕賱賳爻禺丞 丕賱禺丕氐丞 賱賱丕爻鬲毓丕丿丞.</string>
-    <string name="hotspot_join_disconnect">丕賮氐賱 CarPlay 賯亘賱 鬲睾賷賷乇 賳賯胤丞 丕賱丕鬲氐丕賱.</string>
-    <string name="hotspot_join_ready">廿毓丿丕丿 5 GHz 賲丿毓賵賲. 噩賴夭鬲 賳爻禺丞 禺丕氐丞 賰丕賲賱丞貨 賱賲 鬲鬲睾賷乇 賳賯胤丞 丕賱丕鬲氐丕賱 亘毓丿.</string>
-    <string name="hotspot_join_present">丕賱賲毓賱賵賲丕鬲 丕賱賲禺鬲亘乇丞 賲賵噩賵丿丞 亘丕賱賮毓賱. 賱賲 鬲囟賮 賳爻禺丞 賲賰乇乇丞貨 賱丕 賷賲賱賰 TuPigPlay 賳爻禺丞 賱丕爻鬲毓丕丿丞 毓賳氐乇 賲賵噩賵丿 賲爻亘賯賸丕.</string>
-    <string name="hotspot_join_applied">鬲賲 丕賱鬲丨賯賯 賲賳 丕賱廿毓丿丕丿丕鬲 丕賱賲丨賮賵馗丞. 卮睾賱 賳賯胤丞 丕賱丕鬲氐丕賱 賮賷 廿毓丿丕丿丕鬲 丕賱爻賷丕乇丞 賱鬲丨丿賷孬 丕賱亘孬 孬賲 丕禺鬲亘乇 丕賱丕賳囟賲丕賲 丕賱鬲賱賯丕卅賷. 賱丕 賷夭丕賱 賳噩丕丨 丕賱亘孬 賵CarPlay 賷鬲胤賱亘 丕禺鬲亘丕乇賸丕 毓賱賶 丕賱噩賴丕夭.</string>
-    <string name="hotspot_join_restored">鬲賲鬲 丕爻鬲毓丕丿丞 丕賱廿毓丿丕丿丕鬲 丕賱賲丨賮賵馗丞 亘丕賱賰丕賲賱 賵丕賱鬲丨賯賯 賲賳賴丕. 卮睾賱 賳賯胤丞 丕賱丕鬲氐丕賱 賲賳 廿毓丿丕丿丕鬲 丕賱爻賷丕乇丞.</string>
-    <string name="hotspot_join_unsupported">賵丕噩賴丞 兀賵 亘乇賳丕賲噩 孬丕亘鬲 兀賵 賳胤丕賯 兀賵 賲毓賱賵賲丕鬲 賲賵乇丿 賲鬲毓丕乇囟丞 睾賷乇 賲丿毓賵賲丞. 賱賲 賷胤亘賯 廿氐賱丕丨. 丕爻鬲禺丿賲 廿毓丿丕丿賸丕 賲丿毓賵賲賸丕 毓賱賶 5 GHz 賮賯胤貨 丕賱賳胤丕賯丕鬲 丕賱兀禺乇賶 睾賷乇 賲禺鬲亘乇丞.</string>
-    <string name="hotspot_join_off_required">賷噩亘 丕賱鬲兀賰丿 賲賳 廿賷賯丕賮 賳賯胤丞 丕賱丕鬲氐丕賱. 丕賮氐賱 丕賱兀噩賴夭丞 賵兀賵賯賮賴丕 賲賳 廿毓丿丕丿丕鬲 丕賱爻賷丕乇丞 孬賲 兀毓丿 丕賱賲丨丕賵賱丞. 賱賳 賷毓賷丿 TuPigPlay 鬲卮睾賷賱賴丕 鬲賱賯丕卅賷賸丕.</string>
-    <string name="hotspot_join_drift">鬲睾賷乇鬲 丕賱廿毓丿丕丿丕鬲 賲賳匕 丕賱賳爻禺 丕賱丕丨鬲賷丕胤賷. 賱賲 鬲爻鬲亘丿賱. 丕賮丨氐 賲噩丿丿賸丕貨 鬲丨鬲賮馗 丕賱賳爻禺丞 丕賱賲毓賱賯丞 賱賱丕爻鬲毓丕丿丞.</string>
-    <string name="hotspot_join_firmware_changed">鬲睾賷乇 丕賱亘乇賳丕賲噩 丕賱孬丕亘鬲. 丕賱賳爻禺丞 丕賱禺丕氐丞 賲丨賮賵馗丞 賱賰賳 賱丕 賷賲賰賳 丕爻鬲毓丕丿鬲賴丕 亘兀賲丕賳 毓賱賶 賴匕丕 丕賱亘乇賳丕賲噩.</string>
-    <string name="hotspot_join_cancelled">兀賱睾賷 賯亘賱 丕賱賰鬲丕亘丞. 丕賮丨氐 賲噩丿丿賸丕 賱賲毓乇賮丞 丨丕賱丞 丕賱丕爻鬲毓丕丿丞 丕賱賲丨賮賵馗丞.</string>
-    <string name="hotspot_join_failed_restored">賮卮賱 丕賱廿氐賱丕丨 兀賵 兀賱睾賷 亘毓丿 丕賱賰鬲丕亘丞. 丕爻鬲毓賷丿鬲 丕賱廿毓丿丕丿丕鬲 丕賱兀氐賱賷丞 賵鬲賲 丕賱鬲丨賯賯 賲賳 賯乇丕亍鬲賴丕.</string>
-    <string name="hotspot_join_busy">毓賲賱賷丞 兀禺乇賶 賱賳賯胤丞 丕賱丕鬲氐丕賱 賱丕 鬲夭丕賱 噩丕乇賷丞. 丕賳鬲馗乇 孬賲 丕賮丨氐 賲噩丿丿賸丕.</string>
-    <string name="hotspot_join_adb_required">賷鬲胤賱亘 ADB 賲丨賱賷賸丕 毓丕丿賷賸丕 賲氐乇丨賸丕 毓賱賶 localhost:5555. 賮毓賱賴 賵氐乇丨 亘賴 亘丕賱胤乇賷賯丞 丕賱賲丿毓賵賲丞 賱爻賷丕乇鬲賰. 丕賯鬲乇丕賳 鬲氐丨賷丨 丕賱兀禺胤丕亍 丕賱賱丕爻賱賰賷 毓亘乇 TLS 賵丨丿賴 賱賳 賷毓賲賱.</string>
-    <string name="hotspot_join_recovery">丕賱賳鬲賷噩丞 兀賵 丕賱鬲丨賯賯 賲賳 丕賱賳爻禺丞 睾賷乇 賲丐賰丿. 兀賵賯賮 賳賯胤丞 丕賱丕鬲氐丕賱 賵丕賮丨氐 賲噩丿丿賸丕 賯亘賱 丕賱賲鬲丕亘毓丞. 鬲丨鬲賮馗 丕賱賳爻禺丞 丕賱禺丕氐丞 丕賱賲賵噩賵丿丞貨 賱丕 鬲爻賲丨 丕賱丕爻鬲毓丕丿丞 廿賱丕 廿匕丕 馗賱鬲 丕賱廿毓丿丕丿丕鬲 賲鬲胤丕亘賯丞.</string>
+    <string name="hotspot_join_title">الانضمام التلقائي لنقطة الاتصال (تجريبي)</string>
+    <string name="hotspot_join_description">إصلاح اختياري للبرامج الثابتة المدعومة بنظام Android 13 أو أحدث ونقطة اتصال سيارة تعمل على 5 GHz فقط. يجهز الفحص نسخة خاصة للاستعادة دون تغيير نقطة الاتصال. يتطلب ADB محليًا مصرحًا على localhost:5555؛ اقتران تصحيح الأخطاء اللاسلكي عبر TLS غير مدعوم.</string>
+    <string name="hotspot_join_check">فحص إصلاح نقطة الاتصال</string>
+    <string name="hotspot_join_apply">إضافة معلومات الانضمام التلقائي</string>
+    <string name="hotspot_join_restore">استعادة نقطة الاتصال المحفوظة</string>
+    <string name="hotspot_join_working">جارٍ الفحص أو التحديث… قد يتطلب الإلغاء فحصًا جديدًا للتحقق من النتيجة.</string>
+    <string name="hotspot_join_confirm">أثناء الوقوف، افصل CarPlay وأوقف نقطة الاتصال من إعدادات السيارة أولًا. يغير هذا الإجراء إعدادات نقطة الاتصال المحفوظة فقط ويتحقق من قراءتها. شغل نقطة الاتصال بنفسك بعد ذلك لتحديث بثها. ستنفصل الأجهزة المتصلة عند إيقافها. احتفظ بالنسخة الخاصة للاستعادة.</string>
+    <string name="hotspot_join_disconnect">افصل CarPlay قبل تغيير نقطة الاتصال.</string>
+    <string name="hotspot_join_ready">إعداد 5 GHz مدعوم. جهزت نسخة خاصة كاملة؛ لم تتغير نقطة الاتصال بعد.</string>
+    <string name="hotspot_join_present">المعلومات المختبرة موجودة بالفعل. لم تضف نسخة مكررة؛ لا يملك DiPlay نسخة لاستعادة عنصر موجود مسبقًا.</string>
+    <string name="hotspot_join_applied">تم التحقق من الإعدادات المحفوظة. شغل نقطة الاتصال في إعدادات السيارة لتحديث البث ثم اختبر الانضمام التلقائي. لا يزال نجاح البث وCarPlay يتطلب اختبارًا على الجهاز.</string>
+    <string name="hotspot_join_restored">تمت استعادة الإعدادات المحفوظة بالكامل والتحقق منها. شغل نقطة الاتصال من إعدادات السيارة.</string>
+    <string name="hotspot_join_unsupported">واجهة أو برنامج ثابت أو نطاق أو معلومات مورد متعارضة غير مدعومة. لم يطبق إصلاح. استخدم إعدادًا مدعومًا على 5 GHz فقط؛ النطاقات الأخرى غير مختبرة.</string>
+    <string name="hotspot_join_off_required">يجب التأكد من إيقاف نقطة الاتصال. افصل الأجهزة وأوقفها من إعدادات السيارة ثم أعد المحاولة. لن يعيد DiPlay تشغيلها تلقائيًا.</string>
+    <string name="hotspot_join_drift">تغيرت الإعدادات منذ النسخ الاحتياطي. لم تستبدل. افحص مجددًا؛ تحتفظ النسخة المعلقة للاستعادة.</string>
+    <string name="hotspot_join_firmware_changed">تغير البرنامج الثابت. النسخة الخاصة محفوظة لكن لا يمكن استعادتها بأمان على هذا البرنامج.</string>
+    <string name="hotspot_join_cancelled">ألغي قبل الكتابة. افحص مجددًا لمعرفة حالة الاستعادة المحفوظة.</string>
+    <string name="hotspot_join_failed_restored">فشل الإصلاح أو ألغي بعد الكتابة. استعيدت الإعدادات الأصلية وتم التحقق من قراءتها.</string>
+    <string name="hotspot_join_busy">عملية أخرى لنقطة الاتصال لا تزال جارية. انتظر ثم افحص مجددًا.</string>
+    <string name="hotspot_join_adb_required">يتطلب ADB محليًا عاديًا مصرحًا على localhost:5555. فعله وصرح به بالطريقة المدعومة لسيارتك. اقتران تصحيح الأخطاء اللاسلكي عبر TLS وحده لن يعمل.</string>
+    <string name="hotspot_join_recovery">النتيجة أو التحقق من النسخة غير مؤكد. أوقف نقطة الاتصال وافحص مجددًا قبل المتابعة. تحتفظ النسخة الخاصة الموجودة؛ لا تسمح الاستعادة إلا إذا ظلت الإعدادات متطابقة.</string>
 </resources>
-
-

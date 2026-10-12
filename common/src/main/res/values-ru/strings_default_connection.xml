@@ -1,10 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_connection_mode">袪械卸懈屑 锌芯写泻谢褞褔械薪懈褟 锌芯 褍屑芯谢褔邪薪懈褞</string>
-    <string name="default_connection_last_used">袩芯褋谢械写薪懈泄 懈褋锌芯谢褜蟹芯胁邪薪薪褘泄</string>
-    <string name="default_connection_wireless">袘械褋锌褉芯胁芯写薪芯泄</string>
+    <string name="default_connection_mode">Режим подключения по умолчанию</string>
+    <string name="default_connection_last_used">Последний использованный</string>
+    <string name="default_connection_wireless">Беспроводной</string>
     <string name="default_connection_usb">USB</string>
-    <string name="default_connection_description">袩褉懈 芯褌泻褉褘褌懈懈 TuPigPlay 懈褋锌芯谢褜蟹褍泄褌械 褉械卸懈屑 锌芯写泻谢褞褔械薪懈褟 锌芯 褍屑芯谢褔邪薪懈褞 懈 胁褘斜褉邪薪薪褘泄 iPhone. 袣薪芯锌泻懈 褉褍褔薪芯谐芯 锌芯写泻谢褞褔械薪懈褟 懈褋锌芯谢褜蟹褍褞褌 胁褘斜褉邪薪薪褘泄 胁邪屑懈 褉械卸懈屑.</string>
+    <string name="default_connection_description">При открытии DiPlay используйте режим подключения по умолчанию и выбранный iPhone. Кнопки ручного подключения используют выбранный вами режим.</string>
 </resources>
-
-

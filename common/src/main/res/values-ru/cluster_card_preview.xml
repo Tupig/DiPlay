@@ -1,8 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="card_preview_title">袩褉械写锌褉芯褋屑芯褌褉 锌芯谢芯卸械薪懈褟 泻邪褉褌芯褔泻懈 锌芯胁芯褉芯褌邪</string>
-    <string name="card_preview_note">袩芯谢芯卸械薪懈械 锌芯泻邪蟹邪薪芯 芯褌薪芯褋懈褌械谢褜薪芯 胁褋械泄 锌邪薪械谢懈. 袚褉邪薪懈褑邪 屑邪谢芯谐芯 芯泻薪邪 蟹邪胁懈褋懈褌 芯褌 邪胁褌芯屑芯斜懈谢褟.</string>
-    <string name="card_preview_full">袩芯谢薪褘泄 褝泻褉邪薪</string>
-    <string name="card_preview_small">袦邪谢芯械 芯泻薪芯</string>
+    <string name="card_preview_title">Предпросмотр положения карточки поворота</string>
+    <string name="card_preview_note">Положение показано относительно всей панели. Граница малого окна зависит от автомобиля.</string>
+    <string name="card_preview_full">Полный экран</string>
+    <string name="card_preview_small">Малое окно</string>
 </resources>
-
