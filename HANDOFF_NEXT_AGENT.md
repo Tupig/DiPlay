@@ -1,9 +1,9 @@
 # TuPigPlay 零跑 C11 2024 (8295P) 适配项目 - 交接文档
 
-> **项目状态**：核心架构完成 ~85%，网络已恢复可推送
+> **项目状态**：核心架构完成 ~85%，**存在编译阻塞项**（见「给下一个 Agent 的建议」第 1 条）
 > **最后更新**：2026-10-12
-> **当前分支**：`main` (最新 commit: `f207795f`)
-> **远程仓库**：https://github.com/Tupig/DiPlay
+> **当前分支**：`main`（接手前先执行 `git pull` 同步本文档）
+> **远程仓库**：https://github.com/Tupig/DiPlay（独立维护，禁止回推上游）
 
 ---
 
@@ -315,10 +315,214 @@ H:\DiPlay-Merge\main-repo\
 
 ---
 
+## 🔄 上游同步工作流 (单向同步，禁止回推)
+
+> **核心原则**：独立维护 TuPigPlay，**禁止贡献回上游**，但**保留监控上游更新**能力，有价值的更新由 Agent 评估后选择性合并。
+
+### 🔧 远程仓库配置 (已完成)
+
+| 远程名 | URL | 权限 | 说明 |
+|--------|-----|------|------|
+| `origin` | `https://github.com/Tupig/DiPlay.git` | 读写 | 你的主仓库 (TuPigPlay) |
+| `upstream` | `https://github.com/shihabal3amri/DiPlay.git` | **只读** | 上游原项目 (已禁用 push) |
+
+```bash
+# 已配置完成：
+git remote add upstream https://github.com/shihabal3amri/DiPlay.git
+git remote set-url --push upstream "禁用推送到上游"  # 禁用误推
+```
+
+### 🔄 同步工作流 (Agent 必须掌握)
+
+```mermaid
+graph LR
+    A[上游有更新] --> B[git fetch upstream]
+    B --> C{评估价值}
+    C -->|有价值| D[git cherry-pick <commit>]
+    C -->|无价值| E[忽略]
+    D --> F[测试验证]
+    F --> G[推送到 origin/main]
+    E --> H[继续开发]
+```
+
+### 📋 标准操作流程 (Agent 必须掌握)
+
+#### 1. 获取上游更新
+```bash
+cd /d H:\DiPlay-Merge\main-repo
+
+# 获取上游最新代码
+git fetch upstream
+
+# 查看上游新提交 (不合并)
+git log --oneline main..upstream/main
+
+# 查看详细差异
+git log --oneline --graph --all -20
+```
+
+#### 2. 评估价值 (Agent 必须评估)
+
+| 评估维度 | 判断标准 |
+|----------|----------|
+| **功能相关性** | 是否与 TuPigPlay 功能相关 (CarPlay、方向盘、仪表盘、ADB等) |
+| **兼容性** | 是否与零跑 C11 (8295P) 硬件兼容 |
+| **代码质量** | 是否符合项目规范 (ktlint/detekt) |
+| **维护成本** | 引入后维护成本是否可控 |
+
+#### 3. 选择性合并 (有价值时)
+
+```bash
+# 创建临时评估分支
+git checkout -b eval-upstream upstream/main
+
+# 对比差异
+git diff main..eval-upstream --stat
+
+# 仅挑选有用的提交 (推荐 cherry-pick)
+git checkout main
+git cherry-pick <commit-hash>  # 仅挑选有用的
+
+# 或合并特定文件
+git checkout upstream/main -- path/to/valuable/file.kt
+```
+
+#### 4. 测试验证 (必须)
+
+```bash
+# 构建验证
+./build_leapmotor.sh ximalaya
+
+# 真机测试核心流程
+# - 无线/有线 CarPlay 连接
+# - 方向盘按键响应
+# - 三屏显示 (中控/仪表/副驾)
+# - 锯齿/延迟体验
+# - ADB 功能 (热点/车速/USB确认)
+```
+
+#### 5. 推送到主仓库
+```bash
+git push origin main
+```
+
+### ⚠️ 禁止事项 (红线)
+
+| 禁止操作 | 原因 |
+|----------|------|
+| ❌ `git push upstream` | 已禁用，防止误推送到上游 |
+| ❌ 直接合并 `upstream/main` 到 `main` | 会引入大量不兼容的 BYD 代码 |
+| ❌ 盲目合并所有上游提交 | 必须评估后选择性合并 |
+| ❌ 修改上游仓库代码 | 无权限，且违背独立维护原则 |
+
+### 📋 Agent 必须遵守的同步清单
+
+- [ ] 定期 `git fetch upstream` (建议每周至少一次)
+- [ ] 阅读上游 commit 信息，评估价值
+- [ ] 有价值 → `git cherry-pick` 或文件级合并
+- [ ] 无价值 → 记录原因，忽略
+- [ ] 合并后 → 完整测试验证
+- [ ] 推送到 `origin/main` (你的主仓库)
+- [ ] 记录合并决策到 Issue/ADR
+
 ---
 
-## 🎯 给下一个 Agent 的建议
+### ✅ 当前远程配置状态 (已验证)
 
-**文档版本**：v1.0
-**创建时间**：2026-10-12
-**创建者**：当前 Agent (交接用)
+| 远程名 | Fetch URL | Push URL | 状态 |
+|--------|-----------|----------|------|
+| `origin` | `https://github.com/Tupig/DiPlay.git` | `https://github.com/Tupig/DiPlay.git` | ✅ 读写 |
+| `upstream` | `https://github.com/shihabal3amri/DiPlay.git` | `禁用推送到上游` | ✅ 只读 |
+
+```bash
+# 验证命令
+git remote -v
+```
+
+输出应为：
+```
+origin    https://github.com/Tupig/DiPlay.git (fetch)
+origin    https://github.com/Tupig/DiPlay.git (push)
+upstream  https://github.com/shihabal3amri/DiPlay.git (fetch)
+upstream  禁用推送到上游 (push)
+```
+
+---
+
+## 📚 文档规范 (对标 GitHubDesktop2Chinese，强制)
+
+> **标杆仓库**：https://github.com/Tupig/GitHubDesktop2Chinese —— 本项目所有文档必须达到同等清晰度。
+
+### 必须创建/维护的标准文档
+
+| 文件 | 作用 | 状态 |
+|------|------|------|
+| `README.md` | 项目门面：徽章 + 简介 + 目录 + 快速开始 + 截图 + FAQ + 许可证 | ⏳ 待重写 |
+| `docs/CONTRIBUTING.md` | 贡献指南：分支规范、Commit 规范、PR 流程、Issue 流程 | ⏳ 待创建 |
+| `SECURITY.md` | 安全策略：漏洞上报方式（仅 GitHub 私密报告） | ⏳ 待创建 |
+| `PRIVACY.md` | 隐私政策：数据收集、存储、Adb 权限用途 | ⏳ 待创建 |
+| `LICENSE` | 开源许可证（与上游保持一致） | ⏳ 待确认 |
+| `docs/wiki/` | 分类详细文档（安装、使用、开发、故障排查） | ⏳ 待创建 |
+| `CHANGELOG.md` | 版本变更日志（Keep a Changelog 格式） | ⏳ 待创建 |
+| `.github/ISSUE_TEMPLATE/*.yml` | 表单式 Issue 模板（bug/feature/task） | ⏳ 待创建 |
+| `.github/PULL_REQUEST_TEMPLATE.md` | PR 模板 | ⏳ 待创建 |
+| `.github/workflows/*.yml` | CI/CD（构建、检查、Release） | ⏳ 待创建 |
+
+### README.md 结构标准（参照 GitHubDesktop2Chinese）
+
+```markdown
+# TuPigPlay (原 DiPlay)
+
+[![Build](badge)][![Release](badge)][![License](badge)][![Issues](badge)]
+
+> 中英双语一句话简介
+
+## 目录 / Table of Contents
+## ✨ 功能特性 / Features        ← 表格列出，带勾选状态
+## 🚀 快速开始 / Quick Start     ← 可复制的命令块
+## 📦 安装 / Installation        ← 分步骤 + 注意事项引用块
+## 🖥️ 适配车型 / Supported Vehicles  ← 表格：车型/芯片/屏幕/系统版本
+## 🛠️ 构建 / Building            ← 参数表格 + 命令
+## ❓ 常见问题 / FAQ              ← 问答形式
+## 🤝 贡献 / Contributing        ← 链接到 CONTRIBUTING.md
+## 📄 许可证 / License
+## 🙏 致谢 / Acknowledgments     ← 注明上游 shihabal3amri/DiPlay
+```
+
+### 文档写作硬性规则
+
+| 规则 | 说明 |
+|------|------|
+| **双语单文件** | 同一文件内中英对照，**禁止** `.zh-CN.md` 副本文件 |
+| **徽章齐全** | Build / Release / License / Issues 徽章指向 `Tupig/DiPlay` |
+| **相对路径** | 仓库内链接一律相对路径，禁止 `H:\...` 等绝对路径 |
+| **表格优先** | 参数、选项、对比信息必须用表格 |
+| **可复制命令** | 所有命令放在代码块中，可直接复制执行 |
+| **引用块提示** | 重要提示用 `> ⚠️ 注意：`、`> 💡 提示：` 引用块 |
+| **单一事实源** | 同一信息只写一处，其他地方用链接引用 |
+| **链接检查** | 提交前检查无死链（相对链接指向的文件必须存在） |
+
+### 工作流（Workflow）梳理要求
+
+1. **`.github/workflows/build.yml`** — push/PR 触发：Gradle 构建 + ktlint + detekt
+2. **`.github/workflows/release.yml`** — Tag `v*` 触发：生成 Release + APK 附件 + 自动 CHANGELOG
+3. 所有 workflow 必须是**唯一且必要**的（用户要求：只允许一个有效工作流，不重复造轮子）
+4. workflow 内涉及的仓库链接一律用 `Tupig/DiPlay`
+
+---
+
+## 🎯 给下一个 Agent 的建议（接手顺序，务必按此优先级）
+
+> 1. **先修编译**：`CarPlayHostActivity.kt` 中仍残留 `com.shilapi.xcertplay.hud.BydNavigationOutputs` / `BydClusterNaviMode` 引用（约 1058、1127、1267 行），这些类已删除，会直接编译失败；`LeapmotorClusterLayout.kt` 有重复代码块且 package 声明与所在目录不一致，需一并修复。
+> 2. **再补 Phase 4.3**：完善 `CarPlayHostActivity` 中 `ensureCopilotPresentation()` / `Theme.COPILOT` 的副驾屏集成，真机验证 `CopilotDisplayPresentation.findDisplay()`。
+> 3. **然后 Phase 5 ADB**：利用零跑已开启 ADB，实现热点自动开启、USB 自动确认、车速读取（`LeapmotorVehicleAccess.getVehicleSpeed()`）。
+> 4. **最后 Phase 6/8**：按本文档「📚 文档规范」章节重写 README、补齐 `.github/` 模板与工作流、合并双语文档，然后构建验证。
+>
+> 所有基础设施（版本管理、构建脚本、目录结构、代码清理）已完备，可专注业务功能开发。
+> **记住：任何问题都要创建 GitHub Issue 追踪；一切文档与工作流看齐 GitHub 模板规范。**
+
+---
+
+**文档版本**：v1.2
+**最后更新**：2026-10-12
+**维护要求**：随进度持续更新本文档，未完成事项不得删除，完成后标注 ✅ 并注明对应 commit
