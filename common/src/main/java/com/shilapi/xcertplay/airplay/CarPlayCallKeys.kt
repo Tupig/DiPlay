@@ -1,4 +1,4 @@
-package com.shilapi.xcertplay
+﻿package com.shilapi.xcertplay
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,8 +7,8 @@ import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.shilapi.xcertplay.LeapmotorNavigationOutputs
-import com.shilapi.xcertplay.LeapmotorOutputSettings
+import com.shilapi.xcertplay.leapmotor.LeapmotorNavigationOutputs
+import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
 import com.shilapi.xcertplay.hud.CarPlayCallKeyPolicy
 import com.shilapi.xcertplay.orchestration.CarPlayController
 
@@ -95,3 +95,4 @@ internal object CarPlayCallKeys {
 
     private fun CarPlayController?.hasSession(): Boolean = this?.activeAirPlaySessionToken() != null
 }
+

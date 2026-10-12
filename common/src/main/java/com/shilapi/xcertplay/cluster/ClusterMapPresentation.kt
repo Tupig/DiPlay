@@ -25,8 +25,8 @@ import android.view.TextureView
 import android.content.res.ColorStateList
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import com.shilapi.xcertplay.LeapmotorClusterLayout
-import com.shilapi.xcertplay.LeapmotorC11Settings
+import com.shilapi.xcertplay.cluster.LeapmotorClusterLayout
+import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
 
 /**
  * Shows CarPlay's instrument-cluster stream on a Leapmotor cluster projection display.
@@ -274,4 +274,5 @@ private class InstrumentContrastView(
         paint.shader = null
     }
 }
+
 

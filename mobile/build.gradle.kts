@@ -4,14 +4,14 @@ plugins {
 }
 
 // Optional local-only input. CI and ordinary source builds contain no accessory identity.
-val localAuthenticationAssets = providers.environmentVariable("DIPLAY_AUTH_ASSETS_DIR")
+val localAuthenticationAssets = providers.environmentVariable("TUPIGPLAY_AUTH_ASSETS_DIR")
     .orNull?.let { file(it).canonicalFile }
 
 // Optional local-only override for a head-unit whitelist experiment. Unset in CI, so ordinary
 // builds keep the default identity. When set it is the final package name: the debug suffix is
 // dropped so the APK carries exactly the requested applicationId.
-// Usage: ./gradlew :mobile:assembleRelease -PdiplayApplicationId=com.ximalaya.ting.android.car
-val overrideApplicationId = providers.gradleProperty("diplayApplicationId").orNull
+// Usage: ./gradlew :mobile:assembleRelease -PtupigplayApplicationId=com.ximalaya.ting.android.car
+val overrideApplicationId = providers.gradleProperty("tupigplayApplicationId").orNull
 
 android {
     namespace = "com.shilapi.xcertplay"
@@ -20,11 +20,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = overrideApplicationId ?: "com.shihab.diplay"
+        applicationId = overrideApplicationId ?: "com.tupig.tupigplay"
         minSdk = 25
         targetSdk = 37
-        versionCode = 37
-        versionName = "0.2.18"
+        versionCode = 1
+        versionName = "0.0.0.1"
 
     }
 
@@ -53,7 +53,7 @@ android {
                 enable = false
             }
             signingConfig = signingConfigs.getByName("release")
-            // 零跑白名单包名构建：指定 -PdiplayApplicationId 时使用指定包名，去掉后缀
+            // 零跑白名单包名构建：指定 -PtupigplayApplicationId 时使用指定包名，去掉后缀
             applicationIdSuffix = if (overrideApplicationId != null) "" else ""
         }
     }
@@ -113,7 +113,7 @@ val verifyStandaloneAuthentication by tasks.registering {
     val directory = localAuthenticationAssets
     doLast {
         check(directory != null) {
-            "Standalone car builds require DIPLAY_AUTH_ASSETS_DIR; assembleDebug alone is source-only."
+            "Standalone car builds require TUPIGPLAY_AUTH_ASSETS_DIR; assembleDebug alone is source-only."
         }
         check(listOf("identity.pk8", "certificate.p7b").all {
             directory.resolve("offline-mfi/$it").let { file -> file.isFile && file.length() > 0 }

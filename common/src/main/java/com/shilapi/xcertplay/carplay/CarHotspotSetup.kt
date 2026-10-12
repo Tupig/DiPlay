@@ -1,4 +1,4 @@
-package com.shilapi.xcertplay
+﻿package com.shilapi.xcertplay
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -6,19 +6,19 @@ import android.provider.Settings
 import android.util.Log
 import com.shilapi.xcertplay.adb.AdbKeys
 import com.shilapi.xcertplay.adb.LocalAdb
-import com.shilapi.xcertplay.LeapmotorOutputSettings
+import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
 import com.shilapi.xcertplay.network.CarHotspotSettings
 import com.shilapi.xcertplay.orchestration.ManualHotspotValidation
 
 /** Each grant is requested explicitly from settings; startup never calls this authorization path. */
 internal object CarHotspotSetup {
-    // 零跑车机检测：通过车辆数据接口或包名检测
+    // 闆惰窇杞︽満妫€娴嬶細閫氳繃杞﹁締鏁版嵁鎺ュ彛鎴栧寘鍚嶆娴?
     fun isLeapmotorHeadUnit(context: Context): Boolean = LeapmotorOutputSettings.clusterNavigation(context) || runCatching {
         context.packageManager.getApplicationInfo("com.leapmotor.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
     }.getOrDefault(false)
 
-    // 兼容旧代码
-    @Deprecated("使用 isLeapmotorHeadUnit")
+    // 鍏煎鏃т唬鐮?
+    @Deprecated("浣跨敤 isLeapmotorHeadUnit")
     fun isBydHeadUnit(context: Context): Boolean = isLeapmotorHeadUnit(context)
 
     enum class Permission(val appOp: String) {
@@ -58,3 +58,4 @@ internal object CarHotspotSetup {
             ManualHotspotValidation.error(AirPlayPersistence.loadManualHotspotSsid(context),
                 AirPlayPersistence.loadManualHotspotPassphrase(context)) == null
 }
+

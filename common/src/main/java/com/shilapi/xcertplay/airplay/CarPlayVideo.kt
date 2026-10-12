@@ -1,4 +1,4 @@
-package com.shilapi.xcertplay
+﻿package com.shilapi.xcertplay
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.airplay.VideoInCar
 import com.shilapi.xcertplay.host.R
-import com.shilapi.xcertplay.LeapmotorNavigationOutputs
+import com.shilapi.xcertplay.leapmotor.LeapmotorNavigationOutputs
 import com.shilapi.xcertplay.orchestration.CarPlayController
 import com.shilapi.xcertplay.orchestration.CarPlayVideoListener
 import java.util.concurrent.CompletableFuture
@@ -253,3 +253,4 @@ internal object CarPlayVideo : CarPlayVideoListener {
         activity?.finish()
     }
 }
+

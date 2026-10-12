@@ -1,4 +1,4 @@
-package com.shilapi.xcertplay
+﻿package com.shilapi.xcertplay
 
 import android.content.Context
 import android.content.Intent
@@ -21,7 +21,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.compat.AudioFocusRequestCompat
 import com.shilapi.xcertplay.host.R
-import com.shilapi.xcertplay.LeapmotorOutputSettings
+import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
 import com.shilapi.xcertplay.media.CarPlayNowPlaying
 import com.shilapi.xcertplay.orchestration.CarPlayController
 import java.util.concurrent.Executors
@@ -509,7 +509,7 @@ internal object CarPlayMediaKeys {
 }
 
 /**
- * Media-session input → CarPlay presses. Hardware keys arrive as button events and keep the toggle;
+ * Media-session input 鈫?CarPlay presses. Hardware keys arrive as button events and keep the toggle;
  * media controllers (not hardware keys) call [onPlay] and [onPause] with an explicit intent.
  */
 internal class CarPlayMediaCallback(
@@ -532,3 +532,4 @@ internal class CarPlayMediaCallback(
     override fun onSkipToNext() = send(CarPlayMediaButton.NEXT, "next")
     override fun onSkipToPrevious() = send(CarPlayMediaButton.PREVIOUS, "previous")
 }
+
