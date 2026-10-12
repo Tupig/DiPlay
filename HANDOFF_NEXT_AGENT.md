@@ -252,6 +252,73 @@ H:\DiPlay-Merge\main-repo\
 
 ---
 
+## 📋 强制性工作规范 (必须遵守)
+
+### 🐛 Issue 管理规范 (强制)
+
+| 规则 | 说明 |
+|------|------|
+| **所有问题必须创建 Issue** | 任何 Bug、功能需求、技术债、优化建议都必须在 GitHub 创建 Issue，禁止仅在本地或聊天中记录 |
+| **Issue 必填字段** | 标题(清晰描述)、Labels(类型/优先级/模块)、Assignees、Projects、Milestone |
+| **Issue 模板** | 必须使用 `.github/ISSUE_TEMPLATE/` 下的模板：`bug_report.yml`、`feature_request.yml`、`task.yml` |
+| **关联提交** | 所有 commit 必须在 message 中引用 Issue 编号：`fix: 修复锯齿问题 #123` |
+| **关闭方式** | 通过 `Closes #123` 或 `Fixes #123` 在 PR/commit 中自动关闭 |
+
+### 🔄 Git 工作流规范 (强制)
+
+| 规则 | 说明 |
+|------|------|
+| **分支策略** | `main` (受保护) ← `feature/*` / `fix/*` / `chore/*` / `docs/*` / `refactor/*` |
+| **分支命名** | `type/issue号-简短描述` 例：`feat/456-add-copilot-display` |
+| **PR 规范** | 所有变更必须通过 PR 合并，禁止直接推送 `main` |
+| **PR 模板** | 必须使用 `.github/PULL_REQUEST_TEMPLATE.md` |
+| **Review 要求** | 至少 1 次 Code Review 通过后可合并 |
+| **Commit 规范** | Conventional Commits：`type(scope): description` 例：`feat(cluster): add copilot display support` |
+
+### 📝 文档规范
+
+| 规则 | 说明 |
+|------|------|
+| **双语文档** | 所有用户文档必须中英双语单文件，参考 `GitHubDesktop2Chinese` 风格 |
+| **API 文档** | KDoc 注释覆盖所有 public API |
+| **架构决策记录** | 重要决策记录在 `docs/adr/YYYY-MM-DD-短标题.md` (ADR 格式) |
+
+### 🏷️ 标签规范 (GitHub Labels)
+
+| 类型 | 标签示例 |
+|------|----------|
+| **Type** | `type:bug`、`type:feature`、`type:task`、`type:chore`、`type:docs`、`type:refactor` |
+| **Priority** | `priority:critical`、`priority:high`、`priority:medium`、`priority:low` |
+| **Module** | `module:cluster`、`module:airplay`、`module:wheel`、`module:leapmotor`、`module:usb`、`module:bluetooth` |
+| **Status** | `status:todo`、`status:in-progress`、`status:review`、`status:blocked`、`status:done` |
+
+### 🔄 CI/CD 规范
+
+| 规则 | 说明 |
+|------|------|
+| **自动构建** | 每次 PR 推送触发 Gradle 构建 + 单元测试 |
+| **代码检查** | ktlint + detekt 必须通过 |
+| **版本自增** | 合并到 main 自动执行 `version_increment.sh` 并打 Tag `v{version}` |
+| **Release** | Tag 推送触发生成 Release APK + 自动生成 Changelog |
+
+---
+
+## ✅ 下一个 Agent 入职 Checklist
+
+- [ ] 阅读完 `HANDOFF_NEXT_AGENT.md` 全文
+- [ ] 配置 Git 用户信息：`git config user.name/email`
+- [ ] 配置 GitHub CLI：`gh auth login`
+- [ ] 熟悉 `.github/ISSUE_TEMPLATE/` 和 `.github/PULL_REQUEST_TEMPLATE.md`
+- [ ] 创建第一个 Issue：`feat(cluster): complete copilot display integration`
+- [ ] 开发分支：`git checkout -b feat/456-copilot-display-integration`
+- [ ] 开始 Phase 4.3 副驾屏集成开发
+
+---
+
+---
+
+## 🎯 给下一个 Agent 的建议
+
 **文档版本**：v1.0
 **创建时间**：2026-10-12
 **创建者**：当前 Agent (交接用)
