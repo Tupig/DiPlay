@@ -1,4 +1,4 @@
-package com.shilapi.xcertplay
+﻿package com.shilapi.xcertplay
 
 import android.app.Presentation
 import android.content.Context
@@ -25,21 +25,20 @@ import android.view.TextureView
 import android.content.res.ColorStateList
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import com.shilapi.xcertplay.airplay.CarPlayClusterDisplay
-import com.shilapi.xcertplay.host.R
-import com.shilapi.xcertplay.hud.ClusterTurnGuidance
+import com.shilapi.xcertplay.LeapmotorClusterLayout
+import com.shilapi.xcertplay.LeapmotorC11Settings
 
 /**
- * Shows CarPlay's instrument-cluster stream on a BYD cluster projection display.
+ * Shows CarPlay's instrument-cluster stream on a Leapmotor cluster projection display.
  *
- * BYD exposes the cluster's projection area as public presentation displays owned by
- * com.byd.containerservice (DiLink 5) or com.xdja.containerservice (DiLink 4). The
- * cluster only shows this display while its projection mode is on, which DiPlay cannot switch.
+ * Leapmotor C11 2024 (8295P) exposes the cluster's projection area as public presentation
+ * displays. The cluster shows this display while its projection mode is on.
+ * Uses standard CarPlay Cluster Display protocol.
  */
 internal class ClusterMapPresentation(
     context: Context,
     display: Display,
-    private val theme: DiLink51ClusterLayout.Theme = DiLink51ClusterLayout.theme(context),
+    private val theme: LeapmotorClusterLayout.Theme = LeapmotorClusterLayout.theme(context),
     private val onSurface: (Surface?) -> Unit,
 ) : Presentation(context, display) {
     // The placeholder until the map arrives: a small spinner.
@@ -55,10 +54,10 @@ internal class ClusterMapPresentation(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val size = sizeOf(display)
-        val adaptive = DiLink51ClusterLayout.supported()
-        val plan = if (adaptive) DiLink51ClusterLayout.plan(size.x, size.y, theme) else null
+        val adaptive = LeapmotorClusterLayout.supported()
+        val plan = if (adaptive) LeapmotorClusterLayout.plan(size.x, size.y, theme) else null
         // The adaptive DiLink 5.1 layout follows the cluster's own contrast; elsewhere the cluster follows DiPlay's theme.
-        val dark = if (plan != null) DiLink51ClusterLayout.dark(context, theme) else context.resolveAppNightNow()
+        val dark = if (plan != null) LeapmotorClusterLayout.dark(context, theme) else context.resolveAppNightNow()
         val backdrop = if (dark) Color.rgb(15, 22, 30) else Color.rgb(207, 218, 229)
         val placeholder = if (dark) Color.BLACK else Color.rgb(233, 238, 246)
         val root = FrameLayout(context).apply {
@@ -76,14 +75,14 @@ internal class ClusterMapPresentation(
             val textureView = TextureView(context)
             fun transform() {
                 textureView.setTransform(Matrix().apply {
-                    setScale(DiLink51ClusterLayout.STREAM_WIDTH.toFloat() / plan.width,
-                        DiLink51ClusterLayout.STREAM_HEIGHT.toFloat() / plan.height)
+                    setScale(LeapmotorClusterLayout.STREAM_WIDTH.toFloat() / plan.width,
+                        LeapmotorClusterLayout.STREAM_HEIGHT.toFloat() / plan.height)
                     postTranslate(-plan.sourceLeft.toFloat(), -plan.sourceTop.toFloat())
                 })
             }
             textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureAvailable(texture: SurfaceTexture, width: Int, height: Int) {
-                    texture.setDefaultBufferSize(DiLink51ClusterLayout.STREAM_WIDTH, DiLink51ClusterLayout.STREAM_HEIGHT)
+                    texture.setDefaultBufferSize(LeapmotorClusterLayout.STREAM_WIDTH, LeapmotorClusterLayout.STREAM_HEIGHT)
                     transform()
                     outputSurface = Surface(texture).also(onSurface)
                 }
@@ -200,24 +199,24 @@ internal class ClusterMapPresentation(
         const val TAG = "DiPlay-Cluster"
 
         /** Keep the 5/5.1 selection order, then try the measured DiLink 4 projection display. */
-        fun findDisplay(context: Context, theme: DiLink51ClusterLayout.Theme = DiLink51ClusterLayout.theme(context)): Display? {
+        fun findDisplay(context: Context, theme: LeapmotorClusterLayout.Theme = LeapmotorClusterLayout.theme(context)): Display? {
             val displays = context.getSystemService(DisplayManager::class.java)
                 ?.getDisplays(DisplayManager.DISPLAY_CATEGORY_PRESENTATION) ?: return null
-            val name = DiLink51ClusterLayout.displayName(
+            val name = LeapmotorClusterLayout.displayName(
                 displays.map { it.name }, android.os.Build.FINGERPRINT, theme,
             )
             if (name == null) {
                 // Never replace a missing 5.1 side layer with a full-screen display.
-                if (DiLink51ClusterLayout.supported()) return null
+                if (LeapmotorClusterLayout.supported()) return null
                 return displays.firstOrNull { display ->
                     val size = sizeOf(display)
                     DiLink4ClusterDisplay.accepts(display.name, size.x, size.y)
                 }
             }
             return displays.firstOrNull { it.name == name }?.takeIf {
-                if (!DiLink51ClusterLayout.supported()) true else {
+                if (!LeapmotorClusterLayout.supported()) true else {
                     val size = sizeOf(it)
-                    DiLink51ClusterLayout.plan(size.x, size.y, theme) != null
+                    LeapmotorClusterLayout.plan(size.x, size.y, theme) != null
                 }
             }
         }
@@ -250,7 +249,7 @@ internal class ClusterMapPresentation(
 /** Shading belongs to DiPlay's map only; no stock cluster window is changed or covered outside the side card. */
 private class InstrumentContrastView(
     context: Context,
-    private val plan: DiLink51ClusterLayout.Plan,
+    private val plan: LeapmotorClusterLayout.Plan,
     private val background: Int,
 ) : View(context) {
     private val paint = Paint()
@@ -275,3 +274,4 @@ private class InstrumentContrastView(
         paint.shader = null
     }
 }
+

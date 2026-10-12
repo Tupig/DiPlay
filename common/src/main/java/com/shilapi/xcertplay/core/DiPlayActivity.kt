@@ -1996,11 +1996,11 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                     }
                 }
                 if (clusterDisplay != null || adbCluster) {
-                    if (DiLink51ClusterLayout.supported() && !adbCluster) {
-                        val automatic = DiLink51ClusterLayout.automatic(this)
+                    if (LeapmotorClusterLayout.supported() && !adbCluster) {
+                        val automatic = LeapmotorClusterLayout.automatic(this)
                         toggle(card, getString(R.string.follow_instrument_theme_and_map_card),
                             getString(R.string.show_the_side_map_only_when_its_card_is_open_and_switch_to), automatic) {
-                            DiLink51ClusterLayout.saveAutomatic(this, it)
+                            LeapmotorClusterLayout.saveAutomatic(this, it)
                             render()
                             markReconnectNeeded()
                         }
@@ -2009,16 +2009,16 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                             else getString(R.string.usage_access_setup_needed_for_automatic_mode), 14, if (allowed) MUTED else WARNING))
                         card.addView(actionButton(getString(R.string.automatic_map_setup_adb), false) { showClusterAccessSetup() }, matchButton(10, 56))
                         if (!automatic) {
-                            val themes = DiLink51ClusterLayout.Theme.entries
-                            choice(card, getString(R.string.instrument_theme), themes.map { it.localizedLabel(this) }, themes.indexOf(DiLink51ClusterLayout.theme(this))) {
-                                DiLink51ClusterLayout.saveTheme(this, themes[it])
+                            val themes = LeapmotorClusterLayout.Theme.entries
+                            choice(card, getString(R.string.instrument_theme), themes.map { it.localizedLabel(this) }, themes.indexOf(LeapmotorClusterLayout.theme(this))) {
+                                LeapmotorClusterLayout.saveTheme(this, themes[it])
                                 markReconnectNeeded()
                             }
                             card.addView(label(getString(R.string.manual_mode_match_the_cluster_theme_here_the_map_cannot_fo), 14, MUTED))
                         }
-                        val contrasts = DiLink51ClusterLayout.Contrast.entries
-                        choice(card, getString(R.string.instrument_contrast), contrasts.map { it.localizedLabel(this) }, contrasts.indexOf(DiLink51ClusterLayout.contrast(this))) {
-                            DiLink51ClusterLayout.saveContrast(this, contrasts[it])
+                        val contrasts = LeapmotorClusterLayout.Contrast.entries
+                        choice(card, getString(R.string.instrument_contrast), contrasts.map { it.localizedLabel(this) }, contrasts.indexOf(LeapmotorClusterLayout.contrast(this))) {
+                            LeapmotorClusterLayout.saveContrast(this, contrasts[it])
                             markReconnectNeeded()
                         }
                     } else {
@@ -2043,7 +2043,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                                 // DiLink 5.1 layout (always the map), are set up at connection, so they reconnect.
                                 val controller = CarPlayBackgroundSession.snapshot()?.controller
                                 if (customCard || CarPlayClusterDisplay.usesCustomTurnCard(next) ||
-                                    DiLink51ClusterLayout.supported() || controller == null) {
+                                    LeapmotorClusterLayout.supported() || controller == null) {
                                     markReconnectNeeded()
                                 } else controller.showDashboardContent(next.url) { applied ->
                                     runOnUiThread {
@@ -3436,7 +3436,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 if (DiLink51ClusterMonitor.hasAccess(this)) {
                     AirPlayPersistence.saveClusterMapEnabled(this, true)
-                    DiLink51ClusterLayout.saveAutomatic(this, true)
+                    LeapmotorClusterLayout.saveAutomatic(this, true)
                     dialog.dismiss()
                     render()
                     toast(getString(R.string.automatic_map_enabled_open_the_cluster_map_card_or_select))
@@ -3616,7 +3616,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private fun wheelMapZoomAvailable(): Boolean {
         if (!AirPlayPersistence.loadClusterMapEnabled(this)) return false
         val adbCluster = AdbClusterRouter.enabled(this)
-        if (DiLink51ClusterLayout.supported() && !adbCluster) return false
+        if (LeapmotorClusterLayout.supported() && !adbCluster) return false
         return adbCluster || ClusterMapPresentation.findDisplay(this) != null
     }
 
@@ -5977,4 +5977,5 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
         private const val SETTINGS_BLOCK_GAP_DP = 16
     }
 }
+
 
