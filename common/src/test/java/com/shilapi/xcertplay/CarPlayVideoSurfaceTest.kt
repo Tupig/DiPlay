@@ -79,11 +79,11 @@ class CarPlayVideoSurfaceTest {
         assertTrue(backgroundSessionMatchesView(sinkPaces = false, viewSmoothVideo = false))
     }
 
-    @Test fun smoothVideoDelayCoversThreeFramesPlusAMargin() {
-        assertEquals(90, smoothVideoDelayMillis(60))
-        assertEquals(140, smoothVideoDelayMillis(30))
-        assertEquals(90, smoothVideoDelayMillis(120)) // clamped to the 60 fps the stream tops out at
-        assertEquals(140, smoothVideoDelayMillis(0))
+    @Test fun smoothVideoDelayCoversTwoFrameIntervalsPlusALowLatencyBase() {
+        assertEquals(53, smoothVideoDelayMillis(60))
+        assertEquals(86, smoothVideoDelayMillis(30))
+        assertEquals(53, smoothVideoDelayMillis(120)) // clamped to the 60 fps the stream tops out at
+        assertEquals(86, smoothVideoDelayMillis(0))
     }
 
     @Test fun replacingTextureDetachesBeforeReleaseAndDoesNotReleaseHolderSurface() {
