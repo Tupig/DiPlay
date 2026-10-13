@@ -25,6 +25,15 @@ internal fun DiLink51ClusterLayout.Contrast.localizedLabel(context: Context): St
     DiLink51ClusterLayout.Contrast.DARK -> R.string.option_contrast_dark
 })
 
+/** 零跑仪表盘主题与对比度（label 为内置双语文案，过渡期不走字符串资源） */
+internal fun LeapmotorClusterLayout.Theme.localizedLabel(context: Context): String = label
+
+internal fun LeapmotorClusterLayout.Contrast.localizedLabel(context: Context): String = context.getString(when (this) {
+    LeapmotorClusterLayout.Contrast.DEFAULT -> R.string.option_contrast_default
+    LeapmotorClusterLayout.Contrast.LIGHT -> R.string.option_contrast_light
+    LeapmotorClusterLayout.Contrast.DARK -> R.string.option_contrast_dark
+})
+
 /** 零跑仪表盘导航模式 */
 enum class LeapmotorClusterNaviMode {
     OFF,
@@ -65,6 +74,10 @@ internal fun LeapmotorOemClusterHold.localizedLabel(context: Context): String = 
     LeapmotorOemClusterHold.COMPONENT -> R.string.oem_cluster_hold_component
     LeapmotorOemClusterHold.PACKAGE -> R.string.oem_cluster_hold_package
 })
+
+/** shared 模块 BydOemClusterHold（过渡期：按名字映射到 LeapmotorOemClusterHold 复用本地化） */
+internal fun com.shilapi.xcertplay.hud.BydOemClusterHold.localizedLabel(context: Context): String =
+    LeapmotorOemClusterHold.valueOf(name).localizedLabel(context)
 
 // 兼容旧代码
 @Deprecated("使用 LeapmotorClusterNaviMode")

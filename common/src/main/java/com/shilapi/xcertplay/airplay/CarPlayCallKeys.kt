@@ -7,8 +7,7 @@ import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.shilapi.xcertplay.leapmotor.LeapmotorNavigationOutputs
-import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
+import com.shilapi.xcertplay.hud.BydNavigationOutputs
 import com.shilapi.xcertplay.hud.CarPlayCallKeyPolicy
 import com.shilapi.xcertplay.orchestration.CarPlayController
 
@@ -37,7 +36,7 @@ internal object CarPlayCallKeys {
                     val keyCode = intent.getIntExtra(CarPlayCallKeyPolicy.EXTRA_KEYCODE, -1)
                     val controller = currentController()
                     val action = CarPlayCallKeyPolicy.onHangUpBroadcast(
-                        keyCode, LeapmotorNavigationOutputs.carPlayCall(), controller.hasSession(),
+                        keyCode, BydNavigationOutputs.carPlayCall(), controller.hasSession(),
                     )
                     if (action == CarPlayCallKeyPolicy.Action.END) {
                         val sent = controller?.endCall() == true
@@ -62,7 +61,7 @@ internal object CarPlayCallKeys {
     /** Returns true when the key belongs to a CarPlay call and must not reach the car. */
     fun onKey(context: Context, keyCode: Int, down: Boolean, controller: CarPlayController? = currentController()): Boolean {
         if (!LeapmotorOutputSettings.carPlayCallControls(context)) return false
-        val action = CarPlayCallKeyPolicy.onKey(keyCode, down, LeapmotorNavigationOutputs.carPlayCall(), controller.hasSession())
+        val action = CarPlayCallKeyPolicy.onKey(keyCode, down, BydNavigationOutputs.carPlayCall(), controller.hasSession())
         when (action) {
             CarPlayCallKeyPolicy.Action.PASS -> return false
             CarPlayCallKeyPolicy.Action.CONSUME -> Unit

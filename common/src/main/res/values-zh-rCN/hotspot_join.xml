@@ -1,26 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hotspot_join_title">鑷姩鍔犲叆鐑偣锛堝疄楠屾€э級</string>
-    <string name="hotspot_join_description">閫傜敤浜?Android 13 鍙婁互涓娿€佹敮鎸佺浉鍏冲浐浠朵笖浠呬娇鐢?5 GHz 鐨勮溅杞界儹鐐广€傛鏌ュ彧鍑嗗绉佹湁鎭㈠澶囦唤锛屼笉鏇存敼鐑偣銆傞渶瑕佸凡鎺堟潈鐨?localhost:5555 鏈湴 ADB锛涗笉鏀寔 TLS 鏃犵嚎璋冭瘯閰嶅銆?/string>
-    <string name="hotspot_join_check">妫€鏌ョ儹鐐逛慨澶?/string>
-    <string name="hotspot_join_apply">娣诲姞鑷姩鍔犲叆淇℃伅</string>
-    <string name="hotspot_join_restore">鎭㈠宸蹭繚瀛樼殑鐑偣</string>
-    <string name="hotspot_join_working">姝ｅ湪妫€鏌ユ垨鏇存柊鈥﹀彇娑堝悗鍙兘闇€瑕侀噸鏂版鏌ヤ互纭缁撴灉銆?/string>
-    <string name="hotspot_join_confirm">鍋滆溅鍚庯紝璇峰厛鏂紑 CarPlay 骞跺湪杞﹁締璁剧疆涓叧闂儹鐐广€傛鎿嶄綔鍙洿鏀瑰凡淇濆瓨鐨勭儹鐐归厤缃苟璇诲彇楠岃瘉銆傞殢鍚庤鑷寮€鍚儹鐐逛互鏇存柊骞挎挱銆傚叧闂儹鐐逛細鏂紑鐜版湁瀹㈡埛绔€傝淇濈暀绉佹湁澶囦唤鐢ㄤ簬鎭㈠銆?/string>
-    <string name="hotspot_join_disconnect">鏇存敼鐑偣鍓嶈鏂紑 CarPlay銆?/string>
-    <string name="hotspot_join_ready">鏀寔姝?5 GHz 閰嶇疆銆傚凡鍑嗗瀹屾暣绉佹湁澶囦唤锛涘皻鏈洿鏀圭儹鐐广€?/string>
-    <string name="hotspot_join_present">宸插瓨鍦ㄦ祴璇曚娇鐢ㄧ殑淇℃伅銆傛湭娣诲姞閲嶅椤癸紱TuPigPlay 鏃犳硶鍥炴粴姝ゅ墠宸插瓨鍦ㄧ殑鍏冪礌銆?/string>
-    <string name="hotspot_join_applied">宸查獙璇佷繚瀛樼殑閰嶇疆銆傝鍦ㄨ溅杈嗚缃腑寮€鍚儹鐐逛互鏇存柊骞挎挱锛岀劧鍚庢祴璇曡嚜鍔ㄥ姞鍏ャ€傚箍鎾笌 CarPlay 鐨勬垚鍔熶粛闇€瀹炴満娴嬭瘯銆?/string>
-    <string name="hotspot_join_restored">宸叉仮澶嶅苟楠岃瘉瀹屾暣閰嶇疆銆傝鍦ㄨ溅杈嗚缃腑寮€鍚儹鐐广€?/string>
-    <string name="hotspot_join_unsupported">涓嶆敮鎸佹 API銆佸浐浠躲€侀娈垫垨瀛樺湪鍐茬獊鐨勫巶鍟嗕俊鎭€傛湭搴旂敤淇銆傝浣跨敤鍙楁敮鎸佺殑绾?5 GHz 閰嶇疆锛涘叾浠栭娈靛皻鏈獙璇併€?/string>
-    <string name="hotspot_join_off_required">蹇呴』纭鐑偣宸插叧闂€傛柇寮€瀹㈡埛绔苟鍦ㄨ溅杈嗚缃腑鍏抽棴鐑偣锛岀劧鍚庨噸璇曘€侱iPlay 涓嶄細鑷姩閲嶅惎鐑偣銆?/string>
-    <string name="hotspot_join_drift">閰嶇疆鍦ㄥ浠藉悗鍙戠敓鍙樺寲銆傛湭瑕嗙洊浠讳綍鍐呭銆傝閲嶆柊妫€鏌ワ紱寰呮仮澶嶇殑澶囦唤浼氫繚鐣欍€?/string>
-    <string name="hotspot_join_firmware_changed">鍥轰欢宸叉洿鏀广€傜鏈夊浠藉凡淇濈暀锛屼絾鏃犳硶鍦ㄦ鍥轰欢涓婂畨鍏ㄦ仮澶嶃€?/string>
-    <string name="hotspot_join_cancelled">宸插湪鍐欏叆鍓嶅彇娑堛€傝閲嶆柊妫€鏌ヤ繚鐣欑殑鎭㈠鐘舵€併€?/string>
-    <string name="hotspot_join_failed_restored">淇澶辫触鎴栧啓鍏ュ悗琚彇娑堛€傚凡鎭㈠鍘熼厤缃苟璇诲彇楠岃瘉銆?/string>
-    <string name="hotspot_join_busy">鍙︿竴鐑偣鎿嶄綔浠嶅湪杩愯銆傝绛夊緟鍚庨噸鏂版鏌ャ€?/string>
-    <string name="hotspot_join_adb_required">闇€瑕佸凡鎺堟潈鐨?localhost:5555 鏅€氭湰鍦?ADB銆傝鎸夎溅杈嗘敮鎸佺殑鏂瑰紡鍚敤骞舵巿鏉冦€備粎 TLS 鏃犵嚎璋冭瘯閰嶅鏃犳硶浣跨敤銆?/string>
-    <string name="hotspot_join_recovery">缁撴灉鎴栧浠介獙璇佷笉纭畾銆傝鍏抽棴鐑偣骞堕噸鏂版鏌ュ悗鍐嶇户缁€傜幇鏈夌鏈夊浠戒細淇濈暀锛涘彧鏈夐厤缃粛鍖归厤鏃舵墠鍏佽鎭㈠銆?/string>
+    <string name="hotspot_join_title">自动加入热点（实验性）</string>
+    <string name="hotspot_join_description">适用于 Android 13 及以上、支持相关固件且仅使用 5 GHz 的车载热点。检查只准备私有恢复备份，不更改热点。需要已授权的 localhost:5555 本地 ADB；不支持 TLS 无线调试配对。</string>
+    <string name="hotspot_join_check">检查热点修复</string>
+    <string name="hotspot_join_apply">添加自动加入信息</string>
+    <string name="hotspot_join_restore">恢复已保存的热点</string>
+    <string name="hotspot_join_working">正在检查或更新…取消后可能需要重新检查以确认结果。</string>
+    <string name="hotspot_join_confirm">停车后，请先断开 CarPlay 并在车辆设置中关闭热点。此操作只更改已保存的热点配置并读取验证。随后请自行开启热点以更新广播。关闭热点会断开现有客户端。请保留私有备份用于恢复。</string>
+    <string name="hotspot_join_disconnect">更改热点前请断开 CarPlay。</string>
+    <string name="hotspot_join_ready">支持此 5 GHz 配置。已准备完整私有备份；尚未更改热点。</string>
+    <string name="hotspot_join_present">已存在测试使用的信息。未添加重复项；DiPlay 无法回滚此前已存在的元素。</string>
+    <string name="hotspot_join_applied">已验证保存的配置。请在车辆设置中开启热点以更新广播，然后测试自动加入。广播与 CarPlay 的成功仍需实机测试。</string>
+    <string name="hotspot_join_restored">已恢复并验证完整配置。请在车辆设置中开启热点。</string>
+    <string name="hotspot_join_unsupported">不支持此 API、固件、频段或存在冲突的厂商信息。未应用修复。请使用受支持的纯 5 GHz 配置；其他频段尚未验证。</string>
+    <string name="hotspot_join_off_required">必须确认热点已关闭。断开客户端并在车辆设置中关闭热点，然后重试。DiPlay 不会自动重启热点。</string>
+    <string name="hotspot_join_drift">配置在备份后发生变化。未覆盖任何内容。请重新检查；待恢复的备份会保留。</string>
+    <string name="hotspot_join_firmware_changed">固件已更改。私有备份已保留，但无法在此固件上安全恢复。</string>
+    <string name="hotspot_join_cancelled">已在写入前取消。请重新检查保留的恢复状态。</string>
+    <string name="hotspot_join_failed_restored">修复失败或写入后被取消。已恢复原配置并读取验证。</string>
+    <string name="hotspot_join_busy">另一热点操作仍在运行。请等待后重新检查。</string>
+    <string name="hotspot_join_adb_required">需要已授权的 localhost:5555 普通本地 ADB。请按车辆支持的方式启用并授权。仅 TLS 无线调试配对无法使用。</string>
+    <string name="hotspot_join_recovery">结果或备份验证不确定。请关闭热点并重新检查后再继续。现有私有备份会保留；只有配置仍匹配时才允许恢复。</string>
 </resources>
-
-

@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_hide_Leapmotor_call_popup">闅愯棌姣斾簹杩潵鐢靛脊绐楋紙瀹為獙鎬э級</string>
-    <string name="settings_hide_Leapmotor_call_popup_description">浠呴€傜敤浜?Android 12L 姣斾簹杩溅鏈猴紝闇€瑕佸凡鎺堟潈鐨勬湰鍦?ADB銆傝繛鎺ョ殑 CarPlay 浣嶄簬鍓嶅彴鏃堕殣钘忓師鐢熸潵鐢靛脊绐楋紝杩涘叆鍚庡彴鏃舵仮澶嶃€備笉鏀瑰彉钃濈墮闊抽锛屼篃涓嶉殣钘忓叏灞忕數璇濆簲鐢ㄣ€?/string>
+    <string name="settings_hide_byd_call_popup">隐藏比亚迪来电弹窗（实验性）</string>
+    <string name="settings_hide_byd_call_popup_description">仅适用于 Android 12L 比亚迪车机，需要已授权的本地 ADB。连接的 CarPlay 位于前台时隐藏原生来电弹窗，进入后台时恢复。不改变蓝牙音频，也不隐藏全屏电话应用。</string>
 </resources>
-

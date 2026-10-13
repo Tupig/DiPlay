@@ -22,9 +22,8 @@ import com.shilapi.xcertplay.airplay.CarPlayMediaButton
 import com.shilapi.xcertplay.glance.CarPlayGlance
 import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.media.NavigationPlayback
-import com.shilapi.xcertplay.wheel.LeapmotorWheelKeys
+import com.shilapi.xcertplay.hud.BydNavigationOutputs
 import com.shilapi.xcertplay.LeapmotorWheelSettings
-import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
 
 /**
  * Optional: steering-wheel keys zoom CarPlay's dashboard map and work as a CarPlay joystick. BYD's window
@@ -97,11 +96,15 @@ class WheelKeyService : AccessibilityService() {
         refreshEligibility()
         handler.removeCallbacks(pollEligibility)
         handler.postDelayed(pollEligibility, ELIGIBILITY_POLL_MILLIS)
-        Log.i(TAG, "wheel key service connected")
+        WheelKeyLog.bound()
+        note("wheel key service connected")
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        if (running === this) running = null
+        if (running === this) {
+            running = null
+            note("wheel key service unbound")
+        }
         clearLearning()
         keys.updateEligibility(null)
         joystick.end()
@@ -112,7 +115,10 @@ class WheelKeyService : AccessibilityService() {
     }
 
     override fun onDestroy() {
-        if (running === this) running = null
+        if (running === this) {
+            running = null
+            note("wheel key service destroyed")
+        }
         clearLearning()
         keys.timeOut()
         joystick.end()
@@ -125,9 +131,32 @@ class WheelKeyService : AccessibilityService() {
     override fun onInterrupt() { settingsChanged() }
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
+        val kept = handleKey(event)
+        // A held key repeats many times a second; its first press is the evidence.
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) recordPress(event, kept)
+        return kept
+    }
+
+    /** One entry per press for the diagnostic report; it must never be in the way of the key itself. */
+    private fun recordPress(event: KeyEvent, kept: Boolean) {
+        runCatching {
+            val text = WheelKeyLog.writesText(event.keyCode) || runCatching { event.isPrintingKey }.getOrDefault(true)
+            val detail = when {
+                text -> null
+                navigationKeys.owns(event.keyCode, event.deviceId, event.downTime) -> "navigation volume"
+                !kept && NavigationWheelKeyPolicy.volumeStep(event.keyCode) != null -> navigationGate().let {
+                    "navigation volume not used: ${it.closedBy ?: "stream ${it.stream} did not take the change"}"
+                }
+                else -> null
+            }
+            WheelKeyLog.press(event.keyCode, event.scanCode, event.deviceId, kept, detail, text)
+        }
+    }
+
+    private fun handleKey(event: KeyEvent): Boolean {
         if (event.action != KeyEvent.ACTION_DOWN && event.action != KeyEvent.ACTION_UP) return false
         
-        // 闆惰窇 C11 鏂瑰悜鐩樻寜閿娴嬫棩蹇楋紙浠呭湪闆惰窇杞﹀瀷涓婏級
+        // 零跑 C11 方向盘按键检测日志（仅在零跑车型上）
         if (LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(this)) {
             LeapmotorWheelKeys.logDetectedKey(event, this)
         }
@@ -147,7 +176,7 @@ class WheelKeyService : AccessibilityService() {
         if (CarPlayCallKeys.onKey(this, event.keyCode, down)) return true
         if (LeapmotorOutputSettings.carPlayCallControls(this) &&
             CarPlayMediaButton.opensSiriWhileCarPlay(event.keyCode) && session() != null) {
-            if (!down) Log.i(TAG, "CarPlay voice key ${event.keyCode}: Siri sent=${CarPlayBackgroundSession.snapshot()?.controller?.requestSiri() == true}")
+            if (!down) note("CarPlay voice key ${event.keyCode}: Siri sent=${CarPlayBackgroundSession.snapshot()?.controller?.requestSiri() == true}")
             return true
         }
         val key = WheelKey.of(event)
@@ -176,11 +205,11 @@ class WheelKeyService : AccessibilityService() {
                     clearLearning(notify = false)
                     val taken = WheelZoomSettings.conflict(this, role, key)
                     if (taken != null) {
-                        Log.i(TAG, "$role key $key refused: it is the $taken key")
+                        note("$role key $key refused: it is the $taken key")
                         refused?.invoke(taken)
                     } else {
                         WheelZoomSettings.assign(this, role, key)
-                        Log.i(TAG, "$role key is now $key")
+                        note("$role key is now $key")
                         done?.invoke(role, key)
                     }
                     WheelZoomKeys.Action.CONSUME
@@ -204,12 +233,23 @@ class WheelKeyService : AccessibilityService() {
         eligible = navigationStream() != null,
     ) { delta -> adjustNavigation(delta) }
 
-    private fun navigationStream(): Int? {
-        if (!NavigationWheelSettings.enabled(this) || running !== this || inCall(this) || session() == null) return null
+    private fun navigationStream(): Int? = navigationGate().stream
+
+    private class NavigationGate(val closedBy: String?, val stream: Int? = null)
+
+    /** The stream the volume keys may change now, or the first reason they stay with the head unit. */
+    private fun navigationGate(): NavigationGate {
+        if (!NavigationWheelSettings.enabled(this)) return NavigationGate("its setting is off")
+        if (running !== this) return NavigationGate("the service is not bound")
+        if (inCall(this)) return NavigationGate("a call is active")
+        if (session() == null) return NavigationGate("no CarPlay session")
         val playback = navigationPlayback()
-        if (!playback.active || playback.priorityVoiceActive) return null
+        if (!playback.active) return NavigationGate("no guidance is speaking")
+        if (playback.priorityVoiceActive) return NavigationGate("Siri or a call is speaking")
         // Usage routing and a rejected legacy route cannot identify a safe volume stream.
-        return playback.legacyStreamType?.takeIf { it in 1..20 && it != AudioManager.STREAM_MUSIC }
+        val stream = playback.legacyStreamType?.takeIf { it in 1..20 && it != AudioManager.STREAM_MUSIC }
+            ?: return NavigationGate("navigation audio stream ${playback.legacyStreamType ?: "automatic"} has no volume of its own")
+        return NavigationGate(null, stream)
     }
 
     private fun adjustNavigation(delta: Int): Boolean {
@@ -228,6 +268,7 @@ class WheelKeyService : AccessibilityService() {
             audio.getStreamVolume(stream) == target
         } catch (error: Exception) {
             Log.w(TAG, "navigation volume unavailable for stream $stream", error)
+            WheelKeyLog.note("navigation volume unavailable for stream $stream: ${error.javaClass.simpleName}")
             false
         }
     }
@@ -245,7 +286,7 @@ class WheelKeyService : AccessibilityService() {
     // Without a CarPlay session, or in a call, the key keeps the car's own action.
     private fun siriPress(role: WheelZoomSettings.Role?, calling: Boolean, eventTime: Long): WheelZoomKeys.Action? {
         if (role != WheelZoomSettings.Role.SIRI || calling || session() == null) return null
-        if (siriKey.opens(eventTime)) Log.i(TAG, "Siri key sent=${requestSiri()}")
+        if (siriKey.opens(eventTime)) note("Siri key sent=${requestSiri()}")
         return WheelZoomKeys.Action.CONSUME
     }
 
@@ -302,13 +343,13 @@ class WheelKeyService : AccessibilityService() {
     // A toast with the keys at a glance on the centre screen; on the dashboard only the state (its font
     // is limited).
     private fun announceJoystick(on: Boolean) {
-        Log.i(TAG, "joystick ${if (on) "on" else "off"}")
+        note("joystick ${if (on) "on" else "off"}")
         val text = getString(if (on) R.string.wheel_joystick_on else R.string.wheel_joystick_off)
         handler.post {
             if (on) Toast.makeText(this, "$text\n${getString(R.string.wheel_joystick_hint)}", Toast.LENGTH_LONG).show()
             else Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         }
-        LeapmotorNavigationOutputs.dashboardNote(text)
+        BydNavigationOutputs.dashboardNote(text)
     }
 
     private fun clearLearning(notify: Boolean = true) {
@@ -340,14 +381,14 @@ class WheelKeyService : AccessibilityService() {
     // On the centre screen, and where the song shows on the dashboard: zoom with BYD's Bluetooth-music
     // icon (source 6), volume with the song's usual icon.
     private fun announce(zoomOn: Boolean) {
-        Log.i(TAG, "zoom mode ${if (zoomOn) "on" else "off"}")
+        note("zoom mode ${if (zoomOn) "on" else "off"}")
         handler.post {
             Toast.makeText(this, if (zoomOn) R.string.wheel_zoom_mode_on else R.string.wheel_zoom_mode_off, Toast.LENGTH_SHORT).show()
         }
         if (zoomOn) {
-            LeapmotorNavigationOutputs.dashboardNote(this, "馃攳 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
+            BydNavigationOutputs.dashboardNote("🔍 ${getString(R.string.wheel_zoom_note_zoom)}", ZOOM_NOTE_SOURCE)
         } else {
-            LeapmotorNavigationOutputs.dashboardNote(this, "馃攰 ${getString(R.string.wheel_zoom_note_volume)}")
+            BydNavigationOutputs.dashboardNote("🔊 ${getString(R.string.wheel_zoom_note_volume)}")
         }
     }
 
@@ -404,7 +445,7 @@ class WheelKeyService : AccessibilityService() {
                 mayAsk || wanted(context)
             }
             if (allowed && mayAsk) NavigationWheelSettings.recordAuthorization(context)
-            if (allowed) Log.i(TAG, "wheel key service allowed over adb")
+            if (allowed) note("wheel key service allowed over adb")
             if (allowed) access else LocalAdb.Access.UNREACHABLE
         }
 
@@ -470,7 +511,7 @@ class WheelKeyService : AccessibilityService() {
          * puts it back over the car's adb, already allowed, when it is still not running a few seconds after
          * a DiPlay screen opens or comes back to the front, so the keys work without a visit to the settings.
          * The front check matters when the service stays unbound after the retries at startup: the keys
-         * stayed on "Allowed, starting鈥? with the car's adb working until DiPlay was restarted (#606).
+         * stayed on "Allowed, starting…" with the car's adb working until DiPlay was restarted (#606).
          */
         fun restoreIfNeeded(context: Context) {
             val app = context.applicationContext
@@ -483,10 +524,13 @@ class WheelKeyService : AccessibilityService() {
                         sleep = Thread::sleep,
                     ) { attempt, access ->
                         Log.i(TAG, "wheel key service restore attempt=$attempt adb=$access bound=${connected()}")
+                        // Without its number, a run of attempts that end the same way is one line of the report.
+                        WheelKeyLog.note("wheel key service restore attempt adb=$access bound=${connected()}")
                         recordRestore(app, attempt, access)
                     }
                 } catch (error: Exception) {
                     Log.w(TAG, "wheel key service restore failed", error)
+                    WheelKeyLog.note("wheel key service restore failed: ${error.javaClass.simpleName}")
                 } finally {
                     restoring.set(false)
                 }
@@ -495,7 +539,7 @@ class WheelKeyService : AccessibilityService() {
 
         /**
          * At boot the car's adb can come up after DiPlay, and a single early attempt left the keys on
-         * "Allowed, starting鈥? until DiPlay was force-stopped (#606, #619). Unreachable adb, or a service
+         * "Allowed, starting…" until DiPlay was force-stopped (#606, #619). Unreachable adb, or a service
          * that the rewritten list did not bind yet, is tried again; a key the driver has not approved is not.
          */
         internal fun restoreWithRetries(
@@ -522,7 +566,7 @@ class WheelKeyService : AccessibilityService() {
                 .apply()
         }
 
-        /** One line for the diagnostic report: why the keys may still read "Allowed, starting鈥?. */
+        /** One line for the diagnostic report: why the keys may still read "Allowed, starting…". */
         fun report(context: Context): String {
             val prefs = context.getSharedPreferences(RESTORE_PREFS, Context.MODE_PRIVATE)
             val at = prefs.getLong("at", 0L)
@@ -556,10 +600,16 @@ class WheelKeyService : AccessibilityService() {
     }
 }
 
+/** Logcat and the diagnostic report: a head unit without adb has only the report. */
+private fun note(message: String) {
+    Log.i(WheelKeyService.TAG, message)
+    WheelKeyLog.note(message)
+}
+
 // CarPlay's iAP2 call state can be active even when the head unit leaves Android's mode normal.
 // Native Bluetooth calls also use a call/communication audio mode.
 internal fun inCall(context: Context): Boolean =
-    LeapmotorNavigationOutputs.carPlayCall() != null ||
+    BydNavigationOutputs.carPlayCall() != null ||
         (context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager)?.mode.let { it != null && it != AudioManager.MODE_NORMAL }
 
 /** Use the input-device ID for a held press; saved assignments still use the stable device name. */
@@ -801,13 +851,13 @@ object WheelZoomSettings {
         return active.firstOrNull { it != role && (it == Role.SIRI || role == Role.SIRI) && key(context, it) == key }
     }
 
-    /** 妫€娴嬫槸鍚︿负闆惰窇 C11 2024 杞﹀瀷 */
+    /** 检测是否为零跑 C11 2024 车型 */
     private fun isLeapmotorC11(context: Context): Boolean {
         return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context)
     }
 
     fun key(context: Context, role: Role): WheelKey? {
-        // 闆惰窇 C11 浼樺厛浣跨敤闆惰窇棰勮
+        // 零跑 C11 优先使用零跑预设
         if (isLeapmotorC11(context)) {
             return LeapmotorWheelSettings.getKeyForRole(context, role)
         }
@@ -821,7 +871,7 @@ object WheelZoomSettings {
 
     /** The zoom or joystick role with [key]; [isSiriKey] checks the Siri role, which has its own switch. */
     fun roleOf(context: Context, key: WheelKey): Role? {
-        // 闆惰窇 C11 浼樺厛浣跨敤闆惰窇棰勮
+        // 零跑 C11 优先使用零跑预设
         if (isLeapmotorC11(context)) {
             val keyMap = LeapmotorWheelSettings.getKeyMap(context)
             return LeapmotorWheelKeys.LeapmotorKey.entries.firstOrNull { leapKey ->

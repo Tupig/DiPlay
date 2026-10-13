@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.app.AlertDialog
 
 /**
  * 零跑 C11 安装引导与首次配置向导
@@ -42,7 +42,7 @@ object LeapmotorInstallGuide {
     /** 增加取消计数 */
     fun incrementDismissed(context: Context) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
-            .putInt(KEY_DISMISSED_COUNT, prefs.getInt(KEY_DISMISSED_COUNT, 0) + 1)
+            .putInt(KEY_DISMISSED_COUNT, prefs(context).getInt(KEY_DISMISSED_COUNT, 0) + 1)
             .apply()
     }
 

@@ -1,4 +1,4 @@
-﻿package com.shilapi.xcertplay
+package com.shilapi.xcertplay
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -6,20 +6,21 @@ import android.provider.Settings
 import android.util.Log
 import com.shilapi.xcertplay.adb.AdbKeys
 import com.shilapi.xcertplay.adb.LocalAdb
-import com.shilapi.xcertplay.leapmotor.LeapmotorOutputSettings
+import com.shilapi.xcertplay.hud.BydOutputSettings
 import com.shilapi.xcertplay.network.CarHotspotSettings
 import com.shilapi.xcertplay.orchestration.ManualHotspotValidation
 
 /** Each grant is requested explicitly from settings; startup never calls this authorization path. */
 internal object CarHotspotSetup {
-    // 闆惰窇杞︽満妫€娴嬶細閫氳繃杞﹁締鏁版嵁鎺ュ彛鎴栧寘鍚嶆娴?
-    fun isLeapmotorHeadUnit(context: Context): Boolean = LeapmotorOutputSettings.clusterNavigation(context) || runCatching {
-        context.packageManager.getApplicationInfo("com.leapmotor.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
+    // Older BYD units report QUALCOMM/qti and have no supported navigation-output service.
+    fun isBydHeadUnit(context: Context): Boolean = BydOutputSettings.navigationAvailable(context) || runCatching {
+        context.packageManager.getApplicationInfo("com.byd.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
     }.getOrDefault(false)
 
-    // 鍏煎鏃т唬鐮?
-    @Deprecated("浣跨敤 isLeapmotorHeadUnit")
-    fun isBydHeadUnit(context: Context): Boolean = isLeapmotorHeadUnit(context)
+    // 零跑车机检测：只认系统包名；车机检测不能依赖用户开关
+    fun isLeapmotorHeadUnit(context: Context): Boolean = runCatching {
+        context.packageManager.getApplicationInfo("com.leapmotor.carsettings", 0).flags and ApplicationInfo.FLAG_SYSTEM != 0
+    }.getOrDefault(false)
 
     enum class Permission(val appOp: String) {
         HOTSPOT("WRITE_SETTINGS"), BOOT_LAUNCH("SYSTEM_ALERT_WINDOW");
@@ -58,4 +59,3 @@ internal object CarHotspotSetup {
             ManualHotspotValidation.error(AirPlayPersistence.loadManualHotspotSsid(context),
                 AirPlayPersistence.loadManualHotspotPassphrase(context)) == null
 }
-

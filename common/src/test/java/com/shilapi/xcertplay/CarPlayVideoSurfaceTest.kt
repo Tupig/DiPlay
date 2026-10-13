@@ -20,6 +20,57 @@ class CarPlayVideoSurfaceTest {
         assertEquals(CarPlayVideoSurfaceMode.SURFACE, carPlayVideoSurfaceMode(false, directVideoOutput = true))
     }
 
+    @Test fun aTextureUnsafeDecoderSelectsTheSurfaceView() {
+        assertEquals(CarPlayVideoSurfaceMode.SURFACE, carPlayVideoSurfaceMode(true, textureUnsafeDecoder = true))
+        assertEquals(CarPlayVideoSurfaceMode.TEXTURE, carPlayVideoSurfaceMode(true, textureUnsafeDecoder = false))
+    }
+
+    @Test fun theFfmpegCodec2DecoderTheRaspberryPiPicksIsTextureUnsafe() {
+        // Emteria's Raspberry Pi 5 build lists its FFmpeg decoders before the Android software ones.
+        val pi = listOf(
+            VideoDecoderInfo("c2.ffmpeg.h264.decoder", listOf("video/avc")),
+            VideoDecoderInfo("c2.ffmpeg.hevc.decoder", listOf("video/hevc")),
+            VideoDecoderInfo("c2.android.avc.decoder", listOf("video/avc")),
+        )
+
+        assertEquals("c2.ffmpeg.h264.decoder", textureUnsafeDecoder(pi, listOf("video/avc")))
+        assertEquals("c2.ffmpeg.h264.decoder", textureUnsafeDecoder(pi, listOf("video/avc", "video/hevc")))
+        assertEquals("c2.ffmpeg.hevc.decoder", textureUnsafeDecoder(pi, listOf("video/hevc")))
+    }
+
+    @Test fun onlyTheDecoderCreateDecoderByTypePicksDecides() {
+        val hardwareFirst = listOf(
+            VideoDecoderInfo("c2.qti.avc.decoder", listOf("video/avc")),
+            VideoDecoderInfo("c2.ffmpeg.h264.decoder", listOf("video/avc")),
+        )
+        val softwareOnly = listOf(VideoDecoderInfo("c2.android.avc.decoder", listOf("video/avc")))
+        val ffmpegHevc = listOf(
+            VideoDecoderInfo("c2.qti.avc.decoder", listOf("video/avc")),
+            VideoDecoderInfo("c2.ffmpeg.hevc.decoder", listOf("video/hevc")),
+        )
+
+        assertNull(textureUnsafeDecoder(hardwareFirst, listOf("video/avc")))
+        // Ordinary software decoders keep the TextureView and its picture adjustments.
+        assertNull(textureUnsafeDecoder(softwareOnly, listOf("video/avc")))
+        assertNull(textureUnsafeDecoder(emptyList(), listOf("video/avc")))
+        // Only the codecs CarPlay may use count: an FFmpeg HEVC decoder matters only with HEVC on.
+        assertNull(textureUnsafeDecoder(ffmpegHevc, listOf("video/avc")))
+        assertEquals("c2.ffmpeg.hevc.decoder", textureUnsafeDecoder(ffmpegHevc, listOf("video/avc", "video/hevc")))
+    }
+
+    @Test fun theLastPictureStaysUntilAFrameIsRenderedOrItsTimeRunsOut() {
+        // Still the count from before DiPlay left: nothing new on the screen yet.
+        assertFalse(lastPictureDone(rendered = 5_000, baseline = 5_000, elapsedMillis = 400, maxMillis = 30_000))
+        // A parked decoder rendered on: the new surface has a picture.
+        assertTrue(lastPictureDone(rendered = 5_001, baseline = 5_000, elapsedMillis = 400, maxMillis = 30_000))
+        // A decoder built anew counts from 0 and has rendered nothing yet, then its first frame.
+        assertFalse(lastPictureDone(rendered = 0, baseline = 5_000, elapsedMillis = 400, maxMillis = 30_000))
+        assertTrue(lastPictureDone(rendered = 1, baseline = 5_000, elapsedMillis = 400, maxMillis = 30_000))
+        // No decoder at all (-1): only the time limit ends it.
+        assertFalse(lastPictureDone(rendered = -1, baseline = -1, elapsedMillis = 400, maxMillis = 30_000))
+        assertTrue(lastPictureDone(rendered = -1, baseline = -1, elapsedMillis = 30_001, maxMillis = 30_000))
+    }
+
     @Test fun aBackgroundSessionIsAdoptedOnlyWithTheSamePacing() {
         // A Smooth video change whose reconnect stopped early leaves the old session running.
         assertFalse(backgroundSessionMatchesView(sinkPaces = false, viewSmoothVideo = true))
@@ -28,11 +79,11 @@ class CarPlayVideoSurfaceTest {
         assertTrue(backgroundSessionMatchesView(sinkPaces = false, viewSmoothVideo = false))
     }
 
-    @Test fun smoothVideoDelayCoversThreeFramesPlusAMargin() {
-        assertEquals(90, smoothVideoDelayMillis(60))
-        assertEquals(140, smoothVideoDelayMillis(30))
-        assertEquals(90, smoothVideoDelayMillis(120)) // clamped to the 60 fps the stream tops out at
-        assertEquals(140, smoothVideoDelayMillis(0))
+    @Test fun smoothVideoDelayCoversTwoFrameIntervalsPlusALowLatencyBase() {
+        assertEquals(53, smoothVideoDelayMillis(60))
+        assertEquals(86, smoothVideoDelayMillis(30))
+        assertEquals(53, smoothVideoDelayMillis(120)) // clamped to the 60 fps the stream tops out at
+        assertEquals(86, smoothVideoDelayMillis(0))
     }
 
     @Test fun replacingTextureDetachesBeforeReleaseAndDoesNotReleaseHolderSurface() {
