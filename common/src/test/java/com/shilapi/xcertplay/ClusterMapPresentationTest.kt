@@ -57,7 +57,7 @@ class ClusterMapPresentationTest {
         org.robolectric.shadows.ShadowBuild.setFingerprint(DiLink51ClusterLayout.FINGERPRINT)
         DiLink51ClusterLayout.saveContrast(context, DiLink51ClusterLayout.Contrast.DARK)
         try {
-            withPresentation(DiLink51ClusterLayout.FULL, DiLink51ClusterLayout.Theme.MAP) { presentation ->
+            withPresentation(DiLink51ClusterLayout.FULL, LeapmotorClusterLayout.Theme.FULL_MAP) { presentation ->
                 val label: android.view.View = org.robolectric.util.ReflectionHelpers.getField(presentation, "waitingLabel")
                 assertEquals(android.graphics.Color.WHITE, spinner(label).indeterminateTintList?.defaultColor)
             }
@@ -106,12 +106,12 @@ class ClusterMapPresentationTest {
     private fun withMeasuredPresentation(block: (ClusterMapPresentation) -> Unit) {
         val original = android.os.Build.FINGERPRINT
         org.robolectric.shadows.ShadowBuild.setFingerprint(DiLink51ClusterLayout.FINGERPRINT)
-        try { withPresentation(DiLink51ClusterLayout.FULL, DiLink51ClusterLayout.Theme.MAP, block) }
+        try { withPresentation(DiLink51ClusterLayout.FULL, LeapmotorClusterLayout.Theme.FULL_MAP, block) }
         finally { org.robolectric.shadows.ShadowBuild.setFingerprint(original) }
     }
 
     private fun withPresentation(name: String = DiLink51ClusterLayout.BASE,
-        theme: DiLink51ClusterLayout.Theme = DiLink51ClusterLayout.Theme.SCENARIO,
+        theme: LeapmotorClusterLayout.Theme = LeapmotorClusterLayout.Theme.SIDE_MAP,
         block: (ClusterMapPresentation) -> Unit) {
         val id = display(name, "w1920dp-h720dp-mdpi")
         val presentation = ClusterMapPresentation(context, manager.getDisplay(id), theme) {}

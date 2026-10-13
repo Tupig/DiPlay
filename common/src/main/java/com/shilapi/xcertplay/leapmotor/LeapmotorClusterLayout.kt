@@ -106,7 +106,11 @@ internal object LeapmotorClusterLayout {
                 Theme.COPILOT -> names.firstOrNull { it.contains("copilot") || it.contains("passenger") || it.contains("entertainment") }
             }
         }
-        return names.firstOrNull { it.contains("cluster") }
+        // Preserve the BYD DiLink 5 selection order on unverified firmware.
+        return names.firstOrNull { it == DiLink51ClusterLayout.BASE }
+            ?: names.firstOrNull { it.contains(DiLink51ClusterLayout.BASE) && it.endsWith("_0") }
+            ?: names.firstOrNull { it.contains(DiLink51ClusterLayout.BASE) }
+            ?: names.firstOrNull { it.contains("cluster") }
     }
 
     /** Calculate layout plan for given display size and theme */
