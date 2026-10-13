@@ -1,25 +1,25 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 package com.shilapi.xcertplay.settings
 
+import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.Gravity
-import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import com.shilapi.xcertplay.LeapmotorWheelKeys
+import android.widget.Toast
 import com.shilapi.xcertplay.LeapmotorWheelSettings
-import com.shilapi.xcertplay.LeapmotorC11Settings
 import com.shilapi.xcertplay.WheelKeyService
 import com.shilapi.xcertplay.WheelZoomSettings
 import com.shilapi.xcertplay.host.R
-import kotlin.math.roundToInt
 
 /**
  * 零跑 C11 方向盘按键设置界面
- * 
+ *
  * 提供：
  * 1. 预设选择（默认/备选）
  * 2. 按键学习模式
@@ -74,17 +74,16 @@ object LeapmotorWheelKeySettingsSection {
 
         val result = SettingsWidgets.createChoiceRow(
             context,
-            options = presets.map { it.name },
-            labels = presets.map { it.name },
-            checked = currentPreset.ordinal,
+            label = "预设",
+            options = presets.map { it to it.displayName },
+            selected = currentPreset,
             theme = theme,
-            onClick = { index ->
-                val newPreset = presets[index]
+            onSelected = { newPreset ->
                 LeapmotorWheelSettings.setPreset(context, newPreset)
                 LeapmotorWheelSettings.applyPresetToWheelZoomSettings(context)
                 WheelKeyService.settingsChanged()
                 onSettingsChanged()
-                Log.i(TAG, "切换预设: ${newPreset.name}")
+                Log.i(TAG, "切换预设: ${newPreset.displayName}")
             },
         )
         parent.addView(result.container)
@@ -200,7 +199,7 @@ object LeapmotorWheelKeySettingsSection {
             }
 
             val value = TextView(context).apply {
-                text = "KeyCode: ${wheelKey.code} / ScanCode: ${wheelKey.scanCode}"
+                text = "KeyCode: ${wheelKey.code} / ScanCode: ${wheelKey.scan}"
                 textSize = 13f
                 setTextColor(theme.textSecondary)
                 gravity = Gravity.END
@@ -243,7 +242,7 @@ object LeapmotorWheelKeySettingsSection {
         }
 
         roles.forEach { (role, label) ->
-            val btn = SettingsWidgets.createButton(
+            val btn = createButton(
                 context,
                 text = "学习: $label",
                 theme = theme,
@@ -255,7 +254,7 @@ object LeapmotorWheelKeySettingsSection {
         }
 
         // 取消学习按钮
-        val cancelBtn = SettingsWidgets.createButton(
+        val cancelBtn = createButton(
             context,
             text = context.getString(R.string.leapmotor_wheel_cancel_learning),
             theme = theme,
@@ -284,7 +283,7 @@ object LeapmotorWheelKeySettingsSection {
             },
             done = { assignedRole, key ->
                 runOnUiThread {
-                    Toast.makeText(context, "$label 已设置为: ${key.code}/${key.scanCode}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "$label 已设置为: ${key.code}/${key.scan}", Toast.LENGTH_LONG).show()
                     onSettingsChanged()
                 }
             },
@@ -327,12 +326,12 @@ object LeapmotorWheelKeySettingsSection {
         theme: SettingsTheme,
         onSettingsChanged: () -> Unit,
     ) {
-        val btn = SettingsWidgets.createButton(
+        val btn = createButton(
             context,
             text = context.getString(R.string.leapmotor_wheel_reset_title),
             theme = theme,
             onClick = {
-                new AlertDialog.Builder(context)
+                AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.leapmotor_wheel_reset_title))
                     .setMessage("将重置所有方向盘按键映射为当前预设默认值，确定吗？")
                     .setPositiveButton("确定") { _, _ ->
@@ -350,6 +349,32 @@ object LeapmotorWheelKeySettingsSection {
 
     // ===== 辅助方法 =====
 
+    private fun createButton(
+        context: Context,
+        text: String,
+        theme: SettingsTheme,
+        onClick: () -> Unit,
+    ): Button {
+        return Button(context).apply {
+            this.text = text
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(theme.textPrimary)
+            setPadding(theme.dp(context, 16), 0, theme.dp(context, 16), 0)
+            minHeight = theme.dp(context, 48)
+            stateListAnimator = null
+            background = RippleDrawable(
+                ColorStateList.valueOf(theme.ripple),
+                GradientDrawable().apply {
+                    setColor(theme.trackOff)
+                    cornerRadius = theme.dp(context, 12).toFloat()
+                },
+                null,
+            )
+            setOnClickListener { onClick() }
+        }
+    }
+
     private fun addSwitchRow(
         context: Context,
         parent: LinearLayout,
@@ -361,11 +386,11 @@ object LeapmotorWheelKeySettingsSection {
     ) {
         val result = SettingsWidgets.createSwitchRow(
             context,
-            title = title,
-            summary = summary,
+            label = title,
+            description = summary,
             checked = checked,
             theme = theme,
-            onChange = onChange,
+            onChanged = onChange,
         )
         parent.addView(result.rowView)
     }
@@ -383,16 +408,16 @@ object LeapmotorWheelKeySettingsSection {
     ) {
         val result = SettingsWidgets.createChoiceRow(
             context,
-            options = options,
-            labels = labels,
-            checked = checked,
+            label = title,
+            options = options.indices.map { it to options[it] },
+            selected = checked,
             theme = theme,
-            onClick = onChange,
+            onSelected = onChange,
         )
         parent.addView(result.container)
 
         val desc = TextView(context).apply {
-            text = labels[checked]
+            text = summary + "\n" + labels[checked]
             textSize = 13f
             setTextColor(theme.textSecondary)
             setPadding(theme.dp(context, 16), theme.dp(context, 4), theme.dp(context, 16), theme.dp(context, 12))
@@ -402,7 +427,7 @@ object LeapmotorWheelKeySettingsSection {
 
     /** 运行在 UI 线程 */
     private fun runOnUiThread(action: () -> Unit) {
-        if (Thread.currentThread().isInstanceOf<android.os.Looper>()) {
+        if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
             action()
         } else {
             android.os.Handler(android.os.Looper.getMainLooper()).post(action)

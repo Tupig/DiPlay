@@ -91,8 +91,6 @@ import com.shilapi.xcertplay.airplay.SafeAreaRect
 import com.shilapi.xcertplay.host.R
 import com.shilapi.xcertplay.location.AndroidCarPlayLocationProvider
 import com.shilapi.xcertplay.media.AndroidMediaSink
-import com.shilapi.xcertplay.airplay.CarPlayVideoSurface.lowLatencyVideoDelayMillis
-import com.shilapi.xcertplay.airplay.CarPlayVideoSurface.smoothVideoDelayMillis
 import com.shilapi.xcertplay.media.CarPlayTouchMapper
 import com.shilapi.xcertplay.media.CarPlayVideoLayout
 import com.shilapi.xcertplay.mfi.RemoteMfiAuthenticationClient
@@ -185,7 +183,7 @@ class CarPlayHostActivity : ComponentActivity() {
             carPlayUsbInterfaceNumber = 3,
             locationInformationEnabled = locationReportingEnabled,
             vehicleStatusEnabled = LeapmotorOutputSettings.clusterNavigation(this),
-            chargingConnectors = EvChargingConnectors.CCS_COMBO_2,
+            chargingConnectors = LeapmotorOutputSettings.chargingConnectors(this),
             vehicleSpeedEnabled = locationReportingEnabled,
         ),
         label = "TuPigPlay",
@@ -1054,8 +1052,16 @@ class CarPlayHostActivity : ComponentActivity() {
 
     // Experimental: the CarPlay instrument-cluster stream on the BYD cluster projection display.
     private fun effectiveClusterTheme(): LeapmotorClusterLayout.Theme =
-        if (LeapmotorClusterLayout.automatic(this)) detectedCluster.theme ?: LeapmotorClusterLayout.theme(this)
+        if (LeapmotorClusterLayout.automatic(this)) detectedCluster.theme?.let(::detectedClusterTheme)
+            ?: LeapmotorClusterLayout.theme(this)
         else LeapmotorClusterLayout.theme(this)
+
+    /** The DiLink 5.1 activity detection only reports themes on BYD firmware; map them to the closest Leapmotor theme. */
+    private fun detectedClusterTheme(theme: DiLink51ClusterLayout.Theme): LeapmotorClusterLayout.Theme = when (theme) {
+        DiLink51ClusterLayout.Theme.MAP -> LeapmotorClusterLayout.Theme.FULL_MAP
+        DiLink51ClusterLayout.Theme.SCENARIO -> LeapmotorClusterLayout.Theme.SIDE_MAP
+        DiLink51ClusterLayout.Theme.SIMPLE -> LeapmotorClusterLayout.Theme.SIDE_MAP
+    }
 
     private fun onAdbNaviMode(mode: com.shilapi.xcertplay.hud.BydClusterNaviMode?) {
         val previous = adbNaviMode
@@ -1650,13 +1656,6 @@ class CarPlayHostActivity : ComponentActivity() {
         val video = TextureView(this).apply {
             isOpaque = false
             surfaceTextureListener = textureListener
-            // 锯齿优化：启用抗锯齿和双线性过滤
-            setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            if (Build.VERSION.SDK_INT >= 29) {
-                setForceAntiAliasing(true)
-            }
-            // 启用双线性过滤减少锯齿
-            setFilterQuality(FilterQuality.HIGH)
         }
         pictureBinding = CarPlayPicture.Binding(video)
         val gestureLayer = View(this).apply {

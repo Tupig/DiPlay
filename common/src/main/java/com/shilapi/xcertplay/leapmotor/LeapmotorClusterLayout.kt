@@ -56,8 +56,7 @@ internal object LeapmotorClusterLayout {
 
     /** Check if current device is Leapmotor C11 2024+ with cluster display support */
     fun supported(context: Context): Boolean {
-        return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context) &&
-               CarPlayClusterDisplay.isSupported(context)
+        return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context)
     }
 
     /** Get current theme from preferences */

@@ -4,8 +4,7 @@ package com.shilapi.xcertplay
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
 
 /**
  * 零跑车辆数据存储
@@ -14,15 +13,17 @@ import com.google.gson.reflect.TypeToken
  * 零跑无需探测，直接存储用户配置和校准参数
  */
 class LeapmotorVehicleDataStore(context: Context) {
-    private const val TAG = "DiPlay-LeapmotorVehicleDataStore"
-    private const val PREFS = "diplay_leapmotor_vehicle_data"
-    private const val KEY_CALIBRATION = "calibration"
-    private const val KEY_USER_PREFERENCES = "user_preferences"
-    private const val KEY_VEHICLE_CONFIG = "vehicle_config"
-    private const val KEY_LAST_SYNC = "last_sync"
+
+    companion object {
+        private const val TAG = "DiPlay-LeapmotorVehicleDataStore"
+        private const val PREFS = "diplay_leapmotor_vehicle_data"
+        private const val KEY_CALIBRATION = "calibration"
+        private const val KEY_USER_PREFERENCES = "user_preferences"
+        private const val KEY_VEHICLE_CONFIG = "vehicle_config"
+        private const val KEY_LAST_SYNC = "last_sync"
+    }
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-    private val gson = Gson()
 
     /** 车辆校准数据 */
     data class CalibrationData(
@@ -81,7 +82,7 @@ class LeapmotorVehicleDataStore(context: Context) {
         val json = prefs.getString(KEY_CALIBRATION, null)
         return if (json != null) {
             try {
-                gson.fromJson(json, CalibrationData::class.java)
+                calibrationFromJson(json)
             } catch (e: Exception) {
                 Log.w(TAG, "解析校准数据失败", e)
                 CalibrationData()
@@ -92,7 +93,7 @@ class LeapmotorVehicleDataStore(context: Context) {
     /** 保存校准数据 */
     private fun saveCalibration(calibration: CalibrationData) {
         prefs.edit()
-            .putString(KEY_CALIBRATION, gson.toJson(calibration))
+            .putString(KEY_CALIBRATION, calibrationToJson(calibration))
             .apply()
     }
 
@@ -131,7 +132,7 @@ class LeapmotorVehicleDataStore(context: Context) {
         val json = prefs.getString(KEY_USER_PREFERENCES, null)
         return if (json != null) {
             try {
-                gson.fromJson(json, UserPreferences::class.java)
+                userPreferencesFromJson(json)
             } catch (e: Exception) {
                 Log.w(TAG, "解析用户偏好失败", e)
                 UserPreferences()
@@ -142,7 +143,7 @@ class LeapmotorVehicleDataStore(context: Context) {
     /** 保存用户偏好 */
     fun saveUserPreferences(preferences: UserPreferences) {
         prefs.edit()
-            .putString(KEY_USER_PREFERENCES, gson.toJson(preferences))
+            .putString(KEY_USER_PREFERENCES, userPreferencesToJson(preferences))
             .apply()
     }
 
@@ -160,7 +161,7 @@ class LeapmotorVehicleDataStore(context: Context) {
         val json = prefs.getString(KEY_VEHICLE_CONFIG, null)
         return if (json != null) {
             try {
-                gson.fromJson(json, VehicleConfig::class.java)
+                vehicleConfigFromJson(json)
             } catch (e: Exception) {
                 Log.w(TAG, "解析车辆配置失败", e)
                 VehicleConfig()
@@ -171,7 +172,7 @@ class LeapmotorVehicleDataStore(context: Context) {
     /** 保存车辆配置 */
     fun saveVehicleConfig(config: VehicleConfig) {
         prefs.edit()
-            .putString(KEY_VEHICLE_CONFIG, gson.toJson(config))
+            .putString(KEY_VEHICLE_CONFIG, vehicleConfigToJson(config))
             .apply()
     }
 
@@ -210,19 +211,104 @@ class LeapmotorVehicleDataStore(context: Context) {
     /** 导入数据（从备份恢复） */
     fun importData(json: String): Boolean {
         return try {
-            val map = gson.fromJson(json, object : TypeToken<Map<String, Any>>() {}.type)
-            prefs.edit().apply {
-                map["calibration"]?.let { putString(KEY_CALIBRATION, gson.toJson(it)) }
-                map["userPreferences"]?.let { putString(KEY_USER_PREFERENCES, gson.toJson(it)) }
-                map["vehicleConfig"]?.let { putString(KEY_VEHICLE_CONFIG, gson.toJson(it)) }
-                map["lastSync"]?.let { putLong(KEY_LAST_SYNC, it.toString().toLong()) }
-                apply()
-            }
+            val root = JSONObject(json)
+            val editor = prefs.edit()
+            root.optJSONObject("calibration")?.let { editor.putString(KEY_CALIBRATION, it.toString()) }
+            root.optJSONObject("userPreferences")?.let { editor.putString(KEY_USER_PREFERENCES, it.toString()) }
+            root.optJSONObject("vehicleConfig")?.let { editor.putString(KEY_VEHICLE_CONFIG, it.toString()) }
+            if (root.has("lastSync")) editor.putLong(KEY_LAST_SYNC, root.getLong("lastSync"))
+            editor.apply()
             Log.i(TAG, "车辆数据导入成功")
             true
         } catch (e: Exception) {
             Log.e(TAG, "车辆数据导入失败", e)
             false
         }
+    }
+
+    // ========== JSON 序列化（org.json） ==========
+
+    private fun calibrationToJson(calibration: CalibrationData): String {
+        val json = JSONObject()
+        json.put("displayOffsetX", calibration.displayOffsetX)
+        json.put("displayOffsetY", calibration.displayOffsetY)
+        json.put("displayScale", calibration.displayScale.toDouble())
+        json.put("lastCalibrated", calibration.lastCalibrated)
+        calibration.clusterSafeArea?.let { safeArea ->
+            val safeAreaJson = JSONObject()
+            safeAreaJson.put("left", safeArea.left)
+            safeAreaJson.put("top", safeArea.top)
+            safeAreaJson.put("right", safeArea.right)
+            safeAreaJson.put("bottom", safeArea.bottom)
+            safeAreaJson.put("timestamp", safeArea.timestamp)
+            json.put("clusterSafeArea", safeAreaJson)
+        }
+        return json.toString()
+    }
+
+    private fun calibrationFromJson(json: String): CalibrationData {
+        val obj = JSONObject(json)
+        val safeAreaJson = obj.optJSONObject("clusterSafeArea")
+        return CalibrationData(
+            clusterSafeArea = safeAreaJson?.let {
+                ClusterSafeArea(
+                    left = it.optInt("left", 0),
+                    top = it.optInt("top", 0),
+                    right = it.optInt("right", 0),
+                    bottom = it.optInt("bottom", 0),
+                    timestamp = it.optLong("timestamp", 0),
+                )
+            },
+            displayOffsetX = obj.optInt("displayOffsetX", 0),
+            displayOffsetY = obj.optInt("displayOffsetY", 0),
+            displayScale = obj.optDouble("displayScale", 1.0).toFloat(),
+            lastCalibrated = obj.optLong("lastCalibrated", 0),
+        )
+    }
+
+    private fun userPreferencesToJson(preferences: UserPreferences): String {
+        val json = JSONObject()
+        json.put("preferredClusterContent", preferences.preferredClusterContent)
+        json.put("clusterBrightness", preferences.clusterBrightness)
+        json.put("enableSpeedometer", preferences.enableSpeedometer)
+        json.put("enableTurnGuidance", preferences.enableTurnGuidance)
+        json.put("enableMediaInfo", preferences.enableMediaInfo)
+        json.put("enableCallDisplay", preferences.enableCallDisplay)
+        return json.toString()
+    }
+
+    private fun userPreferencesFromJson(json: String): UserPreferences {
+        val obj = JSONObject(json)
+        return UserPreferences(
+            preferredClusterContent = obj.optString("preferredClusterContent", "MAP"),
+            clusterBrightness = obj.optInt("clusterBrightness", 80),
+            enableSpeedometer = obj.optBoolean("enableSpeedometer", false),
+            enableTurnGuidance = obj.optBoolean("enableTurnGuidance", true),
+            enableMediaInfo = obj.optBoolean("enableMediaInfo", true),
+            enableCallDisplay = obj.optBoolean("enableCallDisplay", true),
+        )
+    }
+
+    private fun vehicleConfigToJson(config: VehicleConfig): String {
+        val json = JSONObject()
+        config.vin?.let { json.put("vin", it) }
+        json.put("model", config.model)
+        config.trim?.let { json.put("trim", it) }
+        json.put("year", config.year)
+        json.put("hardwareVersion", config.hardwareVersion)
+        json.put("softwareVersion", config.softwareVersion)
+        return json.toString()
+    }
+
+    private fun vehicleConfigFromJson(json: String): VehicleConfig {
+        val obj = JSONObject(json)
+        return VehicleConfig(
+            vin = obj.optString("vin").ifEmpty { null },
+            model = obj.optString("model", "C11"),
+            trim = obj.optString("trim").ifEmpty { null },
+            year = obj.optInt("year", 2024),
+            hardwareVersion = obj.optString("hardwareVersion", "SA8295P"),
+            softwareVersion = obj.optString("softwareVersion", "3.21+"),
+        )
     }
 }

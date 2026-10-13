@@ -4,6 +4,8 @@ package com.shilapi.xcertplay
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import java.util.Date
+import java.util.Locale
 
 /**
  * 2024 款零跑 C11 (8295P) 专用配置
@@ -24,8 +26,7 @@ object LeapmotorC11Settings {
     }
 
     /** 当前构建使用的白名单包名（通过 -PdiplayApplicationId 指定） */
-    const val CURRENT_WHITELIST_PACKAGE: String = BuildConfig.DIPLAY_APPLICATION_ID
-        ?: WhitelistPackage.XIMALAYA.packageName
+    val CURRENT_WHITELIST_PACKAGE: String = WhitelistPackage.XIMALAYA.packageName
 
     /** 判断当前包名是否为白名单包名 */
     fun isWhitelisted(packageName: String): Boolean = WhitelistPackage.values().any { it.packageName == packageName }
@@ -71,7 +72,7 @@ object LeapmotorC11Settings {
     // ========== 安装引导 ==========
     object InstallGuide {
         /** U 盘安装步骤（中文） */
-        const val USB_INSTALL_STEPS_ZH = """
+        val USB_INSTALL_STEPS_ZH = """
             【零跑 C11 2024 款 U 盘安装 DiPlay 完整步骤】
             
             ⚠️ 重要前提：
@@ -179,7 +180,7 @@ object LeapmotorC11Settings {
             val cap = RuntimeCapabilities.detect(context)
             val sb = StringBuilder()
             sb.appendLine("=== 零跑 C11 2024 诊断报告 ===")
-            sb.appendLine("时间: ${java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\", Locale.getDefault()).format(Date())}")
+            sb.appendLine("时间: ${java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())}")
             sb.appendLine("包名: ${cap.currentPackageName}")
             sb.appendLine("白名单包名: ${cap.isWhitelistedPackage}")
             sb.appendLine("系统版本: ${cap.systemVersion}")
