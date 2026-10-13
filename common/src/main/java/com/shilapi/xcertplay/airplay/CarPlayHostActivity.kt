@@ -1250,6 +1250,32 @@ class CarPlayHostActivity : ComponentActivity() {
         }
     }
 
+    private fun ensureCopilotPresentation() {
+        if (copilotPresentation != null) return
+        val display = CopilotDisplayPresentation.findDisplay(this) ?: run {
+            appendLog("Copilot display: no copilot projection display among ${CopilotDisplayPresentation.describeDisplays(this)}")
+            return
+        }
+        val presentation = CopilotDisplayPresentation(this, display) { surface ->
+            runOnUiThread { copilotSurface = surface }
+        }
+        presentation.setOnDismissListener {
+            if (copilotPresentation === presentation) {
+                copilotPresentation = null
+                copilotSurface = null
+            }
+        }
+        try {
+            presentation.show()
+            copilotPresentation = presentation
+            Log.i(CopilotDisplayPresentation.TAG, "copilot presentation shown display=${display.displayId} name=${display.name}")
+            appendLog("Copilot display: presentation shown display=${display.displayId} name=${display.name}")
+        } catch (error: RuntimeException) {
+            Log.w(CopilotDisplayPresentation.TAG, "copilot presentation failed", error)
+            appendLog("Copilot display: presentation failed ${error.javaClass.simpleName}: ${error.message}")
+        }
+    }
+
     // DiLink 4 (#536): launched before this window's first focus, the cluster window kept the system bars on
     // screen, and the tap that brought focus back restarted CarPlay at the larger size.
     private val clusterLaunchGate = ClusterLaunchGate()
@@ -1284,9 +1310,9 @@ class CarPlayHostActivity : ComponentActivity() {
         }
     }
 
-    private fun ensureDiLink51ClusterPresentation(theme: DiLink51ClusterLayout.Theme) {
-        val fullMap = theme == DiLink51ClusterLayout.Theme.MAP
-        val visible = !DiLink51ClusterLayout.automatic(this) || detectedCluster.mapVisible
+    private fun ensureDiLink51ClusterPresentation(theme: LeapmotorClusterLayout.Theme) {
+        val fullMap = theme == LeapmotorClusterLayout.Theme.FULL_MAP
+        val visible = !LeapmotorClusterLayout.automatic(this) || detectedCluster.mapVisible
         clusterLayers.filterKeys { it != fullMap }.values.forEach { it.setMapVisible(false) }
         var target = clusterLayers[fullMap]
         if (target == null) {
