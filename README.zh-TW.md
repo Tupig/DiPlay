@@ -1,6 +1,6 @@
 # DiPlay
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md)
+[English / 简体中文](README.md) · [繁體中文](README.zh-TW.md)
 
 為相容的比亞迪 Android 車機提供有線與無線 CarPlay，採用熟悉的 DiAuto 介面。DiPlay 是獨立應用程式，正式版套件名稱為 `com.shihab.diplay`。
 
