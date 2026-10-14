@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Installation and connection help
-    url: https://github.com/shihabal3amri/DiPlay/blob/main/docs/INSTALL.md
-    about: Read setup and troubleshooting steps first.
+  - name: 安装与连接帮助 / Installation and connection help
+    url: https://github.com/Tupig/DiPlay/blob/main/docs/INSTALL.md
+    about: 请先阅读安装与故障排查步骤。/ Read setup and troubleshooting steps first.
