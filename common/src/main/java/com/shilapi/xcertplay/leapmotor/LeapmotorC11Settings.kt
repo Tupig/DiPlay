@@ -37,8 +37,8 @@ object LeapmotorC11Settings {
     // ========== 硬件能力常量 ==========
     object Hardware {
         const val SOC = "SA8295P"
-        const val PANEL_WIDTH_PX = 2560
-        const val PANEL_HEIGHT_PX = 1600
+        const val PANEL_WIDTH = 2560
+        const val PANEL_HEIGHT = 1600
         const val PANEL_DIAGONAL_INCHES = 14.6f
         const val PANEL_REFRESH_HZ = 60
         const val PANEL_DPI = 216  // 计算值
@@ -127,8 +127,8 @@ object LeapmotorC11Settings {
                 hasDeveloperOptions = false,
                 canInstallApk = true,  // 通过 U 盘
                 systemVersion = SystemVersion.getCurrentVersion(),
-                screenWidth = Hardware.PANEL_WIDTH_PX,
-                screenHeight = Hardware.PANEL_HEIGHT_PX,
+                screenWidth = Hardware.PANEL_WIDTH,
+                screenHeight = Hardware.PANEL_HEIGHT,
                 recommendedFps = 60
             )
         }
