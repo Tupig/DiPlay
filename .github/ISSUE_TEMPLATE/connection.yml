@@ -1,58 +1,66 @@
-name: Connection problem (logs required)
-description: USB/Bluetooth/Wi-Fi failures, stuck opening CarPlay, disconnects, reconnect loops or connection-dependent stutter.
+name: 连接问题（需日志）/ Connection problem (logs required)
+description: USB/蓝牙/Wi-Fi 失败、CarPlay 打开卡住、断连、重连循环或依赖连接的卡顿。/ USB/Bluetooth/Wi-Fi failures, stuck opening CarPlay, disconnects, reconnect loops or connection-dependent stutter.
 title: '[Connection] '
 body:
   - type: markdown
     attributes:
       value: |
+        排查连接问题需要受影响设备的诊断日志。无日志的报告会先被关闭，待补充日志后欢迎重新打开；如果 GitHub 没有提供 Reopen 按钮，请在评论中补充日志并请维护者重新打开。
+
         We need diagnostic logs from the affected device to investigate connection problems. Reports without logs will be closed pending logs; you are welcome to reopen the issue after providing them. If GitHub does not offer a Reopen button, add the logs in a comment and ask a maintainer to reopen it.
+
+        请在停车状态下，在[最新官方发布版](https://github.com/shihabal3amri/DiPlay/releases)上复现问题，然后打开 **设置 → 诊断 → 保存诊断报告**。请覆盖从首次连接尝试到失败的全过程。
 
         While parked, reproduce the problem on the [latest official release](https://github.com/shihabal3amri/DiPlay/releases), then open **Settings → Diagnostics → Save diagnostic report**. Capture the first connection attempt through the failure.
 
+        Android 10+ 通常保存到 **Downloads/DiPlay**；Android 7.1–9 使用文档选择器。无法保存时，可在完成提示里用 **查看报告** 或 **分享**。也可以把完整报告复制到其他设备的 `.txt` 文件。如果 DiPlay 崩溃，请重新打开并导出报告；有 Android 崩溃日志请一并附上。
+
         Android 10+ normally saves to **Downloads/DiPlay**. Android 7.1–9 uses a document picker. If saving is unavailable, use **View report** or **Share** in the confirmation. You can copy the full report into a `.txt` file on another device. If DiPlay crashes, reopen it and export the report; include Android crash logs if available.
 
-        Reports are public. Review the file and remove personal information and credentials, including hotspot passwords, before uploading. Screenshots or videos may help, but do not replace diagnostic logs. [Detailed export instructions](https://github.com/shihabal3amri/DiPlay/blob/main/docs/INSTALL.md#connection-recovery-and-reports).
+        报告是公开的。上传前请检查文件并删除个人信息和凭据（含热点密码）。截图或视频可能有帮助，但不能替代诊断日志。[详细导出说明](https://github.com/Tupig/DiPlay/blob/main/docs/INSTALL.md#连接恢复与报告--connection-recovery-and-reports)。
+
+        Reports are public. Review the file and remove personal information and credentials, including hotspot passwords, before uploading. Screenshots or videos may help, but do not replace diagnostic logs. [Detailed export instructions](https://github.com/Tupig/DiPlay/blob/main/docs/INSTALL.md#连接恢复与报告--connection-recovery-and-reports).
   - type: input
     id: version
-    attributes: {label: DiPlay version, placeholder: 'Exact version from Settings → About'}
+    attributes: {label: DiPlay 版本 / DiPlay version, placeholder: '设置 → 关于 中的确切版本 / Exact version from Settings → About'}
     validations: {required: true}
   - type: input
     id: car
-    attributes: {label: Car and head-unit model, placeholder: 'Car model/year, head unit, DiLink/Android version and exact firmware'}
+    attributes: {label: 车辆与车机型号 / Car and head-unit model, placeholder: '车型/年款、车机、DiLink/Android 版本与确切固件 / Car model/year, head unit, DiLink/Android version and exact firmware'}
     validations: {required: true}
   - type: input
     id: phone
-    attributes: {label: iPhone model and exact iOS version}
+    attributes: {label: iPhone 型号与确切 iOS 版本 / iPhone model and exact iOS version}
     validations: {required: true}
   - type: dropdown
     id: transport
     attributes:
-      label: Connection
-      options: ['Wireless: built-in car hotspot', 'Wireless: Wi-Fi Direct', 'Wireless: Existing Wi-Fi / Same LAN', USB, Both, 'Other / unsure']
+      label: 连接方式 / Connection
+      options: ['无线：内置车载热点 / Wireless: built-in car hotspot', '无线：Wi-Fi Direct / Wireless: Wi-Fi Direct', '无线：现有 Wi-Fi（同一局域网）/ Wireless: Existing Wi-Fi / Same LAN', 'USB', '两者都有 / Both', '其他或不确定 / Other or unsure']
     validations: {required: true}
   - type: textarea
     id: reproduce
     attributes:
-      label: What happened and how to reproduce it
-      description: 'Include expected behavior, steps, relevant settings and the last connection message. For wireless, include the band/channel if shown and whether the head unit is also connected to another Wi-Fi network. For Same LAN, include the router model and whether client isolation is enabled. For USB, describe any permission prompts. If multiple modes fail, identify the mode used for each log.'
+      label: 发生了什么以及如何复现 / What happened and how to reproduce it
+      description: '请写明预期行为、复现步骤、相关设置和最后一条连接消息。无线连接请写明显示的频段/信道，以及车机是否同时连接了其他 Wi-Fi。同一局域网请写明路由器型号及是否开启客户端隔离。USB 请描述权限提示。多种模式都失败时，请标明每份日志对应的模式。/ Include expected behavior, steps, relevant settings and the last connection message. For wireless, include the band/channel if shown and whether the head unit is also connected to another Wi-Fi network. For Same LAN, include the router model and whether client isolation is enabled. For USB, describe any permission prompts. If multiple modes fail, identify the mode used for each log.'
     validations: {required: true}
   - type: input
     id: failure-time
     attributes:
-      label: Approximate failure time
-      description: 'Give the time shown on the device so we can find the failure in the logs.'
-      placeholder: 'Example: 2026-10-08 14:35, device local time'
+      label: 大概故障时间 / Approximate failure time
+      description: '请给出设备上显示的时间，方便我们在日志中定位故障。/ Give the time shown on the device so we can find the failure in the logs.'
+      placeholder: '例如：2026-10-08 14:35，设备本地时间 / Example: 2026-10-08 14:35, device local time'
     validations: {required: true}
   - type: upload
     id: diagnostics
     attributes:
-      label: Diagnostic logs
-      description: 'Attach the full DiPlay diagnostic report (.txt or .log), or a .zip containing the logs. Wait until the upload finishes before submitting. If you used View report, copy the complete text into a .txt file and attach it here.'
+      label: 诊断日志 / Diagnostic logs
+      description: '请附上完整的 DiPlay 诊断报告（.txt 或 .log），或包含日志的 .zip。提交前请等待上传完成。如果使用了 查看报告，请把完整文本复制到 .txt 文件后在此附上。/ Attach the full DiPlay diagnostic report (.txt or .log), or a .zip containing the logs. Wait until the upload finishes before submitting. If you used View report, copy the complete text into a .txt file and attach it here.'
     validations:
       required: true
       accept: '.txt,.log,.zip'
   - type: textarea
     id: extra-context
     attributes:
-      label: Additional context or screenshots
-      description: 'Optional screenshots, recordings, workarounds or comparisons with another connection mode.'
+      label: 补充说明或截图 / Additional context or screenshots
+      description: '可选：截图、录屏、临时规避办法，或与其他连接方式的对比。/ Optional screenshots, recordings, workarounds or comparisons with another connection mode.'

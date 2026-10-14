@@ -36,7 +36,7 @@ whitespace checks pass. These are automated source checks, not vehicle acceptanc
 
 ## Vehicle acceptance before release
 
-Use a [standalone test build](BUILD.md#standalone-car-test-apk) with an explicit runtime
+Use a [standalone test build](BUILD.md#构建独立车载测试-apk--build-a-standalone-car-test-apk) with an explicit runtime
 identity. An identity-free source/CI APK cannot establish iPhone connection success.
 Keep each test attributable to its exact commit, APK digest, signing/update path,
 firmware fingerprint, head-unit hardware, Android API, iPhone/iOS and connection mode.
