@@ -591,6 +591,29 @@ upstream  https://github.com/shihabal3amri/DiPlay.git (fetch)
 upstream  禁用推送到上游 (push)
 ```
 
+### 🔄 同步评估记录（追加式日志，#11 例行）
+
+> 每次例行巡检在此追加一节：日期 / 合并基 / 规模 / 分类结论 / 决策。
+
+#### 2026-10-14 巡检
+
+- **合并基**：`d9881b4a`（2026-10-12，上游 PR #660 cluster-music-card）。此前 2026-10-12/13 的两次直接合并违反本节红线（直接合并 upstream/main），其语义冲突已由 PR #18 修复；自本次巡检起严格按 cherry-pick 流程执行。
+- **新增规模**：93 提交（48 非合并），2026-10-11 → 10-13；diff 150 文件，+6016/−631。上游正在准备 0.2.19 公测版。
+- **高价值候选**（CarPlay / 视频 / 蓝牙核心健壮性，下次同步优先 cherry-pick）：
+  - `f5366138` HEVC 无硬解时回退 H.264
+  - `5e8a6f9a` 有线会话残留后重新询问 CarPlay 模式
+  - `d0556a2f` FFmpeg-backed Codec2 解码改用 SurfaceView 输出
+  - `54116013` BluetoothManager 为空时回退 BluetoothAdapter.getDefaultAdapter
+  - `5fbd7171` 无线启动改 Wi-Fi 前检查蓝牙已开启
+  - `59c26525` 有线 USB 授权在系统页缺失时的修复
+  - `b5f1bfe4` 倒车影像隐藏状态栏时保持会话
+  - `301c5601` SurfaceView 输出恢复时显示最后一帧 CarPlay 画面
+  - `9647d689` 语音消息打开麦克风 + 无音频返回时自动重启
+- **中价值候选**：诊断报告增强（`5b6dead5` 记录上次崩溃、`d713087d` 列出方向盘键）、`9b169ee3` 连接失败本地化恢复提示、`903f2df4` Android 17 有线启动前申请局域网权限、`55877dba` Android 9- Settings 搜索崩溃修复、`74569fe6` 单元测试 Windows 宿主假设修复、`5fb5d875` Android 12+ 保留旧版蓝牙权限、`4081472f`/`f57c36b1`/`468d18cd`/`67612809` 手机页健壮性与诊断入口
+- **低价值/跳过**：DiLink 3/4 系列（`7a966466`/`d51f1c5c`/`d1a653ea`/`f64e0e83`，BYD 专属）、`2f84512b` BYD 仪表地图 controller 13/17、`791a89d4`/`ab4dd22b`/`bcc5013a` 热点 shell 启动与诊断（BYD/ADB 场景）、`bd2d6066` 手机/平板大喇叭通话、`8e692ea9`+`d0c6469e` Transform/revert 对（净零）、`e06a2502`/`3d9d6acc`/`dde983c0`/`9cf1bc80`/`5b392c0c`/`b3618ae5` 0.2.19 发版记录链
+- **冲突风险文件**（fork 重灾区，cherry-pick 时按 TuPigPlay 侧优先解决）：`DiPlayActivity.kt`（`a8be7283`/`db59fb07`/`93b7869d` swipe 与 Settings 分组重排）、`CarHotspotSetup.kt`（`db23bc2d`/`bcc5013a`）、`values-ja`/`values-zh-rTW`（`9f4adc04` 手机页日文化、`a93066d1` 繁中完整化、`fe8aa505` TW 措辞 14 条——与 fork 本轮翻译工作重叠）、`WheelKeyService.kt`（`d713087d`）
+- **决策**：上次同步为昨日、上游 0.2.19 发版进行中且单日新增 29 提交——倾向等待发版稳定后统一 cherry-pick 高价值组，避免对移动目标反复同步。cherry-pick 执行与否待仓库所有者确认。
+
 ---
 
 ## 📚 文档规范 (对标 GitHubDesktop2Chinese，强制)
