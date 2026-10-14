@@ -427,6 +427,7 @@
     <string name="your_phone_your_drive">你的手機，暢享旅程。</string>
     <string name="your_report_was_saved_to_the_selected_location">報告已儲存至所選位置。</string>
     <string name="cluster_waiting_for_map">DiPlay · 等待 CarPlay 地圖</string>
+    <string name="copilot_waiting_content">DiPlay · 等待副駕屏內容</string>
     <string name="option_size_large">大</string>
     <string name="option_size_medium">中</string>
     <string name="option_size_small">小</string>

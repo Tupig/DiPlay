@@ -414,6 +414,7 @@
     <string name="your_phone_your_drive">TU TELÉFONO. TU TRAYECTO.</string>
     <string name="your_report_was_saved_to_the_selected_location">Tu informe se guardó en la ubicación seleccionada.</string>
     <string name="cluster_waiting_for_map">DiPlay · esperando el mapa de CarPlay</string>
+    <string name="copilot_waiting_content">DiPlay · esperando el contenido de la pantalla del copiloto</string>
     <string name="option_size_large">Grande</string>
     <string name="option_size_medium">Mediano</string>
     <string name="option_size_small">Pequeño</string>
