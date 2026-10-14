@@ -258,12 +258,13 @@ jobs:
           languages: java
 
       # autobuild 会把 JDK 硬编码成 Temurin 17 且不装 Android SDK，无法构建本项目，
-      # 因此在此手动执行与 unit-test 相同的构建，确保 CodeQL trace 到真实编译。
+      # 因此在此手动执行生产模块编译，确保 CodeQL trace 到真实编译。
+      # 只跑 assembleDebug：CodeQL 只需编译追踪。测试与 lint 已由 unit-test job 守门
+      # （needs 链 + !failure()），在此重复执行既多耗 ~10 分钟，又会让测试型 flaky
+      # （Robolectric 运行时下载 android-all、端口绑定竞态）拖挂本 job，见 #32。
       - name: 构建（供 CodeQL 追踪）
         run: >-
           ./gradlew
-          :shared:testDebugUnitTest :common:testDebugUnitTest :home:testDebugUnitTest
-          :mobile:lintDebug :home:lintDebug :maphost:lintDebug
           :mobile:assembleDebug :home:assembleDebug :maphost:assembleDebug
           --stacktrace
 
