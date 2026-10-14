@@ -1214,10 +1214,16 @@ class CarPlayHostActivity : ComponentActivity() {
         
         // Handle COPILOT theme for copilot display
         if (theme == LeapmotorClusterLayout.Theme.COPILOT) {
+            if (clusterPresentation != null || clusterSurface != null || clusterLayers.isNotEmpty()) {
+                appendLog("Copilot display: replacing stale cluster presentation after theme change")
+                dismissClusterPresentation()
+            }
             ensureCopilotPresentation()
+            copilotPresentation?.setStreamActive(SCREEN_TYPE_ALT in activeScreenStreamTypes)
             return
         }
-        
+        dismissCopilotPresentation()
+
         if (LeapmotorClusterLayout.supported(this)) {
             ensureDiLink51ClusterPresentation(theme)
             return
@@ -1257,7 +1263,7 @@ class CarPlayHostActivity : ComponentActivity() {
             return
         }
         val presentation = CopilotDisplayPresentation(this, display) { surface ->
-            runOnUiThread { copilotSurface = surface }
+            runOnUiThread { onCopilotSurface(surface) }
         }
         presentation.setOnDismissListener {
             if (copilotPresentation === presentation) {
@@ -1268,12 +1274,22 @@ class CarPlayHostActivity : ComponentActivity() {
         try {
             presentation.show()
             copilotPresentation = presentation
+            presentation.setStreamActive(SCREEN_TYPE_ALT in activeScreenStreamTypes)
             Log.i(CopilotDisplayPresentation.TAG, "copilot presentation shown display=${display.displayId} name=${display.name}")
             appendLog("Copilot display: presentation shown display=${display.displayId} name=${display.name}")
         } catch (error: RuntimeException) {
             Log.w(CopilotDisplayPresentation.TAG, "copilot presentation failed", error)
             appendLog("Copilot display: presentation failed ${error.javaClass.simpleName}: ${error.message}")
         }
+    }
+
+    private fun onCopilotSurface(surface: Surface?) {
+        if (copilotSurface === surface) return
+        // A direct handoff lets MediaCodec.setOutputSurface preserve its reference frames.
+        // Clearing first would destroy the decoder and can leave the stream waiting for an IDR.
+        if (surface == null) copilotSurface?.let { old -> sink?.clearSurface(SCREEN_TYPE_ALT, old) }
+        copilotSurface = surface
+        if (surface != null) sink?.setSurface(SCREEN_TYPE_ALT, surface)
     }
 
     // DiLink 4 (#536): launched before this window's first focus, the cluster window kept the system bars on
@@ -5302,6 +5318,7 @@ class CarPlayHostActivity : ComponentActivity() {
         sink = renderer
         currentSurface?.let(::attachSurface)
         clusterSurface?.let { renderer.setSurface(SCREEN_TYPE_ALT, it) }
+        copilotSurface?.let { renderer.setSurface(SCREEN_TYPE_ALT, it) }
         MapMirrors.reapply()
         val media = createMediaEngine(renderer)
         val pairings = AirPlayPersistence.loadPairings(this) { id, key ->
@@ -6102,6 +6119,7 @@ class CarPlayHostActivity : ComponentActivity() {
         sink?.setSurface(SCREEN_TYPE_MAIN, surface)
         if (AirPlayPersistence.loadClusterMapEnabled(this)) {
             clusterSurface?.let { sink?.setSurface(SCREEN_TYPE_ALT, it) }
+            copilotSurface?.let { sink?.setSurface(SCREEN_TYPE_ALT, it) }
         } else {
             sink?.setSurface(SCREEN_TYPE_ALT, surface)
         }
@@ -6206,6 +6224,7 @@ class CarPlayHostActivity : ComponentActivity() {
                 Log.i(ClusterMapPresentation.TAG, "cluster stream active=$active")
                 appendLog("Cluster map: stream active=$active")
                 clusterPresentation?.setStreamActive(active)
+                copilotPresentation?.setStreamActive(active)
                 ClusterActivityOutput.setStreamActive(active)
                 MapMirrors.setStreamActive(active)
                 if (active) {

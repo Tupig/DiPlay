@@ -466,6 +466,7 @@
     <string name="your_phone_your_drive">いつものiPhoneを、車でも。</string>
     <string name="your_report_was_saved_to_the_selected_location">選択した場所にレポートを保存しました</string>
     <string name="cluster_waiting_for_map">DiPlay · CarPlayの地図を待っています</string>
+    <string name="copilot_waiting_content">DiPlay · 副乗席ディスプレイのコンテンツを待っています</string>
     <string name="option_size_large">大</string>
     <string name="option_size_medium">中</string>
     <string name="option_size_small">小</string>
