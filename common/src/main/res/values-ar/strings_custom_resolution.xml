@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="custom_resolution_hint">兀丿禺賱 賳爻亘丞 賲賳 30 廿賱賶 160. 賷丐丿賷 丕賱鬲胤亘賷賯 廿賱賶 廿毓丕丿丞 丕鬲氐丕賱 CarPlay.</string>
-    <string name="resolution_number_error">兀丿禺賱 毓丿丿賸丕 氐丨賷丨賸丕 賲賳 %1$d 廿賱賶 %2$d.</string>
+    <string name="custom_resolution_hint">أدخل نسبة من 30 إلى 160. يؤدي التطبيق إلى إعادة اتصال CarPlay.</string>
+    <string name="resolution_number_error">أدخل عددًا صحيحًا من %1$d إلى %2$d.</string>
     <string name="custom_resolution_summary">%1$d%%</string>
-    <string name="resolution_reset_defaults">丕爻鬲毓丕丿丞 丕賱賯賷賲丞 丕賱丕賮鬲乇丕囟賷丞</string>
-    <string name="resolution_canvas_unsupported" formatted="false">賱丕 鬲爻鬲胤賷毓 賵丨丿丞 丕賱賯賷丕丿丞 賴匕賴 賮賰 鬲乇賲賷夭 丕賱丿賯丞 丕賱賲賰亘賾乇丞. 爻鬲購爻鬲禺丿賲 丿賯丞 100%.</string>
+    <string name="resolution_reset_defaults">استعادة القيمة الافتراضية</string>
+    <string name="resolution_canvas_unsupported" formatted="false">لا تستطيع وحدة القيادة هذه فك ترميز الدقة المكبّرة. ستُستخدم دقة 100%.</string>
 </resources>
-

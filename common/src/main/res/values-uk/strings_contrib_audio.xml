@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="contrib_audio_home_channel_preview_unavailable">袧邪 褑褜芯屑褍 锌褉懈褋褌褉芯褩 薪械 屑芯卸薪邪 锌褉芯褋谢褍褏邪褌懈 邪褍写褨芯锌芯褌褨泻 Android %1$d.</string>
-    <string name="contrib_audio_home_choice_summary">%1$s 路 %2$s</string>
-    <string name="contrib_audio_home_media_channel_label">袗褍写褨芯锌芯褌褨泻 屑褍谢褜褌懈屑械写褨邪</string>
-    <string name="contrib_audio_home_nav_channel_label">袗褍写褨芯锌芯褌褨泻 薪邪胁褨谐邪褑褨褩</string>
-    <string name="contrib_audio_home_nav_channel_note">0 = 邪胁褌芯屑邪褌懈褔薪械 褋锌褉褟屑褍胁邪薪薪褟. 袟薪邪褔械薪薪褟 1鈥?0 鈥?褋褌邪褉褨 褨写械薪褌懈褎褨泻邪褌芯褉懈 邪褍写褨芯锌芯褌芯泻褨胁 Android, 褟泻褨 谐芯谢芯胁薪懈泄 锌褉懈褋褌褉褨泄 屑芯卸械 褋锌褉褟屑芯胁褍胁邪褌懈 薪邪 胁懈褏芯写懈 邪胁褌芯屑芯斜褨谢褟. 孝芯褉泻薪褨褌褜褋褟 蟹薪邪褔械薪薪褟, 褖芯斜 锌褉芯褋谢褍褏邪褌懈. 袟屑褨薪懈 薪邪斜褍写褍褌褜 褔懈薪薪芯褋褌褨 锌褨褋谢褟 锌芯胁褌芯褉薪芯谐芯 锌褨写泻谢褞褔械薪薪褟.</string>
-    <string name="contrib_audio_home_toggle_audio_focus">袗褍写褨芯褎芯泻褍褋</string>
-    <string name="contrib_audio_home_toggle_audio_focus_desc">袦褍谢褜褌懈屑械写褨邪 CarPlay 芯褌褉懈屑褍褦 邪褍写褨芯褎芯泻褍褋. 携泻褖芯 蟹胁褍泻 蟹薪懈泻邪褦, 泻芯谢懈 褑褞 褎褍薪泻褑褨褞 胁胁褨屑泻薪械薪芯 (写械褟泻褨 谐芯谢芯胁薪褨 锌褉懈褋褌褉芯褩 锌芯谐邪薪芯 芯斜褉芯斜谢褟褞褌褜 邪褍写褨芯褎芯泻褍褋), 胁懈屑泻薪褨褌褜 褩褩. 袟屑褨薪懈 薪邪斜褍写褍褌褜 褔懈薪薪芯褋褌褨 锌褨褋谢褟 锌芯胁褌芯褉薪芯谐芯 锌褨写泻谢褞褔械薪薪褟.</string>
-    <string name="audio_focus_auto_yield">袩褉懈谐谢褍褕械薪薪褟 屑械写褨邪 锌褉懈 褌懈屑褔邪褋芯胁褨泄 胁褌褉邪褌褨 邪褍写褨芯褎芯泻褍褋褍</string>
-    <string name="audio_focus_auto_yield_desc">袣芯谢懈 邪褍写褨芯褎芯泻褍褋 褍胁褨屑泻薪械薪芯, 锌褉懈谐谢褍褕褍胁邪褌懈 屑械写褨邪 锌褨写 褔邪褋 蟹胁褍泻芯胁懈褏 锌械褉械褉懈胁邪薪褜 Android, 蟹芯泻褉械屑邪 胁懈泻谢懈泻褨胁. 袙褨写薪芯胁谢褞胁邪褌懈 蟹胁褍泻 锌褨褋谢褟 锌芯胁械褉薪械薪薪褟 褎芯泻褍褋褍. 袙懈屑泻薪褨褌褜, 褟泻褖芯 谐芯谢芯胁薪懈泄 锌褉懈褋褌褉褨泄 薪械 锌芯胁械褉褌邪褦 褎芯泻褍褋. 袟屑褨薪懈 薪邪斜褍写褍褌褜 褔懈薪薪芯褋褌褨 锌褨褋谢褟 锌芯胁褌芯褉薪芯谐芯 锌褨写泻谢褞褔械薪薪褟.</string>
+    <string name="contrib_audio_home_channel_preview_unavailable">На цьому пристрої не можна прослухати аудіопотік Android %1$d.</string>
+    <string name="contrib_audio_home_choice_summary">%1$s · %2$s</string>
+    <string name="contrib_audio_home_media_channel_label">Аудіопотік мультимедіа</string>
+    <string name="contrib_audio_home_nav_channel_label">Аудіопотік навігації</string>
+    <string name="contrib_audio_home_nav_channel_note">0 = автоматичне спрямування. Значення 1–20 — старі ідентифікатори аудіопотоків Android, які головний пристрій може спрямовувати на виходи автомобіля. Торкніться значення, щоб прослухати. Зміни набудуть чинності після повторного підключення.</string>
+    <string name="contrib_audio_home_toggle_audio_focus">Аудіофокус</string>
+    <string name="contrib_audio_home_toggle_audio_focus_desc">Мультимедіа CarPlay отримує аудіофокус. Якщо звук зникає, коли цю функцію ввімкнено (деякі головні пристрої погано обробляють аудіофокус), вимкніть її. Зміни набудуть чинності після повторного підключення.</string>
+    <string name="audio_focus_auto_yield">Приглушення медіа при тимчасовій втраті аудіофокусу</string>
+    <string name="audio_focus_auto_yield_desc">Коли аудіофокус увімкнено, приглушувати медіа під час звукових переривань Android, зокрема викликів. Відновлювати звук після повернення фокусу. Вимкніть, якщо головний пристрій не повертає фокус. Зміни набудуть чинності після повторного підключення.</string>
 </resources>
-

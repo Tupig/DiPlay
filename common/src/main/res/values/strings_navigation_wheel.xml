@@ -1,7 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_navigation_wheel_volume">瀵艰埅鎾姤鏃舵柟鍚戠洏璋冭妭瀵艰埅闊抽噺锛堝疄楠屾€э級</string>
-    <string name="settings_navigation_wheel_volume_description">CarPlay 瀵艰埅鎾姤鏈熼棿锛岄煶閲忛敭璋冭妭鎵€閫夊鑸煶棰戞祦锛涘叾浠栨椂鍊欐寜杞︽満鍘熸湁鏂瑰紡澶勭悊銆傞渶瑕佹柟鍚戠洏鎸夐敭鏃犻殰纰嶆潈闄愩€傞€氳瘽銆佸湴鍥剧缉鏀惧拰鎽囨潌淇濇寔浼樺厛銆傚凡鍦ㄥ攼骞冲彴 21 杞︽満鏈湴楠岃瘉锛屼笂娓哥増鏈粛寰呭疄杞︽祴璇曪紱涓嶆嫤鎴嚜鍔ㄦ垨濯掍綋闊抽璺敱銆?/string>
-    <string name="settings_navigation_wheel_service_required">璇峰湪 Android 璁剧疆涓厑璁告柟鍚戠洏鎸夐敭鏃犻殰纰嶆湇鍔★紝鎴栦娇鐢ㄧ幇鏈?ADB 鎺堟潈鎸夐挳銆?/string>
+    <string name="settings_navigation_wheel_volume">导航播报时方向盘调节导航音量（实验性）</string>
+    <string name="settings_navigation_wheel_volume_description">CarPlay 导航播报期间，音量键调节所选导航音频流；其他时候按车机原有方式处理。需要方向盘按键无障碍权限。通话、地图缩放和摇杆保持优先。已在唐平台 21 车机本地验证，上游版本仍待实车测试；不拦截自动或媒体音频路由。</string>
+    <string name="settings_navigation_wheel_service_required">请在 Android 设置中允许方向盘按键无障碍服务，或使用现有 ADB 授权按钮。</string>
 </resources>
-

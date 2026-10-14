@@ -1,0 +1,32 @@
+# 依赖更新自动化（GitHub 原生机制，替代人工依赖巡检）
+# - gradle        : 版本目录 gradle/libs.versions.toml 与各模块 build.gradle.kts 的声明式依赖
+# - github-actions: 工作流与 composite action 中按 commit SHA 固定的第三方 action
+# 说明:
+#   - 升级 PR 与普通 PR 走同一条 diplay.yml 串行流水线验证，绿色才可合并
+#   - minor/patch 自动分组提 PR；major 升级单独提 PR 便于评估
+#   - Gradle Wrapper 的 distributionSha256Sum 需随 gradle 升级手动同步（dependabot 不覆盖该文件）
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      gradle-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      actions-minor-and-patch:
+        update-types:
+          - minor
+          - patch

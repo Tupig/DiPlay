@@ -1,24 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="carplay_night_mode">賵囟毓 丕賱賳賴丕乇 賵丕賱賱賷賱 賮賷 CarPlay</string>
-    <string name="settings_app_appearance">賲馗賴乇 丕賱鬲胤亘賷賯</string>
-    <string name="settings_app_appearance_dark">丿丕賰賳</string>
-    <string name="settings_app_appearance_light">賮丕鬲丨</string>
-    <string name="settings_app_appearance_auto">鬲賱賯丕卅賷</string>
-    <string name="settings_app_appearance_description">賷鬲亘毓 丕賱賵囟毓 丕賱鬲賱賯丕卅賷 廿毓丿丕丿 丕賱賳賴丕乇/丕賱賱賷賱 丕賱賲丨賮賵馗 賮賷 CarPlay貨 賵毓賳丿 賮鬲丨 CarPlay 賷鬲亘毓 丕賱賳鬲賷噩丞 丕賱丨丕賱賷丞. 賷馗賱 丕賱賵囟毓丕賳 丕賱賮丕鬲丨 賵丕賱丿丕賰賳 孬丕亘鬲賷賳 賵賱丕 賷鬲胤賱亘丕賳 廿毓丕丿丞 丕賱丕鬲氐丕賱.</string>
-    <string name="settings_switch_to_light_appearance">丕賱鬲亘丿賷賱 廿賱賶 丕賱賲馗賴乇 丕賱賮丕鬲丨</string>
-    <string name="settings_switch_to_dark_appearance">丕賱鬲亘丿賷賱 廿賱賶 丕賱賲馗賴乇 丕賱丿丕賰賳</string>
-    <string name="carplay_night_system">丕鬲亘丕毓 賳馗丕賲 Android</string>
-    <string name="carplay_night_ambient">丨爻亘 丕賱廿囟丕亍丞 丕賱賲丨賷胤丞</string>
-    <string name="carplay_night_day">賳賴丕乇 丿丕卅賲賸丕</string>
-    <string name="carplay_night_night">賱賷賱 丿丕卅賲賸丕</string>
-    <string name="carplay_night_schedule">丨爻亘 丕賱噩丿賵賱 丕賱夭賲賳賷</string>
-    <string name="carplay_night_start">亘丿丕賷丞 丕賱賵囟毓 丕賱賱賷賱賷</string>
-    <string name="carplay_night_end">賳賴丕賷丞 丕賱賵囟毓 丕賱賱賷賱賷</string>
-    <string name="carplay_night_schedule_hint">賷爻鬲禺丿賲 丕賱鬲賵賯賷鬲 丕賱賲丨賱賷 賱賵丨丿丞 丕賱爻賷丕乇丞. 賷噩亘 兀賳 賷禺鬲賱賮 賵賯鬲 丕賱亘丿丕賷丞 賵丕賱賳賴丕賷丞貙 賵賷賲賰賳 兀賳 鬲賲鬲丿 丕賱賮鬲乇丞 毓亘乇 賲賳鬲氐賮 丕賱賱賷賱.</string>
-    <string name="carplay_night_schedule_same_time">賷噩亘 兀賳 賷禺鬲賱賮 賵賯鬲 丕賱亘丿丕賷丞 賵丕賱賳賴丕賷丞.</string>
-    <string name="carplay_night_hint">丕丨賮馗 孬賲 毓丿 廿賱賶 CarPlay 賱賱鬲胤亘賷賯.</string>
-    <string name="carplay_night_ambient_hint">賷爻鬲禺丿賲 丕賱毓鬲亘丞 賵丕賱鬲兀禺賷乇 兀丿賳丕賴. 賵賷鬲亘毓 Android 毓賳丿 睾賷丕亘 賲爻鬲卮毓乇 丕賱囟賵亍.</string>
-    <string name="carplay_night_time_note">毓賳丿 丕禺鬲賷丕乇 丕賱賲馗賴乇 丕賱鬲賱賯丕卅賷 賮賷 廿毓丿丕丿丕鬲 CarPlay貙 賷乇丕毓賷 CarPlay 賵賯鬲 iPhone 兀賷囟賸丕. 丨鬲賶 廿匕丕 丕禺鬲乇鬲 賳賴丕乇 丿丕卅賲賸丕貙 賮賯丿 賷馗賴乇 CarPlay 亘賲馗賴乇 丿丕賰賳 賱賷賱賸丕.</string>
+    <string name="carplay_night_mode">وضع النهار والليل في CarPlay</string>
+    <string name="settings_app_appearance">مظهر التطبيق</string>
+    <string name="settings_app_appearance_dark">داكن</string>
+    <string name="settings_app_appearance_light">فاتح</string>
+    <string name="settings_app_appearance_auto">تلقائي</string>
+    <string name="settings_app_appearance_description">يتبع الوضع التلقائي إعداد النهار/الليل المحفوظ في CarPlay؛ وعند فتح CarPlay يتبع النتيجة الحالية. يظل الوضعان الفاتح والداكن ثابتين ولا يتطلبان إعادة الاتصال.</string>
+    <string name="settings_switch_to_light_appearance">التبديل إلى المظهر الفاتح</string>
+    <string name="settings_switch_to_dark_appearance">التبديل إلى المظهر الداكن</string>
+    <string name="carplay_night_system">اتباع نظام Android</string>
+    <string name="carplay_night_ambient">حسب الإضاءة المحيطة</string>
+    <string name="carplay_night_day">نهار دائمًا</string>
+    <string name="carplay_night_night">ليل دائمًا</string>
+    <string name="carplay_night_schedule">حسب الجدول الزمني</string>
+    <string name="carplay_night_start">بداية الوضع الليلي</string>
+    <string name="carplay_night_end">نهاية الوضع الليلي</string>
+    <string name="carplay_night_schedule_hint">يستخدم التوقيت المحلي لوحدة السيارة. يجب أن يختلف وقت البداية والنهاية، ويمكن أن تمتد الفترة عبر منتصف الليل.</string>
+    <string name="carplay_night_schedule_same_time">يجب أن يختلف وقت البداية والنهاية.</string>
+    <string name="carplay_night_hint">احفظ ثم عد إلى CarPlay للتطبيق.</string>
+    <string name="carplay_night_ambient_hint">يستخدم العتبة والتأخير أدناه. ويتبع Android عند غياب مستشعر الضوء.</string>
+    <string name="carplay_night_time_note">عند اختيار المظهر التلقائي في إعدادات CarPlay، يراعي CarPlay وقت iPhone أيضًا. حتى إذا اخترت نهار دائمًا، فقد يظهر CarPlay بمظهر داكن ليلًا.</string>
 </resources>
-

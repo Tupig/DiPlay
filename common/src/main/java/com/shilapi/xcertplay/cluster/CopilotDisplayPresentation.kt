@@ -18,7 +18,7 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
+import com.shilapi.xcertplay.resolveAppNightNow
 
 /**
  * Shows CarPlay's copilot (passenger) display stream on Leapmotor C11 2024 (8295P) copilot display.
@@ -56,11 +56,7 @@ internal class CopilotDisplayPresentation(
         val videoParams = FrameLayout.LayoutParams(-1, -1)
         
         val textureView = TextureView(context).apply {
-            // 锯齿优化：启用抗锯齿和高质量过滤
-            if (Build.VERSION.SDK_INT >= 29) {
-                setForceAntiAliasing(true)
-            }
-            setFilterQuality(FilterQuality.HIGH)
+            // 硬件层渲染，降低合成开销
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
         }
         fun transform() {
@@ -140,7 +136,6 @@ internal class CopilotDisplayPresentation(
             
             // Leapmotor C11 copilot display name pattern
             val name = displays.map { it.name }.firstOrNull { it.contains("copilot") || it.contains("passenger") || it.contains("entertainment") }
-                ?: displays.firstOrNull { it.contains("copilot") }?.name
             
             return name?.let { name ->
                 displays.firstOrNull { it.name == name }?.takeIf { 

@@ -555,17 +555,17 @@ git push origin main
 | 禁止操作 | 原因 |
 |----------|------|
 | ❌ `git push upstream` | 已禁用，防止误推送到上游 |
-| ❌ 直接合并 `upstream/main` 到 `main` | 会引入大量不兼容的 BYD 代码 |
-| ❌ 盲目合并所有上游提交 | 必须评估后选择性合并 |
+| ⚠️ 直接合并 `upstream/main` 未审计 | 所有者 2026-10-14 裁决允许直接合并，但合并后必须完成损害审计（翻译键集对账 + `R.string` 引用完整性）并修复语义损坏，CI 绿后才可推进 `main`（范例见"同步评估记录 → 2026-10-14 采纳"节） |
+| ❌ 盲目合并 | 不审计、不修复的合并一律禁止 |
 | ❌ 修改上游仓库代码 | 无权限，且违背独立维护原则 |
 
 ### 📋 Agent 必须遵守的同步清单
 
 - [ ] 定期 `git fetch upstream` (建议每周至少一次)
 - [ ] 阅读上游 commit 信息，评估价值
-- [ ] 有价值 → `git cherry-pick` 或文件级合并
+- [ ] 有价值 → 直接合并 `upstream/main`（所有者 2026-10-14 裁决）或 `git cherry-pick`
 - [ ] 无价值 → 记录原因，忽略
-- [ ] 合并后 → 完整测试验证
+- [ ] 合并后 → 损害审计（键集对账 + 引用完整性）+ 修复 + 完整测试验证
 - [ ] 推送到 `origin/main` (你的主仓库)
 - [ ] 记录合并决策到 Issue/ADR
 
@@ -590,6 +590,39 @@ origin    https://github.com/Tupig/DiPlay.git (push)
 upstream  https://github.com/shihabal3amri/DiPlay.git (fetch)
 upstream  禁用推送到上游 (push)
 ```
+
+### 🔄 同步评估记录（追加式日志，#11 例行）
+
+> 每次例行巡检在此追加一节：日期 / 合并基 / 规模 / 分类结论 / 决策。
+
+#### 2026-10-14 巡检
+
+- **合并基**：`d9881b4a`（2026-10-12，上游 PR #660 cluster-music-card）。此前 2026-10-12/13 的两次直接合并违反当时红线，其语义冲突已由 PR #18 修复；红线已于 2026-10-14 更新为"允许直接合并 + 强制损害审计"（见下方采纳节）。
+- **新增规模**：93 提交（48 非合并），2026-10-11 → 10-13；diff 150 文件，+6016/−631。上游正在准备 0.2.19 公测版。
+- **高价值候选**（CarPlay / 视频 / 蓝牙核心健壮性，下次同步优先 cherry-pick）：
+  - `f5366138` HEVC 无硬解时回退 H.264
+  - `5e8a6f9a` 有线会话残留后重新询问 CarPlay 模式
+  - `d0556a2f` FFmpeg-backed Codec2 解码改用 SurfaceView 输出
+  - `54116013` BluetoothManager 为空时回退 BluetoothAdapter.getDefaultAdapter
+  - `5fbd7171` 无线启动改 Wi-Fi 前检查蓝牙已开启
+  - `59c26525` 有线 USB 授权在系统页缺失时的修复
+  - `b5f1bfe4` 倒车影像隐藏状态栏时保持会话
+  - `301c5601` SurfaceView 输出恢复时显示最后一帧 CarPlay 画面
+  - `9647d689` 语音消息打开麦克风 + 无音频返回时自动重启
+- **中价值候选**：诊断报告增强（`5b6dead5` 记录上次崩溃、`d713087d` 列出方向盘键）、`9b169ee3` 连接失败本地化恢复提示、`903f2df4` Android 17 有线启动前申请局域网权限、`55877dba` Android 9- Settings 搜索崩溃修复、`74569fe6` 单元测试 Windows 宿主假设修复、`5fb5d875` Android 12+ 保留旧版蓝牙权限、`4081472f`/`f57c36b1`/`468d18cd`/`67612809` 手机页健壮性与诊断入口
+- **低价值/跳过**：DiLink 3/4 系列（`7a966466`/`d51f1c5c`/`d1a653ea`/`f64e0e83`，BYD 专属）、`2f84512b` BYD 仪表地图 controller 13/17、`791a89d4`/`ab4dd22b`/`bcc5013a` 热点 shell 启动与诊断（BYD/ADB 场景）、`bd2d6066` 手机/平板大喇叭通话、`8e692ea9`+`d0c6469e` Transform/revert 对（净零）、`e06a2502`/`3d9d6acc`/`dde983c0`/`9cf1bc80`/`5b392c0c`/`b3618ae5` 0.2.19 发版记录链
+- **冲突风险文件**（fork 重灾区，cherry-pick 时按 TuPigPlay 侧优先解决）：`DiPlayActivity.kt`（`a8be7283`/`db59fb07`/`93b7869d` swipe 与 Settings 分组重排）、`CarHotspotSetup.kt`（`db23bc2d`/`bcc5013a`）、`values-ja`/`values-zh-rTW`（`9f4adc04` 手机页日文化、`a93066d1` 繁中完整化、`fe8aa505` TW 措辞 14 条——与 fork 本轮翻译工作重叠）、`WheelKeyService.kt`（`d713087d`）
+- **决策**：倾向等待发版稳定后统一 cherry-pick 高价值组——**已被所有者裁决取代**：2026-10-14 采纳直接合并结果，cherry-pick 计划作废（见下方"2026-10-14 采纳"节）。
+
+#### 2026-10-14 采纳（直接合并结果，所有者裁决）
+
+- **裁决**：所有者于 2026-10-14 20:36 裁决采纳其直接合并结果 `9c719cc6`（对 `5ebe2756` 两次合并 `upstream/main`，冲突按 prefer-upstream 解决）为新基线；本节上方 cherry-pick 20 项计划**作废**。执行分支 `fix/11-adopt-direct-merge`。
+- **吸收规模**：47 提交（23 非合并）；diff `d2dc9bb4`→`9c719cc6` 共 72 文件 +3261/−276。
+- **损害审计**（合并后强制流程，本次全跑）：
+  - 指纹核对全过：`DEFAULT_OEM_LABEL="BYD"`、`isBydHeadUnit`（upstream 原文）、`ensureCopilotPresentation`、`ensureDiLink51ClusterPresentation`、`smoothVideoDelayMillis` fork 公式、`hud.Byd` 42 文件引用全部可解析、`SettingsSection` 枚举无变化。
+  - 双态差分（绿态 `d2dc9bb4` vs 合并态）定位真破坏：24 条 `leapmotor_wheel_*`（`LeapmotorWheelKeySettingsSection.kt` 引用存活、定义被吞——编译级破坏）+ `values-zh-rTW` 8 条既有键翻译（`mfi_*` 诊断 4、CarPlay 通知 3、签名校验 1）。
+  - 假阳性甄别：`music_buffer`/`s_500_ms`/`settings_ambient_palette`/`settings_ambient_palette_summary`/`settings_ambient_select_all` 为 upstream 一致移除（代码零引用），不恢复；`ok`/`exo_controls_*` 为库引用。
+- **修复**：恢复 104 条翻译（24×4 locale + zh-rTW 8 条），与绿态逐字一致；`xmllint` 通过、`<string>` 无重复定义、`leapmotor_wheel` 未定义引用清零。
 
 ---
 

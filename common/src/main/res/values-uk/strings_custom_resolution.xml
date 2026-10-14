@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="custom_resolution_hint">袙胁械写褨褌褜 胁褨写褋芯褌芯泻 胁褨写 30 写芯 160. 袟邪褋褌芯褋褍胁邪薪薪褟 锌芯胁褌芯褉薪芯 锌褨写泻谢褞褔懈褌褜 CarPlay.</string>
-    <string name="resolution_number_error">袙胁械写褨褌褜 褑褨谢械 褔懈褋谢芯 胁褨写 %1$d 写芯 %2$d.</string>
+    <string name="custom_resolution_hint">Введіть відсоток від 30 до 160. Застосування повторно підключить CarPlay.</string>
+    <string name="resolution_number_error">Введіть ціле число від %1$d до %2$d.</string>
     <string name="custom_resolution_summary">%1$d%%</string>
-    <string name="resolution_reset_defaults">袙褨写薪芯胁懈褌懈 褌懈锌芯胁械 蟹薪邪褔械薪薪褟</string>
-    <string name="resolution_canvas_unsupported" formatted="false">笑械泄 谐芯谢芯胁薪懈泄 锌褉懈褋褌褉褨泄 薪械 屑芯卸械 写械泻芯写褍胁邪褌懈 蟹斜褨谢褜褕械薪褍 褉芯蟹写褨谢褜薪褍 蟹写邪褌薪褨褋褌褜. 袙懈泻芯褉懈褋褌芯胁褍褦褌褜褋褟 100%.</string>
+    <string name="resolution_reset_defaults">Відновити типове значення</string>
+    <string name="resolution_canvas_unsupported" formatted="false">Цей головний пристрій не може декодувати збільшену роздільну здатність. Використовується 100%.</string>
 </resources>
-

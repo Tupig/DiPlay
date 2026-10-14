@@ -25,8 +25,8 @@ import android.view.TextureView
 import android.content.res.ColorStateList
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import com.shilapi.xcertplay.cluster.LeapmotorClusterLayout
-import com.shilapi.xcertplay.leapmotor.LeapmotorC11Settings
+import com.shilapi.xcertplay.hud.ClusterTurnGuidance
+import com.shilapi.xcertplay.host.R
 
 /**
  * Shows CarPlay's instrument-cluster stream on a Leapmotor cluster projection display.
@@ -54,7 +54,7 @@ internal class ClusterMapPresentation(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val size = sizeOf(display)
-        val adaptive = LeapmotorClusterLayout.supported()
+        val adaptive = LeapmotorClusterLayout.supported(context)
         val plan = if (adaptive) LeapmotorClusterLayout.plan(size.x, size.y, theme) else null
         // The adaptive DiLink 5.1 layout follows the cluster's own contrast; elsewhere the cluster follows DiPlay's theme.
         val dark = if (plan != null) LeapmotorClusterLayout.dark(context, theme) else context.resolveAppNightNow()
@@ -72,14 +72,8 @@ internal class ClusterMapPresentation(
                 leftMargin = plan.left; topMargin = plan.top
             }
         if (plan != null) {
-            val textureView = TextureView(context).apply {
-                // 锯齿优化：启用抗锯齿和高质量过滤
-                if (Build.VERSION.SDK_INT >= 29) {
-                    setForceAntiAliasing(true)
-                }
-                setFilterQuality(FilterQuality.HIGH)
-                setLayerType(View.LAYER_TYPE_HARDWARE, null)
-            }
+            val textureView = TextureView(context)
+            fun transform() {
                 textureView.setTransform(Matrix().apply {
                     setScale(LeapmotorClusterLayout.STREAM_WIDTH.toFloat() / plan.width,
                         LeapmotorClusterLayout.STREAM_HEIGHT.toFloat() / plan.height)
@@ -210,18 +204,18 @@ internal class ClusterMapPresentation(
             val displays = context.getSystemService(DisplayManager::class.java)
                 ?.getDisplays(DisplayManager.DISPLAY_CATEGORY_PRESENTATION) ?: return null
             val name = LeapmotorClusterLayout.displayName(
-                displays.map { it.name }, android.os.Build.FINGERPRINT, theme,
+                displays.map { it.name }, context, theme,
             )
             if (name == null) {
                 // Never replace a missing 5.1 side layer with a full-screen display.
-                if (LeapmotorClusterLayout.supported()) return null
+                if (LeapmotorClusterLayout.supported(context)) return null
                 return displays.firstOrNull { display ->
                     val size = sizeOf(display)
                     DiLink4ClusterDisplay.accepts(display.name, size.x, size.y)
                 }
             }
             return displays.firstOrNull { it.name == name }?.takeIf {
-                if (!LeapmotorClusterLayout.supported()) true else {
+                if (!LeapmotorClusterLayout.supported(context)) true else {
                     val size = sizeOf(it)
                     LeapmotorClusterLayout.plan(size.x, size.y, theme) != null
                 }

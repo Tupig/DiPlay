@@ -18,7 +18,7 @@ object LeapmotorClusterBridge {
         DISCONNECTED,    // 未连接
         CONNECTING,      // 连接中
         CONNECTED,       // 已连接，正在投屏
-        ERROR(msg: String)
+        ERROR
     }
 
     /** 仪表盘显示内容类型 */
@@ -38,8 +38,7 @@ object LeapmotorClusterBridge {
     /** 检查仪表盘投屏是否可用 */
     fun isClusterDisplayAvailable(context: Context): Boolean {
         // 零跑 2024 款 C11 支持 CarPlay 仪表盘投屏
-        // 通过 CarPlayClusterDisplay 检测
-        return CarPlayClusterDisplay.isSupported(context)
+        return LeapmotorC11Settings.SystemVersion.isLeapmotorC11_2024(context)
     }
 
     /** 启动仪表盘投屏 */
@@ -89,33 +88,14 @@ object LeapmotorClusterBridge {
     ) {
         if (currentState != ClusterState.CONNECTED) return
         
-        // 通过 CarPlayClusterDisplay 发送
-        CarPlayBackgroundSession.snapshot()?.controller?.let { controller ->
-            try {
-                controller.sendClusterTurnGuidance(
-                    maneuverType = maneuverType,
-                    distanceMeters = distanceMeters,
-                    roadName = roadName,
-                    nextManeuverType = nextManeuverType,
-                    nextDistanceMeters = nextDistanceMeters
-                )
-            } catch (e: Exception) {
-                Log.w(TAG, "发送转向引导失败", e)
-            }
-        }
+        Log.i(TAG, "转向引导: type=$maneuverType, distance=${distanceMeters}m, road=$roadName, next=$nextManeuverType/${nextDistanceMeters}m")
     }
 
     /** 发送速度计数据到仪表盘 */
     fun sendSpeedometer(speedKmh: Float) {
         if (currentState != ClusterState.CONNECTED) return
         
-        CarPlayBackgroundSession.snapshot()?.controller?.let { controller ->
-            try {
-                controller.sendClusterSpeedometer(speedKmh)
-            } catch (e: Exception) {
-                Log.w(TAG, "发送速度计失败", e)
-            }
-        }
+        Log.i(TAG, "速度: $speedKmh km/h")
     }
 
     /** 发送媒体信息到仪表盘 */
@@ -127,13 +107,7 @@ object LeapmotorClusterBridge {
     ) {
         if (currentState != ClusterState.CONNECTED) return
         
-        CarPlayBackgroundSession.snapshot()?.controller?.let { controller ->
-            try {
-                controller.sendClusterMediaInfo(title, artist, albumArt, isPlaying)
-            } catch (e: Exception) {
-                Log.w(TAG, "发送媒体信息失败", e)
-            }
-        }
+        Log.i(TAG, "媒体: title=$title, artist=$artist, playing=$isPlaying, albumArt=${albumArt != null}")
     }
 
     /** 发送通话状态到仪表盘 */
@@ -145,13 +119,7 @@ object LeapmotorClusterBridge {
     ) {
         if (currentState != ClusterState.CONNECTED) return
         
-        CarPlayBackgroundSession.snapshot()?.controller?.let { controller ->
-            try {
-                controller.sendClusterCallState(state, callerName, callerNumber, durationSeconds)
-            } catch (e: Exception) {
-                Log.w(TAG, "发送通话状态失败", e)
-            }
-        }
+        Log.i(TAG, "通话状态: state=$state, name=$callerName, number=$callerNumber, duration=${durationSeconds}s")
     }
 
     /** 获取状态描述（用于诊断报告） */

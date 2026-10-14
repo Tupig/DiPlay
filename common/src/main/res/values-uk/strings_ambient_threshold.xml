@@ -1,10 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ambient_light_threshold_title">袩芯褉褨谐 芯褋胁褨褌谢械薪芯褋褌褨</string>
+    <string name="ambient_light_threshold_title">Поріг освітленості</string>
     <string name="ambient_light_threshold_summary">%1$d lux</string>
-    <string name="ambient_light_threshold_value">袩芯褉褨谐 锌械褉械屑懈泻邪薪薪褟 (lux)</string>
-    <string name="ambient_light_threshold_hint">袧懈卸褔械 锌芯褉芯谐邪 (lux) 鈥?薪褨褔薪懈泄, 薪邪 锌芯褉芯蟹褨 泄 胁懈褖械 鈥?写械薪薪懈泄. 袩芯泻邪蟹邪薪薪褟 屑邪褞褌褜 蟹邪谢懈褕邪褌懈褋褟 蟹 褨薪褕芯谐芯 斜芯泻褍 锌芯褉芯谐邪 锌褉芯褌褟谐芯屑 胁懈斜褉邪薪芯褩 蟹邪褌褉懈屑泻懈. 袙胁械写褨褌褜 褑褨谢械 褔懈褋谢芯 胁褨写 1 写芯 200000.</string>
-    <string name="ambient_light_threshold_error">袙胁械写褨褌褜 褑褨谢械 褔懈褋谢芯 胁褨写 1 写芯 200000.</string>
-    <string name="ambient_light_reset_defaults">袙褨写薪芯胁懈褌懈 褌懈锌芯胁械 蟹薪邪褔械薪薪褟</string>
+    <string name="ambient_light_threshold_value">Поріг перемикання (lux)</string>
+    <string name="ambient_light_threshold_hint">Нижче порога (lux) — нічний, на порозі й вище — денний. Показання мають залишатися з іншого боку порога протягом вибраної затримки. Введіть ціле число від 1 до 200000.</string>
+    <string name="ambient_light_threshold_error">Введіть ціле число від 1 до 200000.</string>
+    <string name="ambient_light_reset_defaults">Відновити типове значення</string>
 </resources>
-

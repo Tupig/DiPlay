@@ -1,65 +1,65 @@
-﻿# 瀹夎涓庤繛鎺?
+﻿# 安装与连接
 
-[English](INSTALL.md) 路 **绠€浣撲腑鏂?*
+[English](INSTALL.md) · **简体中文**
 
-1. 鍋滃ソ杞︺€備粠[瀹樻柟鍙戝竷椤礭(https://github.com/Tupig/DiPlay/releases/tag/v0.2.17)涓嬭浇 `TuPigPlay-0.0.0.1.apk`锛孾瀹樼綉](https://shihabal3amri.github.io/DiPlay/)涓婁篃鏈変笅杞介摼鎺ャ€傚畼鏂瑰簲鐢ㄨ姹?Android 7.1 鎴栨洿楂樼増鏈紙API 25+锛夛紱Android 7.1鈥?.1 鐨勬敮鎸佷粛闇€瀹炶溅楠岃瘉銆?
-2. 浣跨敤杞︽満鏀寔鐨?APK 瀹夎鏂瑰紡瀹夎鍒?Android 杞︽満涓娿€備笉瑕佽鍒?iPhone 涓娿€傚氨鍦板崌绾ф椂璇蜂娇鐢ㄧ浉鍚岀殑鍖呭悕/鍙樹綋鍜屽尮閰嶇殑绛惧悕璇佷功锛岃繖鏍锋墠鑳戒繚鐣欒缃拰閰嶅璁板綍銆傚悇鐗堟湰鐨勬瀯寤轰笌绛惧悕鏍￠獙璁板綍鍦?[validation](VALIDATION.md) 涓紱涓嶈鍑枃浠跺悕鎺ㄦ柇鍗囩骇鍏煎鎬с€?
-3. 鎵撳紑 DiPlay銆備负浣犳墍鐢ㄥ埌鐨勫姛鑳芥巿浜堟潈闄愶細钃濈墮/闄勮繎璁惧銆佽緝鏃?Android 涓婄殑 Wi-Fi/浣嶇疆鏉冮檺锛屼互鍙婄敤浜?Siri/閫氳瘽鐨勯害鍏嬮鏉冮檺銆傚厑璁搁€氱煡浠ヤ究浣跨敤杩炴帴鎺у埗銆?
-4. 杩炴帴鍓嶅厛鍏抽棴鍏朵粬鎵嬫満鎶曞睆搴旂敤銆?
+1. 停好车。从[官方发布页](https://github.com/Tupig/DiPlay/releases/tag/v0.2.17)下载 `TuPigPlay-0.0.0.1.apk`，[官网](https://shihabal3amri.github.io/DiPlay/)上也有下载链接。官方应用要求 Android 7.1 或更高版本（API 25+）；Android 7.1–8.1 的支持仍需实车验证。
+2. 使用车机支持的 APK 安装方式安装到 Android 车机上。不要装到 iPhone 上。就地升级时请使用相同的包名/变体和匹配的签名证书，这样才能保留设置和配对记录。各版本的构建与签名校验记录在 [validation](VALIDATION.md) 中；不要凭文件名推断升级兼容性。
+3. 打开 DiPlay。为你所用到的功能授予权限：蓝牙/附近设备、较旧 Android 上的 Wi-Fi/位置权限，以及用于 Siri/通话的麦克风权限。允许通知以便使用连接控制。
+4. 连接前先关闭其他手机投屏应用。
 
-## 鏃犵嚎杩炴帴
+## 无线连接
 
-杞﹀唴鑷甫鐑偣鏄粯璁ゆ柟寮忋€傛墦寮€ **Settings 鈫?Connection 鈫?Connection setup 鈫?Built-in car hotspot**锛屽鏋滄敮鎸佸氨鎵撳紑 5 GHz 杞﹀唴鐑偣锛屽苟鍑嗙‘璁颁笅瀹冪殑鍚嶇О鍜屽瘑鐮併€備繚鎸?iPhone 涓婄殑钃濈墮鍜?Wi-Fi 澶勪簬寮€鍚姸鎬侊紝涓庤溅杈嗛厤瀵癸紝鐒跺悗鐐规寜 **Connect phone**銆傚湪鍏煎鐨勫浐浠朵笂锛岃摑鐗欐彙鎵嬩細鑷姩涓嬪彂鐑偣鍑嵁渚涙墜鏈哄姞鍏ワ紱鏍稿績 CarPlay 骞朵笉渚濊禆 ADB銆傚鏋?iPhone 娌℃湁鑷姩鍔犲叆锛岃璁板綍鎵嬪姩鍔犲叆鏄惁鑳藉惎鍔?CarPlay锛屽苟鍙傞槄鍗曠嫭纭杩囩殑[瀹為獙鎬у姞鍏ヤ慨澶峕(WIRELESS_HOTSPOT_JOIN.md)銆?*Choose iPhone** 鐢ㄤ簬鏇存崲宸查€変腑鐨勯厤瀵硅澶囥€傚弬瑙乕璁剧疆鎸囧崡](CONNECTION_SETUP.md)銆?
+车内自带热点是默认方式。打开 **Settings → Connection → Connection setup → Built-in car hotspot**，如果支持就打开 5 GHz 车内热点，并准确记下它的名称和密码。保持 iPhone 上的蓝牙和 Wi-Fi 处于开启状态，与车辆配对，然后点按 **Connect phone**。在兼容的固件上，蓝牙握手会自动下发热点凭据供手机加入；核心 CarPlay 并不依赖 ADB。如果 iPhone 没有自动加入，请记录手动加入是否能启动 CarPlay，并参阅单独确认过的[实验性加入修复](WIRELESS_HOTSPOT_JOIN.md)。**Choose iPhone** 用于更换已选中的配对设备。参见[设置指南](CONNECTION_SETUP.md)。
 
-褰撹溅鏈哄疄鐜颁簡鎵€闇€鐨勫浐浠?API 鏃讹紝Wi-Fi Direct 鏄?Android 7.1+ 涓婄殑鍙︿竴绉嶉€夋嫨銆侫ndroid 7.1鈥? 浣跨敤鐢熸垚鐨勭粍鍑嵁锛屾棤娉曟牎楠岃姹傜殑棰戞锛汚ndroid 10+ 淇濈暀鍗忓晢棰戞鐨勬牎楠屻€傛棫鐗堢殑淇￠亾鍥哄畾/娓呯悊闄愬埗瑙?[Android 9 Wi-Fi Direct](ANDROID9_WIFI_DIRECT.md)銆?*Existing Wi-Fi / Same LAN** 閫氳繃澶栭儴璺敱鍣ㄦ垨渚挎惡 Wi-Fi 杩炴帴锛氭妸杞﹀拰 iPhone 鎺ュ叆鍚屼竴涓綉缁滐紝鍏抽棴璺敱鍣ㄧ殑瀹㈡埛绔殧绂伙紝骞跺湪 **Settings 鈫?Connection 鈫?Connection setup** 涓嬩繚瀛樿缃戠粶銆備繚鎸佽摑鐗欏紑鍚€侱iPlay 涓嶄細鏇夸綘鍔犲叆缃戠粶鎴栦慨鏀归粯璁よ矾鐢憋紱鍙傝[鍚屼竴灞€鍩熺綉璁剧疆](EXISTING_WIFI.md)銆侺ocal hotspot 閫夐」宸茬Щ闄わ紱鍘熸湁鐨勯€夋嫨浼氳縼绉诲埌鍐呯疆鐑偣銆俇SB 渚濈劧鍙敤銆?
+当车机实现了所需的固件 API 时，Wi-Fi Direct 是 Android 7.1+ 上的另一种选择。Android 7.1–9 使用生成的组凭据，无法校验请求的频段；Android 10+ 保留协商频段的校验。旧版的信道固定/清理限制见 [Android 9 Wi-Fi Direct](ANDROID9_WIFI_DIRECT.md)。**Existing Wi-Fi / Same LAN** 通过外部路由器或便携 Wi-Fi 连接：把车和 iPhone 接入同一个网络，关闭路由器的客户端隔离，并在 **Settings → Connection → Connection setup** 下保存该网络。保持蓝牙开启。DiPlay 不会替你加入网络或修改默认路由；参见[同一局域网设置](EXISTING_WIFI.md)。Local hotspot 选项已移除；原有的选择会迁移到内置热点。USB 依然可用。
 
-鍦?**Settings 鈫?Connection 鈫?Connection setup 鈫?Wi-Fi Direct 鈫?Preferred channel** 涓紝Auto 淇濇寔鑷姩閫変俊閬擄細鍦?5 GHz 鎺ュ叆鐐规梺锛屽畠浼氬厛灏濊瘯绗﹀悎鏉′欢鐨勫凡淇濆瓨/瀵归綈淇￠亾浠ュ強鏄惧紡鐨?2.4 GHz锛屼箣鍚庢墠鍥為€€鍒板叾浠?5 GHz/绯荤粺榛樿淇￠亾銆傝繖骞朵笉淇濊瘉涓€瀹氫娇鐢ㄦ煇涓娈点€?*Auto 路 5 GHz** 鍜?**Auto 路 2.4 GHz** 浼氬湪璁惧鏀寔鐨勫墠鎻愪笅鎶婅嚜鍔ㄥ皾璇曢檺瀹氬湪鎵€閫夐娈碉紱鏃х増 Android 鏃犳硶鏍￠獙鍗忓晢鍑虹殑棰戞銆備綘鍙互淇濆瓨涓€涓彈鏀寔鐨?2.4/5 GHz 淇￠亾渚涗笅娆¤繛鎺ヤ娇鐢紱宸插缓绔嬬殑浼氳瘽浼氫竴鐩存寔缁埌閲嶆柊杩炴帴銆傚鏋滄棤绾跨數鎷掔粷璇ヤ俊閬撴垨鍒涘缓浜嗕笉鍚岀殑淇￠亾锛岃鏀归€?Auto 鎴栧叾浠栦俊閬撳悗閲嶆柊杩炴帴銆傚湴鍖?鏃犵嚎鐢电殑鏀寔鑼冨洿浠嶇劧閫傜敤锛岃€屼笖閫夋嫨淇￠亾骞朵笉鑳借瘉鏄庣‘鍗￠棶棰樺凡淇銆?
+在 **Settings → Connection → Connection setup → Wi-Fi Direct → Preferred channel** 中，Auto 保持自动选信道：在 5 GHz 接入点旁，它会先尝试符合条件的已保存/对齐信道以及显式的 2.4 GHz，之后才回退到其他 5 GHz/系统默认信道。这并不保证一定使用某个频段。**Auto · 5 GHz** 和 **Auto · 2.4 GHz** 会在设备支持的前提下把自动尝试限定在所选频段；旧版 Android 无法校验协商出的频段。你可以保存一个受支持的 2.4/5 GHz 信道供下次连接使用；已建立的会话会一直持续到重新连接。如果无线电拒绝该信道或创建了不同的信道，请改选 Auto 或其他信道后重新连接。地区/无线电的支持范围仍然适用，而且选择信道并不能证明确卡问题已修复。
 
-**Settings 鈫?Connection** 涓嬪彲閫夌殑鑷姩鍚姩鍐呯疆鐑偣榛樿鍏抽棴銆傚湪鍙楁敮鎸佺殑 BYD 鍥轰欢涓婏紝鏄惧紡寮€鍚悗锛孌iPlay 浼氶€氳繃宸叉巿鏉冪殑鏈湴 ADB 涓鸿嚜韬寘鍚嶆牎楠屾潈闄愩€傚畠浼氫繚鐣欒溅杈嗗凡淇濆瓨鐨勭儹鐐瑰悕绉?瀵嗙爜锛涘紑鏈烘墦寮€涓庢墦寮€鍗宠繛鎺ユ槸鍙﹀涓や釜鐙珛璁剧疆銆侫DB 鍏滃簳鏂规瑕佹眰姣忔璇锋眰鏃堕兘瀛樺湪鍙揪涓斿凡鎺堟潈鐨勮繛鎺ワ紝骞朵笖鍥轰欢瑕佸叕寮€澹版槑 Wi-Fi 鐑偣鍛戒护锛涘彧鏈夊湪瑙傚療鍒扮儹鐐瑰氨缁悗鎵嶄細鎶ュ憡鎴愬姛銆傝繖骞朵笉浠ｈ〃姣忎釜 DiLink 鐗堟湰閮芥敮鎸併€傚弬瑙乕杩炴帴璁剧疆](CONNECTION_SETUP.md)銆?
+**Settings → Connection** 下可选的自动启动内置热点默认关闭。在受支持的 BYD 固件上，显式开启后，DiPlay 会通过已授权的本地 ADB 为自身包名校验权限。它会保留车辆已保存的热点名称/密码；开机打开与打开即连接是另外两个独立设置。ADB 兜底方案要求每次请求时都存在可达且已授权的连接，并且固件要公开声明 Wi-Fi 热点命令；只有在观察到热点就绪后才会报告成功。这并不代表每个 DiLink 版本都支持。参见[连接设置](CONNECTION_SETUP.md)。
 
 ## USB
 
-鐢ㄦ敮鎸佹暟鎹紶杈撶殑绾跨紗鎶?iPhone 鎺ュ埌 USB **鏁版嵁**鍙ｏ紝骞堕€夋嫨 **Connect with USB**銆傛寜鎻愮ず鎵瑰噯 USB 璁块棶銆乀rust/CarPlay 浠ュ強鏈湴 VPN 鏉冮檺銆傛湰鍦?VPN 鎵胯浇鐨勬槸 USB 缃戠粶閾捐矾锛屽畠涓嶆槸涓婄綉鐢ㄧ殑 VPN 鏈嶅姟銆備粎渚涚數鐨勬帴鍙?绾跨紗鏃犳硶宸ヤ綔銆傚鏋滄湁绾?CarPlay 姣忛殧鍑犵灏辨柇寮€銆乮Phone 鍙堣嚜鍔ㄩ噸杩烇紝鍙互鍏堣瘯 **Settings 鈫?Connection 鈫?USB connection 鈫?iPhone charging 鈫?Reduced**锛屽啀璇?**Low**锛涗唬浠锋槸 iPhone 鍏呯數浼氬彉鎱€?
+用支持数据传输的线缆把 iPhone 接到 USB **数据**口，并选择 **Connect with USB**。按提示批准 USB 访问、Trust/CarPlay 以及本地 VPN 权限。本地 VPN 承载的是 USB 网络链路，它不是上网用的 VPN 服务。仅供电的接口/线缆无法工作。如果有线 CarPlay 每隔几秒就断开、iPhone 又自动重连，可以先试 **Settings → Connection → USB connection → iPhone charging → Reduced**，再试 **Low**；代价是 iPhone 充电会变慢。
 
-## 璁剧疆
+## 设置
 
-棣栨鍚姩鏃剁殑 DiLink 璁剧疆鍚戝鍙互璺宠繃锛屼篃鍙互浠?Settings 閲嶆柊鎵撳紑銆侱iPlay 姣忓ぉ妫€鏌ヤ竴娆?GitHub 瀹樻柟鏇存柊锛屽苟鍦ㄩ椤垫樉绀?**Update available**锛?*About** 椤甸潰鐐逛竴涓嬪嵆鍙笅杞斤紝骞跺彲鍏抽棴鍚庡彴妫€鏌ャ€侫PK 瀹夎鐢?Android 绯荤粺澶勭悊銆?*App appearance** 鐢ㄤ簬閫夋嫨 DiPlay 鏈韩鐨勬祬鑹层€佹繁鑹叉垨鑷姩妯″紡锛屼笌 CarPlay 鐨勬棩闂?澶滈棿妯″紡浜掍笉褰卞搷銆?
+首次启动时的 DiLink 设置向导可以跳过，也可以从 Settings 重新打开。DiPlay 每天检查一次 GitHub 官方更新，并在首页显示 **Update available**；**About** 页面点一下即可下载，并可关闭后台检查。APK 安装由 Android 系统处理。**App appearance** 用于选择 DiPlay 本身的浅色、深色或自动模式，与 CarPlay 的日间/夜间模式互不影响。
 
-鍦?CarPlay 涓寜璁剧疆鐨勬墜鎸囨暟閲忎笅婊戝彲鎵撳紑蹇嵎鑿滃崟锛屾垨杩斿洖涓诲睆骞曘€傚湪 **Settings 鈫?Vehicle 鈫?CarPlay controls** 涓垨蹇嵎鑿滃崟鍐呭彲閫夋嫨涓ゆ寚銆佷笁鎸囥€佸洓鎸囨垨 **Off**锛涢粯璁や粛涓轰笁鎸囥€傚湪 Back 鎴栧畬鏁磋缃摼鎺ヤ細涓㈠純灏氭湭搴旂敤鐨勬洿鏀逛箣鍓嶏紝蹇嵎鑿滃崟浼氬厛璇㈤棶銆傚浘鏍?鏂囧瓧澶у皬銆佸垎杈ㄧ巼鍜屽抚鐜囧湪浼氳瘽杩涜涓娇鐢?**Apply and reconnect** 鐢熸晥銆備粎鍋氬嚭閫夋嫨骞朵笉浼氬簲鐢紱鐐?Cancel 浼氫繚鐣欏師璁剧疆銆傛湭杩炴帴鏃讹紝**Save** 浼氬湪涓嬫杩炴帴鏃剁敓鏁堛€傝閬靛惊姣忛」璁剧疆鐨勮鏄庯細鏈夌殑鍗虫椂鐢熸晥锛屾湁鐨勫垯浼氭樉绀?**Reconnect now** 骞跺湪涓嬫杩炴帴鏃剁敓鏁堛€?
+在 CarPlay 中按设置的手指数量下滑可打开快捷菜单，或返回主屏幕。在 **Settings → Vehicle → CarPlay controls** 中或快捷菜单内可选择两指、三指、四指或 **Off**；默认仍为三指。在 Back 或完整设置链接会丢弃尚未应用的更改之前，快捷菜单会先询问。图标/文字大小、分辨率和帧率在会话进行中使用 **Apply and reconnect** 生效。仅做出选择并不会应用；点 Cancel 会保留原设置。未连接时，**Save** 会在下次连接时生效。请遵循每项设置的说明：有的即时生效，有的则会显示 **Reconnect now** 并在下次连接时生效。
 
-**Settings 鈫?Display** 鍖呭惈鍥炬爣/鏂囧瓧澶у皬銆佸垎杈ㄧ巼銆佸抚鐜囥€佹棩/澶滈棿澶栬銆佺敾闈㈣皟鑺傘€丏ock 浣嶇疆銆佺郴缁熸爮鍜?**Interface size**銆侷nterface size 鏀瑰彉鐨勬槸 DiPlay 鑷韩鐨勬帶浠讹紝鑰屼笉鏄?CarPlay 鐨勭敾闈€傚缓璁厛浠?30 fps 鍜?Default 鍥炬爣/鏂囧瓧澶у皬寮€濮嬶紱鍦?**Settings 鈫?Advanced 鈫?Video and audio** 涓繚鎸?**Efficient video**锛圚EVC锛夊叧闂€傝溅鏈鸿緝鎱㈡椂鍙皾璇?80% 鎴?60% 鐨勫垎杈ㄧ巼銆傞儴鍒?iPhone/杞︽満缁勫悎浠嶄細蹇界暐鍥炬爣/鏂囧瓧缂╂斁銆?
+**Settings → Display** 包含图标/文字大小、分辨率、帧率、日/夜间外观、画面调节、Dock 位置、系统栏和 **Interface size**。Interface size 改变的是 DiPlay 自身的控件，而不是 CarPlay 的画面。建议先从 30 fps 和 Default 图标/文字大小开始；在 **Settings → Advanced → Video and audio** 中保持 **Efficient video**（HEVC）关闭。车机较慢时可尝试 80% 或 60% 的分辨率。部分 iPhone/车机组合仍会忽略图标/文字缩放。
 
-**Settings 鈫?Audio** 鍖呭惈濯掍綋/瀵艰埅闊抽璺敱鍜岄煶涔愮紦鍐查€夋嫨銆?*Settings 鈫?Navigation** 鍖呭惈浣嶇疆涓婃姤锛屼互鍙婂湪鍙楁敮鎸佽溅鏈轰笂鐨?BYD 瀵艰埅鍗＄墖銆?*Settings 鈫?Vehicle** 鍖呭惈 CarPlay 鎵嬪娍銆佹柟鍚戠洏鎸夐敭鍜岃溅鏈烘寜閿嚜瀹氫箟銆傝繛鎺ヨ缃€佽嚜鍔ㄨ繛鎺ュ拰鏉冮檺浣嶄簬 **Settings 鈫?Connection**锛涜瘖鏂姤鍛婁綅浜?**Settings 鈫?Diagnostics**銆?
+**Settings → Audio** 包含媒体/导航音频路由和音乐缓冲选择。**Settings → Navigation** 包含位置上报，以及在受支持车机上的 BYD 导航卡片。**Settings → Vehicle** 包含 CarPlay 手势、方向盘按键和车机按键自定义。连接设置、自动连接和权限位于 **Settings → Connection**；诊断报告位于 **Settings → Diagnostics**。
 
-杞﹁締鏁版嵁妯″紡浠ュ強鐢甸噺/杞€?椹昏溅瑙嗛鎺у埗浣嶄簬 **Settings 鈫?Advanced 鈫?Advanced vehicle data**銆傜數閲忎笂鎶ャ€佽疆閫熶笂鎶ュ拰椹昏溅瑙嗛鎺у埗榛樿鍏抽棴銆傞粯璁ょ殑 DiLink 5.0 妯″紡浠嶄负榛樿銆傛棫妯″紡涓哄彲閫夛紝浣跨敤鏈夌晫鐨勫彧璇绘帰娴嬩笖闇€瑕佸凡鎺堟潈鐨勭綉缁?ADB锛涘畠鍙毚闇插凡纭鐨勫瓧娈点€傝嫢鍑虹幇鏇挎崲鏃㈡湁宸蹭繚瀛樺瓧娈电殑鎻愮ず锛岃浠旂粏鏌ョ湅銆傝繖骞朵笉浼氬紑鍚?ADB銆佸啓鍏ヨ溅杈嗚缃紝涔熶笉浠ｈ〃姣忎竴娆捐緝鑰佺殑杞︽満閮藉彈鏀寔銆?
+车辆数据模式以及电量/轮速/驻车视频控制位于 **Settings → Advanced → Advanced vehicle data**。电量上报、轮速上报和驻车视频控制默认关闭。默认的 DiLink 5.0 模式仍为默认。旧模式为可选，使用有界的只读探测且需要已授权的网络 ADB；它只暴露已确认的字段。若出现替换既有已保存字段的提示，请仔细查看。这并不会开启 ADB、写入车辆设置，也不代表每一款较老的车机都受支持。
 
-鍙€夌殑鏂瑰舰鐢诲竷鏃嬭浆銆佸垎灞忓尯鍩熷拰渚ц竟鏍忎綅浜?**Settings 鈫?Advanced 鈫?Display (experimental)**锛岄粯璁ゅ叧闂€傜敾甯冭秺澶э紝瑙ｇ爜鍣?GPU 鐨勮礋鎷呰秺閲嶃€侱ock 浣嶇疆浠嶅湪 **Settings 鈫?Display** 涓嬨€?
+可选的方形画布旋转、分屏区域和侧边栏位于 **Settings → Advanced → Display (experimental)**，默认关闭。画布越大，解码器/GPU 的负担越重。Dock 位置仍在 **Settings → Display** 下。
 
-**Smooth video (experimental)**銆?*Buffered music (experimental)**銆?*Call echo cancellation (experimental)** 鍜?**Clearer call voices (experimental)** 浣嶄簬 **Settings 鈫?Advanced 鈫?Video and audio**锛岄粯璁ゅ叧闂€係mooth video 鍙兘澧炲姞瑙︽帶鍝嶅簲寤惰繜锛屽苟浣跨敾闈㈣皟鑺備笉鍙敤銆傛洿鏀?Smooth video 鎴?Buffered music 浼氳杩涜涓殑浼氳瘽閲嶈繛锛涢€氳瘽鍥炲０娑堥櫎鍜屼汉澹拌繃婊ゅ垯鍦ㄤ笅娆¤繛鎺ユ椂鐢熸晥銆侭uffered music 鎺ュ彈鏀寔瀹冪殑搴旂敤杈撳嚭鐨?AAC-LC锛屼笉鏀寔鏃犳崯闊抽銆傚悓涓€鍗＄墖涓殑 **Low-latency decoding (experimental)** 鍜?**Direct video output (experimental)** 鍚屾牱榛樿鍏抽棴銆侺ow-latency decoding 鍦ㄤ笅娆¤繛鎺ユ椂鐢熸晥锛汥irect video output 浼氳 CarPlay 閲嶈繛骞朵娇鐢婚潰璋冭妭涓嶅彲鐢ㄣ€傚鏋滅敾闈㈠嚭鐜拌姳灞忔垨鍗￠】锛岃鍏抽棴鍏朵腑涔嬩竴銆?*Settings 鈫?Diagnostics 鈫?FPS counter** 浼氭樉绀烘瘡绉掑憟鐜颁笌鎺ユ敹鐨勫抚鏁颁互鍙婅В鐮佽€楁椂銆?
+**Smooth video (experimental)**、**Buffered music (experimental)**、**Call echo cancellation (experimental)** 和 **Clearer call voices (experimental)** 位于 **Settings → Advanced → Video and audio**，默认关闭。Smooth video 可能增加触控响应延迟，并使画面调节不可用。更改 Smooth video 或 Buffered music 会让进行中的会话重连；通话回声消除和人声过滤则在下次连接时生效。Buffered music 接受支持它的应用输出的 AAC-LC，不支持无损音频。同一卡片中的 **Low-latency decoding (experimental)** 和 **Direct video output (experimental)** 同样默认关闭。Low-latency decoding 在下次连接时生效；Direct video output 会让 CarPlay 重连并使画面调节不可用。如果画面出现花屏或卡顿，请关闭其中之一。**Settings → Diagnostics → FPS counter** 会显示每秒呈现与接收的帧数以及解码耗时。
 
-鐙珛鐨勫疄楠屾€?**CarPlay call keys** 鍜?**CarPlay calls on the dashboard** 浠嶉粯璁ゅ叧闂€傚畠浠嚭鐜板湪 **Settings 鈫?Navigation 鈫?BYD navigation** 涓嬶紱鑻?BYD 瀵艰埅鍗＄墖涓嶅彲鐢紝鍒欏嚭鐜板湪 **Settings 鈫?Advanced 鈫?Advanced vehicle data** 涓嬨€備华琛ㄧ洏鍗＄墖闇€瑕佸凡鎺堟潈鐨?ADB 鍜屽搴旂殑鍥轰欢銆傚惎鐢ㄥ墠璇峰厛闃呰 [0.2.17 闄愬埗璇存槑](RELEASE-NOTES-0.2.17.md)銆?
+独立的实验性 **CarPlay call keys** 和 **CarPlay calls on the dashboard** 仍默认关闭。它们出现在 **Settings → Navigation → BYD navigation** 下；若 BYD 导航卡片不可用，则出现在 **Settings → Advanced → Advanced vehicle data** 下。仪表盘卡片需要已授权的 ADB 和对应的固件。启用前请先阅读 [0.2.17 限制说明](RELEASE-NOTES-0.2.17.md)。
 
-搴旂敤鍜屽彂甯冪綉绔欐彁渚涗竷绉嶈瑷€锛屽寘鎷箒浣撲腑鏂囷紙鍙版咕锛夈€侫ndroid 13+ 鐨勫簲鐢ㄨ瑷€閫夋嫨涓?Android 绯荤粺璁剧疆鍚屾锛汚ndroid 7.1鈥?2 鍒欎繚鐣欏凡淇濆瓨鐨勪笂涓嬫枃瑕嗙洊銆傞娓?婢抽棬鐢ㄨ鍜岀箒浣撲娇鐢ㄥ彴婀剧増搴旂敤缈昏瘧锛屽苟闈炵嫭绔嬬殑鍦板尯鐗堟湰銆?
+应用和发布网站提供七种语言，包括繁体中文（台湾）。Android 13+ 的应用语言选择与 Android 系统设置同步；Android 7.1–12 则保留已保存的上下文覆盖。香港/澳门用语和繁体使用台湾版应用翻译，并非独立的地区版本。
 
-## 杩炴帴鎭㈠涓庢姤鍛?
+## 连接恢复与报告
 
-濡傛灉閲嶈鍚庢畫鐣欎簡鏃х殑缁勶紝璇峰厛鍏抽棴鍏朵粬鎶曞睆搴旂敤锛屽啀浣跨敤 **Settings 鈫?Connection 鈫?Wireless connection help 鈫?Reset CarPlay Wi-Fi**銆傚湪绉婚櫎鏃犳硶璇嗗埆鐨?Wi-Fi Direct 缁勪箣鍓嶏紝DiPlay 浼氬厛璇㈤棶銆傚氨鍦板崌绾т紭浜庡嵏杞介噸瑁呫€?
+如果重装后残留了旧的组，请先关闭其他投屏应用，再使用 **Settings → Connection → Wireless connection help → Reset CarPlay Wi-Fi**。在移除无法识别的 Wi-Fi Direct 组之前，DiPlay 会先询问。就地升级优于卸载重装。
 
-璇峰湪 **0.2.17** 涓婂鐜板皻鏈В鍐崇殑闂骞跺鍑轰竴浠藉叏鏂版姤鍛婏紝鍗充究浣犳鍓嶅凡缁忓彂閫佽繃鏃ф棩蹇椼€傝浠庣涓€娆¤繛鎺ュ皾璇曚竴鐩撮噰闆嗗埌澶辫触鍙戠敓锛涘鏋滄槸寮€鏈?鑷惎鍔ㄩ棶棰橈紝璇烽噸鍚悗鎵嬪姩鎵撳紑 DiPlay 鍐嶅鍑恒€備娇鐢?**Settings 鈫?Diagnostics 鈫?Save diagnostic report**銆侫ndroid 10+ 閫氬父淇濆瓨鍒?**Downloads/DiPlay**锛汚ndroid 7.1鈥? 浼氳姹傚瓨鍌ㄦ潈闄愶紝鍚屾牱淇濆瓨鍦ㄩ偅閲屻€?*Choose save location** 涔熷彲鐢ㄣ€傚鏋滄枃浠堕€夋嫨鍣ㄦ垨 Downloads 瀛樺偍涓嶅彲鐢紝鍏滃簳鐨?TXT 鏂囦欢浼氫繚瀛樺湪搴旂敤涓撳睘澶栭儴瀛樺偍涓紝纭鎻愮ず浼氭樉绀哄叾纭垏璺緞銆傝嫢澶栭儴瀛樺偍鍚屾牱涓嶅彲鐢紝DiPlay 浼氭妸鎶ュ憡绉佸瘑淇濆瓨銆備袱绉嶅厹搴曟柟寮忛兘鎻愪緵 **View report** 鍜?**Share**锛涘綋娌℃湁鍙敤鐨勫垎浜簲鐢ㄦ椂锛屽彲鍦ㄦ姤鍛婃煡鐪嬬晫闈腑閫夋嫨/澶嶅埗鏂囨湰銆傝妫€鏌?`.txt` 鏂囦欢锛岀劧鍚庡皢鍏堕檮鍔犲埌浣犲凡鏈夌殑 [GitHub issue](https://github.com/Tupig/DiPlay/issues) 鎴朳鍒涘缓鏂?issue](https://github.com/Tupig/DiPlay/issues/new/choose)锛屽苟闄勪笂杞﹀瀷/杞︽満鍨嬪彿銆佺‘鍒囩殑 DiLink/Android/鍥轰欢鐗堟湰銆乮Phone/iOS 鐗堟湰銆佽繛鎺ュ悗绔紙USB銆佸唴缃儹鐐广€乄i-Fi Direct 鎴栧悓涓€灞€鍩熺綉锛夈€佺浉鍏宠缃€佹湡鏈涗笌瀹為檯琛ㄧ幇銆佸鐜版楠や互鍙婂ぇ鑷寸殑澶辫触鏃堕棿銆傚垏鍕垮寘鍚綘鐨勭儹鐐瑰瘑鐮併€備笉浼氳嚜鍔ㄤ笂浼犱换浣曞唴瀹广€?
+请在 **0.2.17** 上复现尚未解决的问题并导出一份全新报告，即便你此前已经发送过旧日志。请从第一次连接尝试一直采集到失败发生；如果是开机/自启动问题，请重启后手动打开 DiPlay 再导出。使用 **Settings → Diagnostics → Save diagnostic report**。Android 10+ 通常保存到 **Downloads/DiPlay**；Android 7.1–9 会请求存储权限，同样保存在那里。**Choose save location** 也可用。如果文件选择器或 Downloads 存储不可用，兜底的 TXT 文件会保存在应用专属外部存储中，确认提示会显示其确切路径。若外部存储同样不可用，DiPlay 会把报告私密保存。两种兜底方式都提供 **View report** 和 **Share**；当没有可用的分享应用时，可在报告查看界面中选择/复制文本。请检查 `.txt` 文件，然后将其附加到你已有的 [GitHub issue](https://github.com/Tupig/DiPlay/issues) 或[创建新 issue](https://github.com/Tupig/DiPlay/issues/new/choose)，并附上车型/车机型号、确切的 DiLink/Android/固件版本、iPhone/iOS 版本、连接后端（USB、内置热点、Wi-Fi Direct 或同一局域网）、相关设置、期望与实际表现、复现步骤以及大致的失败时间。切勿包含你的热点密码。不会自动上传任何内容。
 
-棰濆鐨勬棤绾?濯掍綋/涓婚/閫€鍑鸿嚜韬簲鐢ㄨ褰曟湁鍔╀簬瀹氫綅澶辫触鐜妭锛涗絾瀹冧滑骞朵笉鑳借瘉鏄?Qin Plus 鍚姩銆乄i-Fi Direct 鍗￠】銆丼iri銆乮OS 15 鎴栨棩/澶滈棿鍥轰欢鐩稿叧鎶ュ憡鐨勯棶棰樺凡瑙ｅ喅銆傚弬瑙?[0.2.17 鍙戣璇存槑](RELEASE-NOTES-0.2.17.md)銆?
+额外的无线/媒体/主题/退出自身应用记录有助于定位失败环节；但它们并不能证明 Qin Plus 启动、Wi-Fi Direct 卡顿、Siri、iOS 15 或日/夜间固件相关报告的问题已解决。参见 [0.2.17 发行说明](RELEASE-NOTES-0.2.17.md)。
 
-APK 瀹夎闄愬埗鐢变綘鐨勮溅杈嗗浐浠跺喅瀹氥€侫DB 鏄湪浣犵殑杞︽敮鎸佹椂鐨勫彲閫夐」锛屽苟闈炲簲鐢ㄨ繍琛屾椂鐨勫繀瑕佹潯浠讹細
+APK 安装限制由你的车辆固件决定。ADB 是在你的车支持时的可选项，并非应用运行时的必要条件：
 
 ```sh
 adb install -r TuPigPlay-0.0.0.1.apk
 ```
 
-鍙娇鐢ㄥ彈淇′换鐨勭數鑴戙€備娇鐢ㄤ笉鍚岀殑绛惧悕璇佷功鏃犳硶鏇存柊杩欎釜鏋勫缓锛涘湪淇濆瓨濂戒綘闇€瑕佺殑鎶ュ憡涔嬪墠锛屼笉瑕佸嵏杞姐€?
+只使用受信任的电脑。使用不同的签名证书无法更新这个构建；在保存好你需要的报告之前，不要卸载。
 
-鍙畨瑁呭巶鍟嗚鍙寘鐨勫浐浠堕渶瑕佸厛鑾峰緱璇ユ壒鍑嗐€俒Leapmotor 璇存槑](LEAPMOTOR.md)璁板綍浜嗗凡鍏紑鐨?闆惰窇 C 绯诲垪鐧藉悕鍗曘€乁鐩?瀹夎娴佺▼锛屼互鍙婃湰浠撳簱鎻愪緵鐨勫疄楠屾€ф瀯寤鸿鐩栨柟寮忋€傝繖浜涢兘涓嶆瀯鎴愬吋瀹规€ф壙璇恒€?
+只安装厂商认可包的固件需要先获得该批准。[Leapmotor 说明](LEAPMOTOR.md)记录了已公开的 零跑 C 系列白名单、U盘 安装流程，以及本仓库提供的实验性构建覆盖方式。这些都不构成兼容性承诺。
 
-## BYD 瀵艰埅
+## BYD 导航
 
-鍏充簬鍥轰欢閫傜敤鑼冨洿銆佸湴鍥惧厓鏁版嵁瑕佹眰銆佽缃」鍜屾竻鐞嗚涓猴紝鍙傝 [BYD 瀵艰埅鏄剧ず](BYD_NAVIGATION.md)銆傚師鐢?DiLink 5 鏄剧ず璺敱涓嶉渶瑕佸閮?ADB 鍚姩鍣ㄣ€傚彲閫夌殑 DiLink 3/4 闆嗘垚鏈夊悇鑷殑鍥轰欢涓庡凡鎺堟潈 ADB 瑕佹眰锛岃瑙佽鎸囧崡銆?
+关于固件适用范围、地图元数据要求、设置项和清理行为，参见 [BYD 导航显示](BYD_NAVIGATION.md)。原生 DiLink 5 显示路由不需要外部 ADB 启动器。可选的 DiLink 3/4 集成有各自的固件与已授权 ADB 要求，详见该指南。
 

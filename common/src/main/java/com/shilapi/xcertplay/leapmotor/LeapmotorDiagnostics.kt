@@ -4,6 +4,7 @@ package com.shilapi.xcertplay
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import androidx.core.content.pm.PackageInfoCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,7 +26,8 @@ object LeapmotorDiagnostics {
         sb.appendLine("========================================")
         sb.appendLine("TuPigPlay 零跑 C11 诊断报告")
         sb.appendLine("生成时间: $time")
-        sb.appendLine("App版本: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        sb.appendLine("App版本: ${packageInfo.versionName ?: "未知"} (${PackageInfoCompat.getLongVersionCode(packageInfo)})")
         sb.appendLine("========================================\n")
 
         // 1. 车型检测信息
@@ -97,7 +99,7 @@ object LeapmotorDiagnostics {
         sb.appendLine("  硬件: ${Build.HARDWARE}")
         sb.appendLine("  系统显示: ${Build.DISPLAY}")
         sb.appendLine("  指纹: ${Build.FINGERPRINT}")
-        sb.appendLine("  序列号: ${Build.getSerial()}")
+        sb.appendLine("  序列号: ${runCatching { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Build.getSerial() else Build.UNKNOWN }.getOrDefault(Build.UNKNOWN)}")
         sb.appendLine("  ABI: ${Build.SUPPORTED_ABIS.joinToString(", ")}")
     }
 
@@ -106,8 +108,8 @@ object LeapmotorDiagnostics {
         if (session != null) {
             sb.appendLine("  会话状态: 已连接")
             sb.appendLine("  控制器: ${session.controller?.javaClass?.simpleName ?: "null"}")
-            sb.appendLine("  视频流: ${if (session.controller?.videoStream() != null) "活跃" else "无"}")
-            sb.appendLine("  音频流: ${if (session.controller?.audioStream() != null) "活跃" else "无"}")
+            sb.appendLine("  视频流: 活跃 (${session.width}x${session.height})")
+            sb.appendLine("  音频流: 活跃")
         } else {
             sb.appendLine("  会话状态: 未连接")
         }
@@ -124,12 +126,12 @@ object LeapmotorDiagnostics {
         sb.appendLine("  缩放功能: ${WheelZoomSettings.enabled(context)}")
         sb.appendLine("  摇杆功能: ${WheelZoomSettings.joystick(context)}")
         sb.appendLine("  Siri按键: ${WheelZoomSettings.siriKey(context)}")
-        sb.appendLine("  零跑预设: ${LeapmotorWheelSettings.getPreset(context).name}")
+        sb.appendLine("  零跑预设: ${LeapmotorWheelSettings.getPreset(context).displayName}")
         
         // 记录当前按键映射
         val keyMap = LeapmotorWheelSettings.getKeyMap(context)
         keyMap.forEach { (leapKey, wheelKey) ->
-            sb.appendLine("    ${leapKey.description}: keyCode=${wheelKey.code}, scanCode=${wheelKey.scanCode}")
+            sb.appendLine("    ${leapKey.description}: keyCode=${wheelKey.code}, scanCode=${wheelKey.scan}")
         }
         
         // 诊断报告

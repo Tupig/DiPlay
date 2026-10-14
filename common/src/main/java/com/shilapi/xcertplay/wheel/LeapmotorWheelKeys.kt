@@ -82,7 +82,7 @@ object LeapmotorWheelSettings {
     private const val KEY_PRESET = "preset_version"
 
     /** 零跑 C11 方向盘预设配置 */
-    enum class Preset(val name: String, val keyMap: Map<LeapmotorWheelKeys.LeapmotorKey, WheelKey>) {
+    enum class Preset(val displayName: String, val keyMap: Map<LeapmotorWheelKeys.LeapmotorKey, WheelKey>) {
         DEFAULT("默认预设", mapOf(
             LeapmotorWheelKeys.LeapmotorKey.MODE_CONFIRM to WheelKey(110, 300, "simulate-keys"),
             LeapmotorWheelKeys.LeapmotorKey.VOLUME_UP to WheelKey(24, 115, "simulate-keys"),

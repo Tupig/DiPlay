@@ -1,54 +1,54 @@
-﻿# 鍏煎鎬?
+﻿# 兼容性
 
-[English](COMPATIBILITY.md) 路 **绠€浣撲腑鏂?*
+[English](COMPATIBILITY.md) · **简体中文**
 
-鏈叕寮€棰勮鐗堟槸涓€涓嫭绔嬫帴鏀剁锛屽苟闈?Apple 璁よ瘉鐨?CarPlay 閰嶄欢銆傚疄楠屾€х殑闅忛檮閰嶄欢韬唤鍙鎻愬彇锛屽叾鏈潵鐨勫彲鐢ㄦ€т笉淇濊瘉銆?
+本公开预览版是一个独立接收端，并非 Apple 认证的 CarPlay 配件。实验性的随附配件身份可被提取，其未来的可用性不保证。
 
-| 鏂归潰 | 褰撳墠鑼冨洿 |
+| 方面 | 当前范围 |
 | --- | --- |
-| 杞︽満 | Android 7.1+锛圓PI 25+锛堿PK锛汚ndroid 7.1鈥?.1 鐨勬敮鎸佸皻鏈湪瀹炶溅涓婄‘璁わ紝Android 7.x 娌℃湁浠呮湰鏈虹儹鐐癸紙璇蜂娇鐢ㄨ溅杈嗙儹鐐广€乄i-Fi Direct 鎴?Existing Wi-Fi锛夛紱Android 7.0 鍙婃洿鏃╃増鏈笉鏀寔锛沇i-Fi Direct 鍦ㄦ棫鐗?Android 7.1鈥? 涓婃湁涓€鏉′緷璧栧浐浠剁殑璺緞锛屾棤娉曟牎楠岃姹傜殑棰戞锛孉ndroid 10+ 鍒欎娇鐢ㄧ幇浠ｆ牎楠岄娈?|
-| 鎵嬫満 | 宸插惎鐢?CarPlay 鐨勬爣鍑嗘湭瓒婄嫳 iPhone锛涜澶?iOS 鍏煎鎬у洜鏈哄瀷鑰屽紓 |
-| 瀹炴満璇佹嵁 | 姝ゅ墠鐨勭鏈夋瀯寤猴細鍦ㄥ紑鍙戣溅杈嗕笂浣跨敤 iPhone XS / iOS 18.7.10 纭浜嗘湁绾夸笌鏃犵嚎鐨勭敾闈€佽Е鎺у拰闊抽 |
-| 鍏朵粬杞﹀瀷 | 璺?DiLink 浠ｉ檯鐨勭ぞ鍖哄弽棣堝ソ鍧忓弬宸紱杩欎笉鏄竴浠界粡璁よ瘉鐨勮溅鍨嬫敮鎸佸垪琛?|
-| 0.2.14 璇佹嵁 | 鑷姩鍖栨簮鐮?鏋勫缓鏍￠獙涓庣讲鍚嶇殑璐＄尞鑰呮祴璇曪紱涓嶄富寮犳柊鐨勫畬鏁村彂甯冨疄杞︽祴璇曟垨鍏ㄨ溅鍨嬫敮鎸併€傛鍓?DiLink 5.1 HUD/鐑偣鐨勭粨鏋滀粛灞炲巻鍙茶瘉鎹€?|
-| Wi-Fi | Auto 浣跨敤绗﹀悎鏉′欢鐨勫凡淇濆瓨/瀵归綈淇￠亾锛涘湪 5 GHz 鎺ュ叆鐐规梺锛屾樉寮忕殑 2.4 GHz 浼樺厛浜庡叾浠?5 GHz/鏈浐瀹氶粯璁ゅ洖閫€銆傛墜鍔ㄤ俊閬撲繚鎸佹樉寮忥紱涓嶄繚璇侀娈?鎬ц兘銆?|
-| 瑙嗛 | 榛樿 H.264 / 30 fps锛?0 fps 涓?HEVC 浼氭彁楂樺璁惧鐨勭壒瀹氳姹?|
+| 车机 | Android 7.1+（API 25+）APK；Android 7.1–8.1 的支持尚未在实车上确认，Android 7.x 没有仅本机热点（请使用车辆热点、Wi-Fi Direct 或 Existing Wi-Fi）；Android 7.0 及更早版本不支持；Wi-Fi Direct 在旧版 Android 7.1–9 上有一条依赖固件的路径，无法校验请求的频段，Android 10+ 则使用现代校验频段 |
+| 手机 | 已启用 CarPlay 的标准未越狱 iPhone；设备/iOS 兼容性因机型而异 |
+| 实机证据 | 此前的私有构建：在开发车辆上使用 iPhone XS / iOS 18.7.10 确认了有线与无线的画面、触控和音频 |
+| 其他车型 | 跨 DiLink 代际的社区反馈好坏参差；这不是一份经认证的车型支持列表 |
+| 0.2.14 证据 | 自动化源码/构建校验与署名的贡献者测试；不主张新的完整发布实车测试或全车型支持。此前 DiLink 5.1 HUD/热点的结果仍属历史证据。 |
+| Wi-Fi | Auto 使用符合条件的已保存/对齐信道；在 5 GHz 接入点旁，显式的 2.4 GHz 优先于其他 5 GHz/未固定默认回退。手动信道保持显式；不保证频段/性能。 |
+| 视频 | 默认 H.264 / 30 fps；60 fps 与 HEVC 会提高对设备的特定要求 |
 
-## BYD HUD 涓庤溅杈嗙儹鐐?
+## BYD HUD 与车辆热点
 
-纭垏鐨勫凡楠岃瘉鍥轰欢涓庣敓鍛藉懆鏈熼檺鍒跺弬瑙?[BYD 瀵艰埅](BYD_NAVIGATION.md)銆傛鍓嶇殑杞﹁締鐑偣鏋勫缓鍦ㄥ紑鍙戣溅杈嗕笂閫氳繃闄愬畾浣滅敤鍩熺殑 IPv6 鍚姩浜?CarPlay銆傚綋鍓嶆帴鍏ョ偣绔偣浼樺厛浣跨敤鍙敤鐨?IPv4锛屽苟淇濈暀闄愬畾浣滅敤鍩熺殑 IPv6 鍥為€€銆傛墜鏈哄繀椤诲姞鍏ユ墍閰嶇疆鐨勮溅杈嗙儹鐐广€備袱鑰呯殑缁撴灉閮戒笉淇濊瘉鍦ㄦ瘡娆惧浐浠朵笂閮藉彈鏀寔銆?
+确切的已验证固件与生命周期限制参见 [BYD 导航](BYD_NAVIGATION.md)。此前的车辆热点构建在开发车辆上通过限定作用域的 IPv6 启动了 CarPlay。当前接入点端点优先使用可用的 IPv4，并保留限定作用域的 IPv6 回退。手机必须加入所配置的车辆热点。两者的结果都不保证在每款固件上都受支持。
 
-## Android 9 Wi-Fi Direct 涓庡疄楠屾€у姛鑳?
+## Android 9 Wi-Fi Direct 与实验性功能
 
-Android 9 璺緞浣跨敤鍏紑鐨勬棫鐗堢粍 API 鍒涘缓鎴栧鐢ㄤ竴涓寔涔呯郴缁熼厤缃紝璇诲彇鐢熸垚鐨勫嚟鎹紝骞跺湪鍙敤鏃朵娇鐢ㄥ浐浠剁殑淇￠亾璁剧疆鎺ュ彛銆傚畠瀵瑰浐瀹?鍙栨秷鍋氫簡涓茶鍖栵紝閬垮紑浠栨柟鎷ユ湁鐨勭粍锛屽苟鍙Щ闄よ嚜宸辨嫢鏈夌殑娲昏穬缁勶紱鎸佷箙閰嶇疆鏂囦欢涓嶄細琚垹闄ゃ€傛湭鐭ョ殑璁剧疆缁撴灉浼氫腑姝㈠惎鍔紱鍥哄畾/娓呯悊涓嶅彲闈犳椂搴旀敼鐢ㄨ溅杈嗙儹鐐规墜鍔ㄨ繛鎺ャ€傚弬瑙乕鏃х増闄愬埗](ANDROID9_WIFI_DIRECT.md)锛涜础鐚€呯殑 Redmi K20 Pro 缁撴灉骞朵笉鑳介獙璇佹瘡涓€娆?BYD Android 9 鍥轰欢銆?
+Android 9 路径使用公开的旧版组 API 创建或复用一个持久系统配置，读取生成的凭据，并在可用时使用固件的信道设置接口。它对固定/取消做了串行化，避开他方拥有的组，并只移除自己拥有的活跃组；持久配置文件不会被删除。未知的设置结果会中止启动；固定/清理不可靠时应改用车辆热点手动连接。参见[旧版限制](ANDROID9_WIFI_DIRECT.md)；贡献者的 Redmi K20 Pro 结果并不能验证每一款 BYD Android 9 固件。
 
-DiLink 3 閫氳瘽鎺у埗/浠〃鐩樺崱鐗囦笌 AAC-LC 缂撳啿闊充箰鏄浉浜掔嫭绔嬨€侀粯璁ゅ叧闂殑瀹為獙鍔熻兘銆傚畠浠嚭鐜板湪 **Settings 鈫?Navigation 鈫?BYD navigation** 涓嬶紙璇ュ崱鐗囦笉鍙敤鏃跺嚭鐜板湪 **Advanced 鈫?Advanced vehicle data** 涓嬶級锛岀紦鍐查煶涔愬垯鍦?**Advanced 鈫?Video and audio** 涓嬨€傚叾淇鍚庣殑婧愮爜宸叉湁鍥炲綊娴嬭瘯瑕嗙洊锛涘畬鏁寸殑閫氳瘽/闊抽/楹﹀厠椋?鎭㈠浠ュ強闊充箰涓柇楠屾敹浠嶆槸璁惧灞傞潰鐨勫伐浣溿€侱iLink 4 鎶曞睆/鐢婚潰淇鎻忚堪鐨勬槸鎵€娴嬭瘯鐨?2022 娆?Seal 璁剧疆锛屽苟闈炲 Qin/Seal 鍏ㄧ郴鐨勪繚璇併€侫ndroid 13+ 鐨勭儹鐐瑰姞鍏ヨ緟鍔╁姛鑳借姹備弗鏍肩殑鐢ㄦ埛閰嶇疆/5 GHz/API/ADB 闂ㄦ浠ュ強鏄惧紡纭銆傚弬瑙?[0.2.14 鍙戣璇存槑](RELEASE-NOTES-0.2.14.md)銆?
+DiLink 3 通话控制/仪表盘卡片与 AAC-LC 缓冲音乐是相互独立、默认关闭的实验功能。它们出现在 **Settings → Navigation → BYD navigation** 下（该卡片不可用时出现在 **Advanced → Advanced vehicle data** 下），缓冲音乐则在 **Advanced → Video and audio** 下。其修正后的源码已有回归测试覆盖；完整的通话/音频/麦克风/恢复以及音乐中断验收仍是设备层面的工作。DiLink 4 投屏/画面修复描述的是所测试的 2022 款 Seal 设置，并非对 Qin/Seal 全系的保证。Android 13+ 的热点加入辅助功能要求严格的用户配置/5 GHz/API/ADB 门槛以及显式确认。参见 [0.2.14 发行说明](RELEASE-NOTES-0.2.14.md)。
 
-## 褰撳墠璁剧疆涓庡惎鐢ㄩ檺鍒?
+## 当前设置与启用限制
 
-棣栨鍚姩涓旀病鏈夊凡淇濆瓨鐨?iPhone 鏃朵細鎵撳紑 **Setup guide**锛涘畠鍙互璺宠繃锛屼篃鍙粠 **Settings 鈫?Overview** 閲嶆柊鎵撳紑銆傚畠浼氫粠绯荤粺鏋勫缓鍚嶇О涓鍙?DiLink 鐗堟湰锛堜緥濡?`DiLink3.0`锛夛紝鍏佽椹鹃┒鍛樿嚜琛屾洿姝ｏ紝骞朵笖鍙彁渚涢€傜敤浜庤浠ｉ檯鐨勫姛鑳斤紝鏍囨敞涓?`Tested on some cars` 鎴?`Experimental`锛屽繀瑕佹椂杩樹細甯?ADB 寰芥爣銆傚湪 DiLink 3 涓婏紝瀹冧細闅愯棌 DiLink 4 浠〃鐩樿矾鐢卞苟寤鸿鍏抽棴锛屽洜涓鸿璺敱浼氫腑鏂?DiLink 3 鐨勪华琛ㄧ洏鍦板浘銆傝繖浜涙爣绛炬槸瀵逛笂杩板弽棣堢殑姒傛嫭锛屽苟闈炰竴浠界粡璁よ瘉鐨勬敮鎸佸垪琛ㄣ€?
+首次启动且没有已保存的 iPhone 时会打开 **Setup guide**；它可以跳过，也可从 **Settings → Overview** 重新打开。它会从系统构建名称中读取 DiLink 版本（例如 `DiLink3.0`），允许驾驶员自行更正，并且只提供适用于该代际的功能，标注为 `Tested on some cars` 或 `Experimental`，必要时还会带 ADB 徽标。在 DiLink 3 上，它会隐藏 DiLink 4 仪表盘路由并建议关闭，因为该路由会中断 DiLink 3 的仪表盘地图。这些标签是对上述反馈的概括，并非一份经认证的支持列表。
 
-**Settings 鈫?Display** 鍖呭惈鍒嗚鲸鐜囥€佸抚鐜囥€佸浘鏍?鏂囧瓧澶у皬銆佸瑙傚拰 Interface size锛汭nterface size 鏀瑰彉鐨勬槸 DiPlay 鎺т欢锛岃€屼笉鏄?CarPlay 鐨勫嚑浣曞竷灞€銆?*Audio** 鍖呭惈闊抽璺敱鍜屽父瑙勭殑闊充箰缂撳啿閫夋嫨銆?*Navigation** 鍖呭惈浣嶇疆/BYD 瀵艰埅锛?*Vehicle** 鍖呭惈鎵嬪娍/鏂瑰悜鐩樻寜閿?杞︽満鎸夐敭鎺у埗锛?*Connection** 鍖呭惈浼犺緭/鍚姩/鏉冮檺锛?*Advanced** 鍖呭惈瀹為獙鎬ф樉绀?濯掍綋涓庤溅杈嗘暟鎹紝**Diagnostics** 鐢ㄤ簬瀵煎嚭鎶ュ憡銆?
+**Settings → Display** 包含分辨率、帧率、图标/文字大小、外观和 Interface size；Interface size 改变的是 DiPlay 控件，而不是 CarPlay 的几何布局。**Audio** 包含音频路由和常规的音乐缓冲选择。**Navigation** 包含位置/BYD 导航，**Vehicle** 包含手势/方向盘按键/车机按键控制，**Connection** 包含传输/启动/权限，**Advanced** 包含实验性显示/媒体与车辆数据，**Diagnostics** 用于导出报告。
 
-**Smooth video (experimental)**銆?*Call echo cancellation (experimental)** 鍜?**Clearer call voices (experimental)** 鍦?**Settings 鈫?Advanced 鈫?Video and audio** 涓嬮粯璁ゅ叧闂€係mooth video 浼氬鍔犺嚜閫傚簲鑺傛媿寤惰繜锛屽彲鑳芥嫋鎱㈣Е鎺у搷搴旓紝骞朵娇鐢ㄦ病鏈夌敾闈㈣皟鑺傜殑 SurfaceView 璺緞銆傛洿鏀瑰畠浼氳杩愯涓殑浼氳瘽閲嶈繛銆傞€氳瘽澶勭悊鐩稿叧鎺т欢鍦ㄤ笅娆¤繛鎺ユ椂鐢熸晥锛涙簮鐮?JNI 娴嬭瘯骞朵笉鑳借瘉鏄庤溅涓婄殑瀹為檯澹板鏁堟灉銆傚彲閫夌殑鏃嬭浆銆佸垎灞忓尯鍩熷拰渚ц竟鏍忓湪 **Advanced 鈫?Display (experimental)** 涓嬮粯璁ゅ叧闂€傚凡鏈夌殑宸插惎鐢ㄨ缃細鍦ㄥ氨鍦板崌绾т腑淇濈暀銆?
+**Smooth video (experimental)**、**Call echo cancellation (experimental)** 和 **Clearer call voices (experimental)** 在 **Settings → Advanced → Video and audio** 下默认关闭。Smooth video 会增加自适应节拍延迟，可能拖慢触控响应，并使用没有画面调节的 SurfaceView 路径。更改它会让运行中的会话重连。通话处理相关控件在下次连接时生效；源码/JNI 测试并不能证明车上的实际声学效果。可选的旋转、分屏区域和侧边栏在 **Advanced → Display (experimental)** 下默认关闭。已有的已启用设置会在就地升级中保留。
 
-姝ゅ墠涓撻棬瑙傚療鍒扮殑 1280脳480 DiLink 3 鎶曞睆琛ㄩ潰鐜板凡琚棦鏈夌殑浠〃鐩樺湴鍥捐矾寰勮瘑鍒€傚疄闄呯殑鍦板浘杈撳嚭浠嶉渶鍦ㄨ溅涓婂娴嬶紱瀹炴祴鐨?1920脳720 鏍″噯骞朵笉浼氬簲鐢ㄥ埌閭ｅ潡鏇村皬鐨勫睆骞曚笂銆傜獎骞?USB 鍙栨櫙/闃熷垪淇涓庤摑鐗欐帴鏀朵慨澶嶅凡鏈夊洖褰掓祴璇曡鐩栵紝浣嗗畠浠苟涓嶈兘璇佹槑姣忎竴浠借繛鎺ュ弽棣堥兘宸蹭慨澶嶃€備粎鍏呯數鐨?USB 鍙ｆ棤娉曟彁渚涙暟鎹紶杈撱€?
+此前专门观察到的 1280×480 DiLink 3 投屏表面现已被既有的仪表盘地图路径识别。实际的地图输出仍需在车上复测；实测的 1920×720 校准并不会应用到那块更小的屏幕上。窄幅 USB 取景/队列修复与蓝牙接收修复已有回归测试覆盖，但它们并不能证明每一份连接反馈都已修复。仅充电的 USB 口无法提供数据传输。
 
-## 宸茬煡闄愬埗
+## 已知限制
 
-- 濡傛灉 iPhone 绂诲紑浜嗗綋鍓嶇殑 Wi-Fi 缃戠粶鍗存病鏈夊姞鍏ヨ溅杈嗙儹鐐癸紝璇锋鏌ヨ鐑偣鏄惁鍚敤浜嗚嚜鍔ㄥ姞鍏ャ€傚鏋滄墜鍔ㄩ€夋嫨瀹冩椂鏃犻渶杈撳叆瀵嗙爜灏卞惎鍔ㄤ簡 CarPlay锛岃鍦ㄨ瘖鏂姤鍛婁腑璁板綍杩欎竴鍖哄埆銆傚嵆渚垮嚟鎹互鍙婇殢鍚庣殑 CarPlay 浼犺緭閮芥甯革紝AP 骞挎挱淇℃伅鍏冪礌涔熷彲鑳藉奖鍝嶈嚜鍔ㄥ姞鍏ャ€侫pple 瀹樻柟鏂囨。鎵€杩扮殑瑕佹眰涓庝竴娆″彈鎺у姣斿弬瑙乕鑷姩鍔犲叆鐑偣](WIRELESS_HOTSPOT_JOIN.md)锛涜繖骞朵笉浠ｈ〃瀵规瘡娆捐溅鏈烘垨 iOS 鐗堟湰閮芥湁鍙楁敮鎸佺殑淇銆?
-- 閮ㄥ垎杞︽満浼氬崱椤匡紝灏ゅ叾鏄湪瑙嗛璐熻浇杈冮珮鏃躲€備粎鏈?2.4 GHz 閾捐矾骞朵笉鑳借瘉鏄庡師鍥狅細骞叉壈銆佸浐浠跺拰瑙ｇ爜鍣ㄥ仠椤块兘鍙兘鏄洜绱犮€傝鍏堝皾璇?Default 鍥炬爣銆?0 fps 鍜岃緝浣庡垎杈ㄧ巼锛岀劧鍚庨檮涓婁竴浠芥姤鍛娿€?
-- 鍏充簬鍦?BYD Tang 涓婃渶娴佺晠鎵€鐢ㄧ殑 Wi-Fi 淇￠亾涓庣敾闈㈠昂瀵稿強鍏跺師鍥狅紝鍙傝[娴佺晠鐨勬棤绾?CarPlay](SMOOTH_WIRELESS.md)銆?
-- 褰撹溅杈嗚嚜韬殑 Wi-Fi 瀹㈡埛绔湪鎼滅储缃戠粶鏃讹紝Wi-Fi Direct 鍙兘姣忛殧鍑犵灏卞崱椤夸竴娆°€傝溅杈嗗彧鏈変竴濂楁棤绾跨數锛屾瘡娆℃悳绱㈤兘浼氳瀹冪寮€ CarPlay 淇￠亾锛屾湡闂村彂鍑虹殑闊抽鍖呬究浼氫涪澶憋紱鏇村ぇ鐨勯煶涔愮紦鍐蹭篃鏃犳硶琛ュ洖杩欎簺鍖呫€傛潵鑷?DiLink 3銆?.0 鍜?5.0 鐨勫弽棣堟樉绀猴細褰撳鎴风鏈姞鍏ョ綉缁滄椂姣?10 s 鎼滅储涓€娆★紝鍦ㄦ煇浜涘叾浠栧浐浠朵笂鎴栧凡鍔犲叆缃戠粶鏃跺垯姣?20鈥?0 s 鎼滅储涓€娆°€傝溅鍐呰嚜甯︾儹鐐瑰湪瀹㈡埛绔叧闂椂杩愯锛屾槸鎺ㄨ崘鐨勮繛鎺ユ柟寮忋€傚湪 Android 7.1 鍙婁互涓婏紝鑻ョ綉缁?ADB 宸茶幏鎵瑰噯锛孌iPlay 浼氬湪 Wi-Fi Direct 浼氳瘽鏈熼棿鏆傚仠 Android 鐨勮嚜鍔ㄥ姞鍏ワ紝浠庤€屽仠姝㈣繖绉嶆悳绱紱鍦?CarPlay 缁撴潫涔嬪墠锛岃溅杈嗕笉浼氬姞鍏ュ凡淇濆瓨鐨勭綉缁溿€傛帶鍒跺櫒绉熺害鍏变韩鍚屼竴涓覆琛?worker锛屼竴涓寔涔呮爣璁颁綅浜庢殏鍋滀箣鍓嶏紝鎭㈠澶辫触鏃跺湪搴旂敤杩愯鏈熼棿姣?30 s 閲嶈瘯涓€娆★紝搴旂敤鍚姩鏃朵細鎭㈠琚墦鏂殑鎭㈠杩囩▼锛屼笖杞﹁締閲嶅惎鍚?Android 浼氳嚜琛岄噸缃璁剧疆銆傛湭鑾锋壒鍑嗘椂涓嶄細鏈変换浣曞彉鍖栵紝鎶ュ憡涓細鍐欐槑 `reason=adb-not-approved` 鎴?`reason=adb-off`銆傚叾浠栧簲鐢ㄥ彂璧风殑鎼滅储涓嶄細琚殏鍋溿€侫ndroid 11+ 璺緞宸插湪涓€杈?DiLink 5.1 杞︿笂鎵嬪伐纭锛涘簲鐢ㄥ唴璺緞浠嶉渶鍋滆溅澶嶆祴銆?
-- 閮ㄥ垎 iPhone/杞︽満缁勫悎涓嶄細鏄庢樉搴旂敤鍥炬爣鍜屾枃瀛楀ぇ灏忋€傞噸杩炲姛鑳藉凡缁忓疄鐜帮紱浣嗚繖骞朵笉淇濊瘉 iPhone 浼氶€夋嫨鎵€璇锋眰鐨勫竷灞€銆?
-- 鏀寔鍔犲叆 5 GHz 缃戠粶鐨勬棤绾跨數浠嶅彲鑳芥嫆缁?5 GHz 鐨?Wi-Fi Direct 缁勩€傝鑳藉姏鏍囧織浠呯敤浜庤瘖鏂紝骞堕潪缁勬墍鏈夎€呮敮鎸佺殑璇佹槑銆?
-- 鑷姩鍚姩鍙栧喅浜庤溅杈嗗浐浠跺拰鍚姩鏉冮檺銆?
-- USB 闇€瑕佹暟鎹彛浠ュ強姝ｇ‘鐨勪富鏈?浠庢満瑙掕壊琛屼负銆?
-- 閫氳瘽銆丼iri銆佸悗鍙伴噸杩炪€侀暱閫斿嚭琛屼互鍙婃湭鏉ョ殑 iOS 鐗堟湰闇€瑕佹洿骞挎硾鐨勬祴璇曘€?
+- 如果 iPhone 离开了当前的 Wi-Fi 网络却没有加入车辆热点，请检查该热点是否启用了自动加入。如果手动选择它时无需输入密码就启动了 CarPlay，请在诊断报告中记录这一区别。即便凭据以及随后的 CarPlay 传输都正常，AP 广播信息元素也可能影响自动加入。Apple 官方文档所述的要求与一次受控对比参见[自动加入热点](WIRELESS_HOTSPOT_JOIN.md)；这并不代表对每款车机或 iOS 版本都有受支持的修复。
+- 部分车机会卡顿，尤其是在视频负载较高时。仅有 2.4 GHz 链路并不能证明原因：干扰、固件和解码器停顿都可能是因素。请先尝试 Default 图标、30 fps 和较低分辨率，然后附上一份报告。
+- 关于在 BYD Tang 上最流畅所用的 Wi-Fi 信道与画面尺寸及其原因，参见[流畅的无线 CarPlay](SMOOTH_WIRELESS.md)。
+- 当车辆自身的 Wi-Fi 客户端在搜索网络时，Wi-Fi Direct 可能每隔几秒就卡顿一次。车辆只有一套无线电，每次搜索都会让它离开 CarPlay 信道，期间发出的音频包便会丢失；更大的音乐缓冲也无法补回这些包。来自 DiLink 3、4.0 和 5.0 的反馈显示：当客户端未加入网络时每 10 s 搜索一次，在某些其他固件上或已加入网络时则每 20–30 s 搜索一次。车内自带热点在客户端关闭时运行，是推荐的连接方式。在 Android 7.1 及以上，若网络 ADB 已获批准，DiPlay 会在 Wi-Fi Direct 会话期间暂停 Android 的自动加入，从而停止这种搜索；在 CarPlay 结束之前，车辆不会加入已保存的网络。控制器租约共享同一个串行 worker，一个持久标记位于暂停之前，恢复失败时在应用运行期间每 30 s 重试一次，应用启动时会恢复被打断的恢复过程，且车辆重启后 Android 会自行重置该设置。未获批准时不会有任何变化，报告中会写明 `reason=adb-not-approved` 或 `reason=adb-off`。其他应用发起的搜索不会被暂停。Android 11+ 路径已在一辆 DiLink 5.1 车上手工确认；应用内路径仍需停车复测。
+- 部分 iPhone/车机组合不会明显应用图标和文字大小。重连功能已经实现；但这并不保证 iPhone 会选择所请求的布局。
+- 支持加入 5 GHz 网络的无线电仍可能拒绝 5 GHz 的 Wi-Fi Direct 组。该能力标志仅用于诊断，并非组所有者支持的证明。
+- 自动启动取决于车辆固件和启动权限。
+- USB 需要数据口以及正确的主机/从机角色行为。
+- 通话、Siri、后台重连、长途出行以及未来的 iOS 版本需要更广泛的测试。
 
-濡傞渶鏈€鏂板弽棣堬紝璇峰湪 **0.2.14** 涓婂鐜伴棶棰橈紝鐒跺悗鎵撳紑 **Settings 鈫?Diagnostics 鈫?Save diagnostic report**銆侫ndroid 10+ 閫氬父淇濆瓨鍒?**Downloads/DiPlay**锛汚ndroid 9 浣跨敤鏂囨。閫夋嫨鍣ㄣ€傜‘璁ゆ彁绀轰細鏍囨槑鍏滃簳瀛樺偍浣嶇疆锛屽苟鎻愪緵 **View report** 鍜?**Share**銆傝鎶婃鏌ヨ繃鐨?`.txt` 闄勫姞鍒板搴旂殑[宸叉湁 issue](https://github.com/Tupig/DiPlay/issues)锛屾垨[鍒涘缓 issue](https://github.com/Tupig/DiPlay/issues/new/choose)銆傝鍖呭惈杞﹀瀷/杞︽満銆丄ndroid/DiLink/鍥轰欢銆乮Phone/iOS銆佽繛鎺ユā寮忋€佹楠や互鍙婂け璐ユ椂闂淬€備笉浼氳嚜鍔ㄤ笂浼犱换浣曞唴瀹广€?
+如需最新反馈，请在 **0.2.14** 上复现问题，然后打开 **Settings → Diagnostics → Save diagnostic report**。Android 10+ 通常保存到 **Downloads/DiPlay**；Android 9 使用文档选择器。确认提示会标明兜底存储位置，并提供 **View report** 和 **Share**。请把检查过的 `.txt` 附加到对应的[已有 issue](https://github.com/Tupig/DiPlay/issues)，或[创建 issue](https://github.com/Tupig/DiPlay/issues/new/choose)。请包含车型/车机、Android/DiLink/固件、iPhone/iOS、连接模式、步骤以及失败时间。不会自动上传任何内容。
 
-鎶ュ憡浼氳褰曡姹傜殑棰戞銆佹帴鍏ョ偣鍏宠仈鐘舵€併€佸洖閫€澶辫触浠ュ強璁板繂閰嶇疆浜嬩欢銆侫ndroid 10+ 鍙互鏍￠獙瀹為檯鐨勭粍棰戞锛汚ndroid 9 浼氭妸鍏惰鎺ュ彈鐨勪俊閬撹姹傝涓烘湭鏍￠獙锛屾妸绯荤粺榛樿璁颁负淇￠亾 0銆俉i-Fi 鍑嵁涓庡崗璁浇鑽峰凡琚帓闄ゃ€傜儹鐐规垚鍔熸湰韬苟涓嶇瓑浜?CarPlay 浼氳瘽鎴愬姛銆?
+报告会记录请求的频段、接入点关联状态、回退失败以及记忆配置事件。Android 10+ 可以校验实际的组频段；Android 9 会把其被接受的信道请求记为未校验，把系统默认记为信道 0。Wi-Fi 凭据与协议载荷已被排除。热点成功本身并不等于 CarPlay 会话成功。
 
-Android 鍙傝€冿細[SupplicantState](https://developer.android.com/reference/android/net/wifi/SupplicantState)銆乕explicit P2P operating frequency](https://developer.android.com/reference/android/net/wifi/p2p/WifiP2pConfig.Builder#setGroupOperatingFrequency(int))銆?
+Android 参考：[SupplicantState](https://developer.android.com/reference/android/net/wifi/SupplicantState)、[explicit P2P operating frequency](https://developer.android.com/reference/android/net/wifi/p2p/WifiP2pConfig.Builder#setGroupOperatingFrequency(int))。
 
