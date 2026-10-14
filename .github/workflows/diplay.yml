@@ -27,13 +27,14 @@
 #         每个 job 显式 needs 前序 job，任一环节失败则整链止步。
 #
 #   串行链与手动跳级的兼容（规避 needs 跳过传播）:
-#     GitHub Actions 会把 needs 的 skipped 状态向下游连锁传播。若严格串行，
-#     手动 security（不编译）与手动 deploy（不编译不扫描）的跳级模式会被
-#     连锁跳过而失效。因此 codeql-scan / deploy-pages 的 if 首先检查
-#     needs.<job>.result ∈ {success, skipped}:
-#       - success : 前级已运行且通过，正常放行
-#       - skipped : 前级被触发条件排除（跳级场景），放行本级
-#       - failure : 前级失败，整链止步（质量/安全门禁语义不变）
+#     GitHub Actions 会把 needs 的 skipped 状态向下游连锁传播：若下游 if 不含
+#     显式状态函数，skipped 的 needs 会让下游被无条件跳过，仅靠
+#     needs.<job>.result 检查无法拦截（实测手动 deploy 因此不部署，#26）。
+#     因此 codeql-scan / deploy-pages 的 if 以 !cancelled() && !failure() 开头，
+#     再检查 needs.<job>.result ∈ {success, skipped}:
+#       - !failure()      : 任一前级失败，整链止步（质量/安全门禁语义不变）
+#       - !cancelled()    : 工作流被取消时不启动新级
+#       - success/skipped : 前级通过，或被触发条件排除（跳级场景），放行本级
 #
 # ── 单一 workflow 为什么还需要 resolve-version ─────────────
 #   GitHub Actions 的 push.paths 过滤作用于整个 workflow，无法只对某个 job 生效。
@@ -226,9 +227,10 @@ jobs:
     name: CodeQL 安全扫描
     needs: [resolve-version, unit-test, build-apk]
     # fork PR 的令牌无 security-events 写权限，跳过以避免上传必失败
-    # 首行放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
+    # 放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
     #   定时与手动 security 时 build-apk 为 skipped 放行；build 失败则整链止步
     if: |
+      !cancelled() && !failure() &&
       (needs.build-apk.result == 'success' || needs.build-apk.result == 'skipped') &&
       ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
       github.event_name == 'push' ||
@@ -275,9 +277,10 @@ jobs:
     name: 部署下载站
     needs: [resolve-version, unit-test, build-apk, codeql-scan]
     # push: 仅站点相关变更且全链（含 CodeQL）通过时部署；手动 deploy: 始终部署
-    # 首两行放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
+    # 放行条件（success/skipped）的语义见文件头「串行链与手动跳级的兼容」:
     #   手动 deploy 时 build-apk 与 codeql-scan 均为 skipped 放行；任一失败则整链止步
     if: |
+      !cancelled() && !failure() &&
       (needs.build-apk.result == 'success' || needs.build-apk.result == 'skipped') &&
       (needs.codeql-scan.result == 'success' || needs.codeql-scan.result == 'skipped') &&
       ((github.event_name == 'push' && needs.resolve-version.outputs.site-changed == 'true') ||
