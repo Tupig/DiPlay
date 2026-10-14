@@ -1,4 +1,4 @@
-﻿package com.shilapi.xcertplay
+package com.shilapi.xcertplay
 
 import android.app.AlertDialog
 import android.Manifest

@@ -1,4 +1,4 @@
-﻿# 兼容性
+# 兼容性
 
 [English](COMPATIBILITY.md) · **简体中文**
 
