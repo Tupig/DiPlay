@@ -1,4 +1,4 @@
-﻿# Install and connect
+# Install and connect
 
 1. Park the car. Download `DiPlay-0.2.19.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19), also linked on the [website](https://shihabal3amri.github.io/DiPlay/). The official app requires Android 7.1 or newer (API 25+); Android 7.1–8.1 support still needs vehicle testing.
 2. Install on the Android head unit using its supported APK installation method. Do not install on the iPhone. Use the same package/variant and a matching signing certificate for an in-place update that preserves settings and pairing records. Release-specific build and signing checks are recorded in [validation](VALIDATION.md); do not infer update compatibility from the filename.

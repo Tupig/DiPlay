@@ -1,4 +1,4 @@
-﻿package com.shilapi.xcertplay
+package com.shilapi.xcertplay
 
 import android.content.BroadcastReceiver
 import android.content.Context

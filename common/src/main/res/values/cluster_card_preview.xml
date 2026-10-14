@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="card_preview_title">Turn-card placement preview</string>
     <string name="card_preview_note">Proportional position on the full cluster panel. The actual small-window edge varies by car.</string>
