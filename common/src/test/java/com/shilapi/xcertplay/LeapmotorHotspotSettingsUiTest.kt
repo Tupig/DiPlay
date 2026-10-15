@@ -34,7 +34,10 @@ class LeapmotorHotspotSettingsUiTest {
 
     @Before fun setUp() {
         val app = RuntimeEnvironment.getApplication()
-        app.getSharedPreferences("diplay_car_hotspot", 0).edit().clear().commit()
+        for (name in listOf("diplay_byd_outputs", "diplay_byd_vehicle_fields", "diplay_car_hotspot", "xcertplay_airplay")) {
+            app.getSharedPreferences(name, 0).edit().clear().commit()
+        }
+        shadowOf(app.packageManager).removePackage("com.byd.amapservice")
         shadowOf(app.packageManager).installPackage(PackageInfo().apply {
             packageName = "com.leapmotor.carsettings"
             applicationInfo = ApplicationInfo().apply {
