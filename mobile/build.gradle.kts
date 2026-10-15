@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -16,7 +18,7 @@ val overrideApplicationId = providers.gradleProperty("tupigplayApplicationId").o
 // TuPigPlay fork versioning: version.properties is the single source of truth, decoupled from the
 // upstream version scheme. Bump it with ./version_increment.sh [major|minor|patch|build].
 // versionCode keeps the +38 offset so 0.0.0.1 stays compatible with the previously released code 39.
-val versionProperties = java.util.Properties().apply {
+val versionProperties = Properties().apply {
     rootProject.file("version.properties").inputStream().use { load(it) }
 }
 val forkVersionName = listOf("VERSION_MAJOR", "VERSION_MINOR", "VERSION_PATCH", "VERSION_BUILD")
