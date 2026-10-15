@@ -1,6 +1,6 @@
 # Optional BYD ambient lighting
 
-Contributed by 寒叙 (@Hanxu4131), adapted from original ambient-light work in the contributor's local DiPlay-based BYD CarPlay project. This patch is based on upstream DiPlay main b26cd544 (v0.2.13). It keeps DiPlay branding, application identifiers and existing network behavior.
+Contributed by 寒叙 (@Hanxu4131), adapted from original ambient-light work in the contributor's local TuPigPlay-based BYD CarPlay project. This patch is based on upstream TuPigPlay main b26cd544 (v0.2.13). It keeps TuPigPlay branding, application identifiers and existing network behavior.
 
 Configure the feature while parked. Control is off by default. Saving an enabled configuration first performs a read-only check using existing ADB authorization and the vehicle lamp interface. The feature does not enable ADB, offer an authorization key for approval or change debugging settings. A failed check leaves the saved configuration unchanged. Access setup remains a separate user-controlled action.
 

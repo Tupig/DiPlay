@@ -1,4 +1,4 @@
-# DiPlay 统一 CI 工作流
+# TuPigPlay 统一 CI 工作流（DiPlay fork）
 # 一个工作流完成：版本解析、单元测试与静态检查、调试 APK 构建、CodeQL 安全扫描、下载站部署。
 #
 # ── 触发矩阵（与各 job 的 if 条件逐项对应）─────────────────
@@ -56,11 +56,11 @@
 #   - 版本号在写入输出前做格式校验，防止非法值污染产物命名
 #
 # ── 产物约定 ───────────────────────────────────────────────
-#   build-apk 产物   DiPlay-<version>-debug-<短SHA>.apk（Actions artifact，保留 7 天）
+#   build-apk 产物   TuPigPlay-<version>-debug-<短SHA>.apk（Actions artifact，保留 7 天）
 #   注意：CI 无法产出可连真车的 APK——MFi 认证资产被 scripts/check_public_tree.py 禁入仓库，
 #         只能由本地构建并手动发布到 Releases。
 
-name: DiPlay
+name: TuPigPlay CI
 
 on:
   # 推送 main
@@ -123,10 +123,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          VERSION="$(sed -n 's/^[[:space:]]*versionName = "\(.*\)"$/\1/p' mobile/build.gradle.kts | head -n1)"
+          VERSION="$(sed -n 's/^VERSION_NAME=//p' version.properties | head -n1)"
           # 写入输出前校验格式：非法值会污染产物命名
           if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
-            echo "::error::无法从 mobile/build.gradle.kts 解析出合法的 versionName，实际得到 '$VERSION'"
+            echo "::error::无法从 version.properties 解析出合法的 VERSION_NAME，实际得到 '$VERSION'"
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -215,7 +215,7 @@ jobs:
       - name: 上传 APK
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: DiPlay-${{ needs.resolve-version.outputs.version }}-debug-${{ github.sha }}
+          name: TuPigPlay-${{ needs.resolve-version.outputs.version }}-debug-${{ github.sha }}
           path: mobile/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 7

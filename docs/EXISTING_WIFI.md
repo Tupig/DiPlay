@@ -1,16 +1,16 @@
 # 已有 Wi-Fi / 同一局域网 / Existing Wi-Fi / Same LAN
 
-在系统设置中把 Android 接收端和 iPhone 连接到同一个第三方路由器或便携 Wi-Fi。在 DiPlay → Connection setup → Wireless 中选择 **Existing Wi-Fi / Same LAN**，输入准确的 SSID 和 WPA2 密码并保存。开放式网络请留空密码。保持 Bluetooth 开启且 iPhone 与接收端已配对，然后照常启动无线 CarPlay。
+在系统设置中把 Android 接收端和 iPhone 连接到同一个第三方路由器或便携 Wi-Fi。在 TuPigPlay → Connection setup → Wireless 中选择 **Existing Wi-Fi / Same LAN**，输入准确的 SSID 和 WPA2 密码并保存。开放式网络请留空密码。保持 Bluetooth 开启且 iPhone 与接收端已配对，然后照常启动无线 CarPlay。
 
-Connect the Android receiver and iPhone to the same third-party router or portable Wi-Fi in system settings. In DiPlay → Connection setup → Wireless, select **Existing Wi-Fi / Same LAN**, enter the exact SSID and WPA2 password, and save. For an open network, leave the password empty. Keep Bluetooth enabled and the iPhone paired with the receiver, then start wireless CarPlay as usual.
+Connect the Android receiver and iPhone to the same third-party router or portable Wi-Fi in system settings. In TuPigPlay → Connection setup → Wireless, select **Existing Wi-Fi / Same LAN**, enter the exact SSID and WPA2 password, and save. For an open network, leave the password empty. Keep Bluetooth enabled and the iPhone paired with the receiver, then start wireless CarPlay as usual.
 
 请使用 WPA2-Personal 或 WPA2/WPA3 混合模式。仅 WPA3、企业级认证和强制门户（captive portal）目前不在该模式范围内。双方客户端必须能够互通；请允许组播 DNS 以进行服务发现。支持时优先使用 5 GHz。
 
 Use WPA2-Personal or WPA2/WPA3 mixed mode. WPA3-only, enterprise authentication and captive portals are outside this mode's current scope. Both clients must be able to communicate; allow multicast DNS for service discovery. Prefer 5 GHz when supported.
 
-DiPlay 直接附着到已有连接，不创建 AP、不加入其他网络，也不改变默认路由。Internet 访问由路由器提供。已有的 Wi-Fi 凭据与车机热点设置分开存储。Android 无法把已保存的密码暴露给普通应用，因此密码需要手动输入。可读取的实时 SSID 必须与已保存的名称一致。当网络能力快照隐藏了该名称时，管理器会尝试读取 station WifiInfo；如果两份快照都把它隐藏了，请在 Android 设置中核对手动配置。精确位置权限和已开启的系统定位可以让网络详情可读，但它们并不是启动该模式的必要条件，也不与可选的 GPS 上报绑定。
+TuPigPlay 直接附着到已有连接，不创建 AP、不加入其他网络，也不改变默认路由。Internet 访问由路由器提供。已有的 Wi-Fi 凭据与车机热点设置分开存储。Android 无法把已保存的密码暴露给普通应用，因此密码需要手动输入。可读取的实时 SSID 必须与已保存的名称一致。当网络能力快照隐藏了该名称时，管理器会尝试读取 station WifiInfo；如果两份快照都把它隐藏了，请在 Android 设置中核对手动配置。精确位置权限和已开启的系统定位可以让网络详情可读，但它们并不是启动该模式的必要条件，也不与可选的 GPS 上报绑定。
 
-DiPlay attaches to the existing connection without creating an AP, joining another network or changing the default route. The router supplies Internet access. Existing Wi-Fi credentials are stored separately from car-hotspot settings. Android cannot expose saved passwords to ordinary apps, so the password is entered manually. A readable live SSID must match the saved name. The manager tries station WifiInfo when the network capabilities snapshot hides that name; if both snapshots hide it, verify the manual configuration in Android settings. Precise location permission and enabled system location can make network details readable, but are not required merely to start this mode or tied to optional GPS reporting.
+TuPigPlay attaches to the existing connection without creating an AP, joining another network or changing the default route. The router supplies Internet access. Existing Wi-Fi credentials are stored separately from car-hotspot settings. Android cannot expose saved passwords to ordinary apps, so the password is entered manually. A readable live SSID must match the saved name. The manager tries station WifiInfo when the network capabilities snapshot hides that name; if both snapshots hide it, verify the manual configuration in Android settings. Precise location permission and enabled system location can make network details readable, but are not required merely to start this mode or tied to optional GPS reporting.
 
 ## 实现 / Implementation
 

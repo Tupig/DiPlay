@@ -62,13 +62,15 @@ esac
 
 # 生成版本字符串
 VERSION_NAME="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_BUILD}"
-VERSION_CODE=$((VERSION_MAJOR * 1000000 + VERSION_MINOR * 10000 + VERSION_PATCH * 100 + VERSION_BUILD))
+# versionCode = 四段式公式 + 38 偏移（与 0.0.0.1 -> 39 的发布历史衔接；gradle 同公式）
+VERSION_CODE=$((VERSION_MAJOR * 1000000 + VERSION_MINOR * 10000 + VERSION_PATCH * 100 + VERSION_BUILD + 38))
 
 # 写回文件
 cat > "$VERSION_FILE" <<EOF
 # TuPigPlay 版本配置
 # 版本规则：0.0.0.1 -> 0.0.0.2 ... -> 0.0.0.100 -> 0.0.1.1 -> 0.0.1.2 ... -> 0.0.100.100 -> 0.1.1.1
-# 每次构建/推送自动 +1
+# 递增方式：发版前手动执行 ./version_increment.sh [major|minor|patch|build]
+# gradle 与 CI 从本文件读取 versionName/versionCode（mobile/build.gradle.kts）
 
 # 当前版本号（四段式：major.minor.patch.build）
 VERSION_MAJOR=$VERSION_MAJOR
@@ -79,7 +81,7 @@ VERSION_BUILD=$VERSION_BUILD
 # 版本名称（用于显示）
 VERSION_NAME=$VERSION_NAME
 
-# 版本代码（用于 Android versionCode，单调递增）
+# 版本代码（用于 Android versionCode = 四段式公式 + 38 偏移，0.0.0.1 -> 39）
 VERSION_CODE=$VERSION_CODE
 
 # 最大值限制

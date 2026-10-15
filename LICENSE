@@ -1,5 +1,16 @@
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+TuPigPlay — CarPlay for compatible Android head units
+Copyright (C) 2026 Tupig (TuPigPlay fork: https://github.com/Tupig/DiPlay)
+Based on DiPlay, Copyright (C) 2025-2026 shihabal3amri
+which adapts xcertplay by shilapi (GPL-3.0)
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License. The full license text follows.
+
+-----------------------------------------------------------------------
+
+                     GNU GENERAL PUBLIC LICENSE
+                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
  Everyone is permitted to copy and distribute verbatim copies

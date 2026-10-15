@@ -1,6 +1,6 @@
-# 從原始碼建置 DiPlay
+# 從原始碼建置 TuPigPlay
 
-[繁體中文首頁](../README.zh-TW.md) · [英文建置指南](BUILD.md) · [DiPlay CI](../.github/workflows/diplay.yml)
+[繁體中文首頁](../README.zh-TW.md) · [英文建置指南](BUILD.md) · [TuPigPlay CI](../.github/workflows/diplay.yml)
 
 以下指令從專案根目錄執行，也就是包含 `gradlew` 與 `settings.gradle.kts` 的目錄。環境版本以本分支的建置設定及 CI 為準。
 
@@ -8,12 +8,12 @@
 
 | Gradle 模組 | 用途 | Debug APK |
 | --- | --- | --- |
-| `:mobile` | 車機使用的主要 DiPlay 應用程式 | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
-| `:home` | 選用的 DiPlay Home 啟動器 | `samples/home/build/outputs/apk/debug/home-debug.apk` |
-| `:maphost` | 接收 DiPlay 地圖的範例應用程式 | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
+| `:mobile` | 車機使用的主要 TuPigPlay 應用程式 | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
+| `:home` | 選用的 TuPigPlay Home 啟動器 | `samples/home/build/outputs/apk/debug/home-debug.apk` |
+| `:maphost` | 接收 TuPigPlay 地圖的範例應用程式 | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
 | `:automotive` | 從 xcertplay 繼承的獨立 Android Automotive 應用程式 | `automotive/build/outputs/apk/debug/automotive-debug.apk` |
 
-`:common` 與 `:shared` 是共用函式庫。要安裝主程式，請選 **mobile**；如果裝到「DiPlay map host」，表示選錯模組或 APK。單獨執行 `assembleDebug` 可能建置多個應用程式。
+`:common` 與 `:shared` 是共用函式庫。要安裝主程式，請選 **mobile**；如果裝到「TuPigPlay map host」，表示選錯模組或 APK。單獨執行 `assembleDebug` 可能建置多個應用程式。
 
 ## 準備環境
 

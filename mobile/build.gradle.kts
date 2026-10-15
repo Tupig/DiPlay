@@ -13,6 +13,19 @@ val localAuthenticationAssets = providers.environmentVariable("TUPIGPLAY_AUTH_AS
 // Usage: ./gradlew :mobile:assembleRelease -PtupigplayApplicationId=com.ximalaya.ting.android.car
 val overrideApplicationId = providers.gradleProperty("tupigplayApplicationId").orNull
 
+// TuPigPlay fork versioning: version.properties is the single source of truth, decoupled from the
+// upstream version scheme. Bump it with ./version_increment.sh [major|minor|patch|build].
+// versionCode keeps the +38 offset so 0.0.0.1 stays compatible with the previously released code 39.
+val versionProperties = java.util.Properties().apply {
+    rootProject.file("version.properties").inputStream().use { load(it) }
+}
+val forkVersionName = listOf("VERSION_MAJOR", "VERSION_MINOR", "VERSION_PATCH", "VERSION_BUILD")
+    .joinToString(".") { versionProperties.getProperty(it) }
+val forkVersionCode = versionProperties.getProperty("VERSION_MAJOR").toInt() * 1_000_000 +
+    versionProperties.getProperty("VERSION_MINOR").toInt() * 10_000 +
+    versionProperties.getProperty("VERSION_PATCH").toInt() * 100 +
+    versionProperties.getProperty("VERSION_BUILD").toInt() + 38
+
 android {
     namespace = "com.shilapi.xcertplay"
     compileSdk {
@@ -23,8 +36,8 @@ android {
         applicationId = overrideApplicationId ?: "com.tupig.tupigplay"
         minSdk = 25
         targetSdk = 37
-        versionCode = 39
-        versionName = "0.2.20"
+        versionCode = forkVersionCode
+        versionName = forkVersionName
 
     }
 
