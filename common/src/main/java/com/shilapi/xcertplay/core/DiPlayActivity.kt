@@ -2806,12 +2806,12 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
 
     private fun bydAdbSettings(parent: LinearLayout) {
         if (AirPlayPersistence.loadWirelessHotspotMode(this) != WirelessHotspotMode.MANUAL) return
-        if (!CarHotspotSetup.isBydHeadUnit(this)) {
+        if (!CarHotspotSetup.isBydHeadUnit(this) && !CarHotspotSetup.isLeapmotorHeadUnit(this)) {
             if (CarHotspotTethering.appStartSupported()) {
-                Log.i("DiPlay-Hotspot", "BYD head unit not detected: hotspot control through system settings access")
+                Log.i("DiPlay-Hotspot", "BYD/Leapmotor head unit not detected: hotspot control through system settings access")
                 systemHotspotSettings(parent)
             } else {
-                Log.i("DiPlay-Hotspot", "settings hidden: BYD head unit not detected; Android ${Build.VERSION.SDK_INT} does not let an app start tethering")
+                Log.i("DiPlay-Hotspot", "settings hidden: BYD/Leapmotor head unit not detected; Android ${Build.VERSION.SDK_INT} does not let an app start tethering")
             }
             return
         }
@@ -2831,7 +2831,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             val access = runCatching { CarHotspotSetup.check(applicationContext) }
                 .onFailure { Log.w("DiPlay-Hotspot", "settings ADB check failed", it) }
                 .getOrDefault(LocalAdb.Access.UNREACHABLE)
-            Log.i("DiPlay-Hotspot", "settings eligibility: byd=true adb=$access visible=${CarHotspotSettings.visible(true, access)}")
+            Log.i("DiPlay-Hotspot", "settings eligibility: headUnit=true adb=$access visible=${CarHotspotSettings.visible(true, access)}")
             runOnUiThread {
                 if (bydAdbControls !== controls || isFinishing || isDestroyed) return@runOnUiThread
                 if (CarHotspotSettings.visible(true, access)) {

@@ -7,9 +7,12 @@ import android.content.Intent
 import android.os.SystemClock
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Base64
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import com.shilapi.xcertplay.adb.AdbKeys
+import java.security.MessageDigest
 
 /**
  * An accessibility service to automatically check "Always allow / Use by default"
@@ -42,11 +45,32 @@ class UsbAutoConfirmService : AccessibilityService() {
                 node.contentDescription?.toString()?.let(texts::add)
                 false
             }
+            val joined = texts.joinToString(" ")
             val appLabel = applicationInfo.loadLabel(packageManager).toString()
-            if (!isTargetPrompt(texts.joinToString(" "), appLabel)) {
-                if (ignoredWindowId != usbWindowId) {
-                    ignoredWindowId = usbWindowId
-                    Log.i(TAG, "System dialog does not ask for DiPlay USB access; left alone")
+            if (!isTargetPrompt(joined, appLabel)) {
+                // The ADB "Allow USB debugging?" dialog never names DiPlay; the only stable
+                // identity of the request is the fingerprint of the key we generated. Foreign
+                // computers' fingerprints do not match and stay manual.
+                if (!isOwnAdbAuthorizationPrompt(joined, ownAdbFingerprints(applicationContext))) {
+                    if (ignoredWindowId != usbWindowId) {
+                        ignoredWindowId = usbWindowId
+                        Log.i(TAG, "System dialog does not ask for DiPlay USB access; left alone")
+                    }
+                    return
+                }
+                visit(root) { node ->
+                    node.isCheckable && !node.isChecked && node.isEnabled &&
+                        node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                }
+                val adbConfirmed = visit(root) { node ->
+                    val label = node.text?.toString()?.trim()
+                    node.isEnabled && node.isClickable &&
+                        (node.viewIdResourceName == "android:id/button1" || label in CONFIRM_LABELS) &&
+                        node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                }
+                if (adbConfirmed) {
+                    lastClickTime = now
+                    Log.i(TAG, "Auto-confirmed ADB debugging authorization for our own key")
                 }
                 return
             }
@@ -105,11 +129,13 @@ class UsbAutoConfirmService : AccessibilityService() {
          * consent, report the same name, so [isTargetPrompt] must also find a USB device.
          */
         private const val ALERT_ACTIVITY_CLASS = "android.app.Dialog"
+        private const val ADB_DEBUGGING_ACTIVITY = "com.android.server.adb.AdbDebuggingActivity"
         private val CONFIRM_LABELS = setOf("确定", "允许", "OK", "Allow", "Confirm")
         private val USB_DEVICE_WORDS = Regex("USB|iPhone|iPad", RegexOption.IGNORE_CASE)
 
         internal fun isSystemUsbWindow(pkg: String?, className: String?): Boolean =
-            pkg in SYSTEM_PACKAGES && (className in USB_ACTIVITIES || className == ALERT_ACTIVITY_CLASS)
+            pkg in SYSTEM_PACKAGES && (className in USB_ACTIVITIES || className == ALERT_ACTIVITY_CLASS ||
+                className == ADB_DEBUGGING_ACTIVITY)
 
         /**
          * The prompt must name this app and a USB device. Android 10+ words it "Allow DiPlay to
@@ -122,6 +148,47 @@ class UsbAutoConfirmService : AccessibilityService() {
                 Regex("(?<![A-Za-z0-9_])${Regex.escape(appLabel)}(?![A-Za-z0-9_])", RegexOption.IGNORE_CASE)
                     .containsMatchIn(text) &&
                 USB_DEVICE_WORDS.containsMatchIn(text)
+
+        @Volatile
+        private var cachedOwnAdbFingerprints: List<String>? = null
+
+        internal fun installOwnAdbFingerprintsForTests(fingerprints: List<String>?) {
+            cachedOwnAdbFingerprints = fingerprints
+        }
+
+        /** Fingerprints of our own ADB public key in the encodings adbd may present, lowercase hex without separators. */
+        internal fun ownAdbFingerprints(context: Context): List<String>? {
+            cachedOwnAdbFingerprints?.let { return it }
+            return runCatching {
+                val public = AdbKeys.load(context).public
+                fun digest(algorithm: String, data: ByteArray): String =
+                    MessageDigest.getInstance(algorithm).digest(data).joinToString("") { "%02x".format(it.toInt() and 0xff) }
+                val message = AdbKeys.publicKeyMessage(public)
+                val base64 = String(message, Charsets.UTF_8).substringBefore(' ')
+                val blob = Base64.decode(base64, Base64.DEFAULT)
+                buildList {
+                    for (algorithm in listOf("MD5", "SHA-256")) {
+                        add(digest(algorithm, public.encoded))
+                        add(digest(algorithm, base64.toByteArray(Charsets.UTF_8)))
+                        add(digest(algorithm, blob))
+                    }
+                }
+            }.onSuccess { cachedOwnAdbFingerprints = it }.getOrNull()
+        }
+
+        /**
+         * The ADB "Allow USB debugging?" prompt never names DiPlay and is localized, so the only
+         * stable identity is the fingerprint of our own key. Foreign computers present their own
+         * keys, do not match, and stay manual.
+         */
+        internal fun isOwnAdbAuthorizationPrompt(text: String, fingerprints: List<String>?): Boolean {
+            if (fingerprints.isNullOrEmpty()) return false
+            val hexStream = buildString {
+                for (c in text.lowercase()) if (c.isDigit() || c in 'a'..'f') append(c)
+            }
+            if (hexStream.length < 32) return false
+            return fingerprints.any { hexStream.contains(it) }
+        }
 
 
         fun isEnabled(context: Context): Boolean {

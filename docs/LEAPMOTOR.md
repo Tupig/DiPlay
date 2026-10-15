@@ -167,13 +167,37 @@ Consequences if it works, before you install:
 
 ADB is not required to run DiPlay. It matters only for head units whose whitelist cannot be satisfied.
 
-在目标车辆上的观察：iPhone 热点网段 `172.20.10.0/28` 上有一个主机在 5555 端口响应 `unauthorized`，且从未出现过授权提示。这更像是遗留可达的 Leapmotor 服务网 ADB，而不是用户可启用的调试端口，因此无法直接使用。
+历史观察（更早的系统版本）：iPhone 热点网段 `172.20.10.0/28` 上有一个主机在 5555 端口响应 `unauthorized`，且从未出现过授权提示。这更像是遗留可达的 Leapmotor 服务网 ADB，而不是用户可启用的调试端口。
 
-Observed on the target vehicle: the iPhone hotspot range `172.20.10.0/28` exposes a host on port 5555 answering `unauthorized` with no authorization prompt ever shown. That is consistent with a Leapmotor service-network ADB left reachable, not with a user-enableable debug port, and it cannot be used as-is.
+Earlier observation (on an earlier system build): the iPhone hotspot range `172.20.10.0/28` exposes a host on port 5555 answering `unauthorized` with no authorization prompt ever shown. That is consistent with a Leapmotor service-network ADB left reachable, not with a user-enableable debug port.
 
-公开渠道没有已知方法可在 LeapOS 3.x 上启用 ADB。同类品牌有公开方法：BYD 保持 ADB 开启；小鹏车机有文档记载，可在授权的服务网点进入 **维修模式 → 检查模式 → 常用命令合集**，然后执行 `setprop service.adb.tcp.port 5050`。没有公开的 Leapmotor 对应流程。
+当前目标车辆已启用 ADB（2026-10 确认），DiPlay 的零跑 ADB 功能——热点自动开启、车速读取（#8）——在这辆车上可用。此前「公开渠道没有已知方法可在 LeapOS 3.x 上启用 ADB」的结论对当前车辆不再成立；若你的车机没有 ADB，这些功能保持降级，不影响 CarPlay 主功能。
 
-No public method enables ADB on LeapOS 3.x. Comparable brands expose one: BYD keeps ADB open, and Xiaopeng units are documented as opening **维修模式 → 检查模式 → 常用命令合集** from an authorised service visit before `setprop service.adb.tcp.port 5050`. No equivalent Leapmotor procedure is published.
+The current target vehicle has ADB enabled (confirmed 2026-10), and DiPlay's Leapmotor ADB features — automatic hotspot and vehicle-speed reading (#8) — work on it. The earlier conclusion that no public method enables ADB on LeapOS 3.x no longer holds for this vehicle; on a head unit without ADB those features stay degraded and CarPlay itself is unaffected.
+
+## 车速命令标定 / Calibrating the speed command
+
+零跑没有公开的车辆数据接口，车速经车机本机 ADB（`127.0.0.1:5555`）执行一条 shell 命令并读取其输出（#8）。命令模板保存在 `LeapmotorVehicleDataStore`；未标定时 `LeapmotorVehicleAccess.getVehicleSpeed()` 返回 null，功能降级，不崩溃。
+
+Leapmotor exposes no vehicle-data API, so speed is read over the head unit's own ADB (`127.0.0.1:5555`) by running one shell command (#8). The template lives in `LeapmotorVehicleDataStore`; until it is calibrated, `LeapmotorVehicleAccess.getVehicleSpeed()` returns null and the feature stays degraded without crashing.
+
+标定步骤（需要可用的 ADB）：
+
+1. `adb shell service list` — 找车辆服务候选（名称含 car / vehicle / leapmotor 字样）。
+2. `adb shell dumpsys <候选服务>`、`adb shell getprop | grep -i -e car -e vehicle -e speed` — 找一个随车速变化的数值。
+3. 行驶中（由副驾操作）多次采样，确认数值与仪表车速一致、单位为 km/h。
+4. 把确定的 shell 命令写入车速命令存储，验证 `getVehicleSpeed()` 返回实际车速。
+
+Calibration steps (requires working ADB):
+
+1. `adb shell service list` — shortlist vehicle services (names containing car / vehicle / leapmotor).
+2. `adb shell dumpsys <candidate>`, `adb shell getprop | grep -i -e car -e vehicle -e speed` — find a value that changes with the speed.
+3. While driving (operated by the passenger), sample repeatedly and confirm the value matches the cluster speedometer in km/h.
+4. Store the resulting shell command in the speed-command store and verify `getVehicleSpeed()` returns the live speed.
+
+读取端把命令输出中的第一个数字当作 km/h（`LeapmotorVehicleAccess.parseSpeed`），因此命令应让车速是输出中的第一个数字，或在命令内用 `grep` / `awk` 先行提取。
+
+The reader takes the first number in the command output as km/h (`LeapmotorVehicleAccess.parseSpeed`), so write the command so the speed is the first number in the output, or extract it first with `grep` / `awk`.
 
 ## 保修 / Warranty
 
