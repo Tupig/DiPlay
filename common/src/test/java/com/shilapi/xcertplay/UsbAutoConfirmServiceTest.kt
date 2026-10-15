@@ -21,6 +21,26 @@ class UsbAutoConfirmServiceTest {
     @Before
     fun setUp() {
         context = RuntimeEnvironment.getApplication()
+        UsbAutoConfirmService.installOwnAdbFingerprintsForTests(null)
+    }
+
+    @Test fun adbDebuggingActivityIsAcceptedAsASystemWindow() {
+        assertTrue(UsbAutoConfirmService.isSystemUsbWindow("android", "com.android.server.adb.AdbDebuggingActivity"))
+        assertFalse(UsbAutoConfirmService.isSystemUsbWindow("evil.app", "com.android.server.adb.AdbDebuggingActivity"))
+        assertFalse(UsbAutoConfirmService.isSystemUsbWindow("android", "com.android.server.pm.PackageInstallerActivity"))
+    }
+
+    @Test fun adbPromptMatchesOnlyOurOwnKeyFingerprint() {
+        val own = listOf("00112233445566778899aabbccddeeff")
+        assertTrue(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt(
+            "允许 USB 调试吗？此计算机的 RSA 密钥指纹如下:\n00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF", own))
+        assertTrue(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt(
+            "Allow USB debugging? The computer's RSA key fingerprint is:\n00:11:22:33:44:55:66:77:88:99:aa:bb:cc:dd:ee:ff", own))
+        assertFalse(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt(
+            "Allow USB debugging? The computer's RSA key fingerprint is:\nff:ee:dd:cc:bb:aa:99:88:77:66:55:44:33:22:11:00", own))
+        assertFalse(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt("Allow USB debugging?", null))
+        assertFalse(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt("Allow USB debugging?", emptyList()))
+        assertFalse(UsbAutoConfirmService.isOwnAdbAuthorizationPrompt("00:11:22", own))
     }
 
     @Test
@@ -125,6 +145,46 @@ class UsbAutoConfirmServiceTest {
             val label = service.applicationInfo.loadLabel(service.packageManager)
             org.mockito.Mockito.`when`(root.text).thenReturn("Allow $label to access this USB device?")
             service.onAccessibilityEvent(event)
+            org.mockito.Mockito.verify(button).performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)
+        } finally {
+            event.recycle()
+        }
+    }
+
+    @Test fun adbAuthorizationForOurOwnKeyChecksAlwaysAllowAndConfirms() {
+        UsbAutoConfirmService.installOwnAdbFingerprintsForTests(listOf("00112233445566778899aabbccddeeff"))
+        val service = org.mockito.Mockito.spy(org.robolectric.Robolectric.buildService(UsbAutoConfirmService::class.java).create().get())
+        val root = org.mockito.Mockito.mock(android.view.accessibility.AccessibilityNodeInfo::class.java)
+        val checkbox = org.mockito.Mockito.mock(android.view.accessibility.AccessibilityNodeInfo::class.java)
+        val button = org.mockito.Mockito.mock(android.view.accessibility.AccessibilityNodeInfo::class.java)
+        org.mockito.Mockito.doReturn(root).`when`(service).rootInActiveWindow
+        org.mockito.Mockito.`when`(root.windowId).thenReturn(42)
+        org.mockito.Mockito.`when`(root.packageName).thenReturn("android")
+        org.mockito.Mockito.`when`(root.childCount).thenReturn(2)
+        org.mockito.Mockito.`when`(root.getChild(0)).thenReturn(checkbox)
+        org.mockito.Mockito.`when`(root.getChild(1)).thenReturn(button)
+        org.mockito.Mockito.`when`(checkbox.isCheckable).thenReturn(true)
+        org.mockito.Mockito.`when`(checkbox.isChecked).thenReturn(false)
+        org.mockito.Mockito.`when`(checkbox.isEnabled).thenReturn(true)
+        org.mockito.Mockito.`when`(checkbox.performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)).thenReturn(true)
+        org.mockito.Mockito.`when`(button.isEnabled).thenReturn(true)
+        org.mockito.Mockito.`when`(button.isClickable).thenReturn(true)
+        org.mockito.Mockito.`when`(button.viewIdResourceName).thenReturn("android:id/button1")
+        org.mockito.Mockito.`when`(button.performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)).thenReturn(true)
+        val event = org.mockito.Mockito.mock(android.view.accessibility.AccessibilityEvent::class.java)
+        org.mockito.Mockito.`when`(event.eventType).thenReturn(android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
+        org.mockito.Mockito.`when`(event.packageName).thenReturn("android")
+        org.mockito.Mockito.`when`(event.className).thenReturn("com.android.server.adb.AdbDebuggingActivity")
+        org.mockito.Mockito.`when`(event.windowId).thenReturn(42)
+        try {
+            // A foreign computer's fingerprint does not match and stays manual.
+            org.mockito.Mockito.`when`(root.text).thenReturn("允许 USB 调试吗？\nff:ee:dd:cc:bb:aa:99:88:77:66:55:44:33:22:11:00")
+            service.onAccessibilityEvent(event)
+            org.mockito.Mockito.verify(checkbox, org.mockito.Mockito.never()).performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)
+            // Our own key fingerprint checks "always allow" and confirms.
+            org.mockito.Mockito.`when`(root.text).thenReturn("允许 USB 调试吗？此计算机的 RSA 密钥指纹如下:\n00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF")
+            service.onAccessibilityEvent(event)
+            org.mockito.Mockito.verify(checkbox).performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)
             org.mockito.Mockito.verify(button).performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)
         } finally {
             event.recycle()
