@@ -13,7 +13,7 @@
 >
 > **Note:** These projects focus on BYD cars. They may work on other brands, but other brands are unsupported and there are no plans to add support or fix brand-specific incompatibilities.
 
-[下载与官网 / Download & website](https://tupig.github.io/DiPlay/) · [0.2.19 版本 / Release v0.2.19](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) · [报告问题 / Report a problem](https://github.com/Tupig/DiPlay/issues/new/choose) · [繁體中文指南 / Traditional Chinese guide](README.zh-TW.md)
+[下载与官网 / Download & website](https://tupig.github.io/DiPlay/) · [0.2.20 版本 / Release v0.2.20](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.20) · [报告问题 / Report a problem](https://github.com/Tupig/DiPlay/issues/new/choose) · [繁體中文指南 / Traditional Chinese guide](README.zh-TW.md)
 
 ![DiPlay home](site/assets/home.png)
 
@@ -51,18 +51,18 @@
 | ✅ Diagnostic reports | Local diagnostic export; reports are sent only if you choose to share them |
 | ✅ Separate installation alongside DiAuto | Run one projection app at a time |
 
-0.2.19 的主要变化：许多车机上有线 CarPlay 启动快了几秒；通话、Siri 与导航语音的时序修正，CarPlay 在后台时音乐不再断音；DiLink 4 仪表地图开启时不再首次触摸即重连、保留状态栏时倒车影像后画面不再缩小；新增日语、补齐繁体中文与更多阿拉伯语；“设置 → 诊断 → 在手机上取得报告”可通过二维码或地址验证码在手机上下载报告；CarPlay 内设置菜单重设计；可选仪表地图专辑封面卡片。完整列表见 [CHANGELOG.md](CHANGELOG.md) 与 [0.2.19 发行说明](docs/RELEASE-NOTES-0.2.19.md)。
+0.2.20 的主要变化：车机音频时钟偏快或偏慢时音乐不再每分钟左右暂停一次，车机打开 360° 影像时爆音减少，无线与 USB 使用独立缓冲；被车机路由到听筒的通话改走扬声器；更多车机上有线 CarPlay 可启动（USB 音频驱动占用 iPhone 的车机、Android 17）；「自动开启车机热点」覆盖更多车机（含无 ADB 的 Android 8.0–10 非 BYD 车机），「车机热点已关闭」对话框中的 Connect 现在可以连接；仪表地图（实验性）在更多 BYD 固件上找到仪表（含 Leopard 5 Ultra），无 HEVC 硬件解码时回退 H.264；诊断报告记录 DiPlay 最近崩溃、收到的方向盘与媒体按键以及音乐重缓冲。完整列表见 [CHANGELOG.md](CHANGELOG.md) 与 [0.2.20 发行说明](docs/RELEASE-NOTES-0.2.20.md)。
 
-What's new in 0.2.19: wired CarPlay starts several seconds sooner on many head units; calls, Siri and navigation prompts keep the right timing, and background music no longer underruns; with the DiLink 4 dashboard map on, CarPlay no longer restarts at the first touch or stays scaled down after the reversing camera; Japanese added, Traditional Chinese complete and more Arabic translated; **Settings → Diagnostics → Get the report on a phone** downloads the diagnostic report by QR code or a typed address and code; a redesigned settings menu inside CarPlay; an optional album-artwork card on the dashboard map. See [CHANGELOG.md](CHANGELOG.md) and [0.2.19 release notes](docs/RELEASE-NOTES-0.2.19.md).
+What's new in 0.2.20: music no longer pauses every minute or so on head units whose audio clock runs fast or slow, crackles less while the head unit opens its 360° camera, and keeps separate buffers for wireless and USB; calls that a head unit sent to its earpiece play on the loudspeaker; wired CarPlay starts on head units whose USB audio driver held the iPhone, and starts on Android 17; **automatically turn on the car hotspot** works on more head units, including head units that aren't BYD on Android 8.0–10 without ADB, and **Connect** in the **Car hotspot is off** dialog now connects; **CarPlay map on dashboard (experimental)** finds the cluster on more BYD firmware, including the Leopard 5 Ultra, and HEVC falls back to H.264 when the head unit has no hardware decoder for it; the diagnostic report records DiPlay's last crash, the wheel and media keys received, and music rebuffers. See [CHANGELOG.md](CHANGELOG.md) and [0.2.20 release notes](docs/RELEASE-NOTES-0.2.20.md).
 
 ## 🚀 快速开始 / Quick Start
 
-1. 停好车。从[官方发布页](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19)下载 `DiPlay-0.2.19.apk`（[官网](https://tupig.github.io/DiPlay/)亦有链接）。本 fork 的 `TuPigPlay-0.0.0.1.apk` 需从源码自行构建，见 [BUILD.md](docs/BUILD.md)。
+1. 停好车。从[官方发布页](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.20)下载 `DiPlay-0.2.20.apk`（[官网](https://tupig.github.io/DiPlay/)亦有链接）。本 fork 的 `TuPigPlay-0.0.0.1.apk` 需从源码自行构建，见 [BUILD.md](docs/BUILD.md)。
 2. 将 APK 安装到**车机**上，而不是 iPhone 上。车机须允许安装 APK，系统为 Android 7.1+（API 25+）。
 3. 打开 DiPlay，按需授予权限：蓝牙／附近设备、麦克风（Siri／通话）、通知；连接前先关闭其他投屏应用。
 4. 默认使用车内自带热点：在车机设置中开启热点（支持则选 5 GHz），在 **Settings → Connection → Connection setup → Built-in car hotspot** 中保存热点名称与密码；iPhone 保持蓝牙与 Wi-Fi 开启并与车辆配对，然后点按 **Connect phone**。
 
-1. Park the car. Download `DiPlay-0.2.19.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) (also linked on the [website](https://tupig.github.io/DiPlay/)). This fork's `TuPigPlay-0.0.0.1.apk` is built from source; see [BUILD.md](docs/BUILD.md).
+1. Park the car. Download `DiPlay-0.2.20.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.20) (also linked on the [website](https://tupig.github.io/DiPlay/)). This fork's `TuPigPlay-0.0.0.1.apk` is built from source; see [BUILD.md](docs/BUILD.md).
 2. Install the APK on the **car head unit**, not the iPhone. The head unit must permit APK installation and run Android 7.1+ (API 25+).
 3. Open DiPlay and grant the permissions you need: Bluetooth/Nearby devices, microphone (Siri/calls), notifications. Close other phone-projection apps before connecting.
 4. The built-in car hotspot is the default: turn on the car hotspot (5 GHz if available) in the car's settings, save its exact name and password under **Settings → Connection → Connection setup → Built-in car hotspot**, keep Bluetooth and Wi-Fi enabled on the iPhone, pair it with the car, then tap **Connect phone**.
@@ -70,7 +70,7 @@ What's new in 0.2.19: wired CarPlay starts several seconds sooner on many head u
 安装命令 / Install command:
 
 ```sh
-adb install -r DiPlay-0.2.19.apk
+adb install -r DiPlay-0.2.20.apk
 ```
 
 > 💡 提示：ADB 只是车机支持时的可选安装方式，核心 CarPlay 连接不要求 ADB。
@@ -199,11 +199,11 @@ Built-in car hotspot (recommended), Wi-Fi Direct, Existing Wi-Fi / Same LAN, plu
 
 **问：如何报告问题？**
 
-在 **0.2.19** 上复现问题并记录发生时间；打开 **Settings → Diagnostics → Save diagnostic report**（Android 10+ 通常保存到 **Downloads/DiPlay**；Android 7.1–9 会请求存储权限）。检查 `.txt` 并删除隐私信息，再附到匹配的[已有 issue](https://github.com/Tupig/DiPlay/issues) 或[新建 issue](https://github.com/Tupig/DiPlay/issues/new/choose)，并注明车型／车机、DiLink/Android/完整固件、iPhone/iOS、连接方式、相关设置、复现步骤与失败时间。报告不会自动上传；切勿公开热点密码。
+在 **0.2.20** 上复现问题并记录发生时间；打开 **Settings → Diagnostics → Save diagnostic report**（Android 10+ 通常保存到 **Downloads/DiPlay**；Android 7.1–9 会请求存储权限）。检查 `.txt` 并删除隐私信息，再附到匹配的[已有 issue](https://github.com/Tupig/DiPlay/issues) 或[新建 issue](https://github.com/Tupig/DiPlay/issues/new/choose)，并注明车型／车机、DiLink/Android/完整固件、iPhone/iOS、连接方式、相关设置、复现步骤与失败时间。报告不会自动上传；切勿公开热点密码。
 
 **Q: How do I report a problem?**
 
-Reproduce it on **0.2.19** and note the failure time, then use **Settings → Diagnostics → Save diagnostic report** (Android 10+ normally saves to **Downloads/DiPlay**; Android 7.1–9 asks for storage access). Review the `.txt`, remove private information, and attach it to a matching [existing issue](https://github.com/Tupig/DiPlay/issues) or [create one](https://github.com/Tupig/DiPlay/issues/new/choose), with car/head-unit model, DiLink/Android/full firmware, iPhone/iOS, connection mode, relevant settings, reproduction steps and the failure time. Reports are shared only when you choose; never post your hotspot password.
+Reproduce it on **0.2.20** and note the failure time, then use **Settings → Diagnostics → Save diagnostic report** (Android 10+ normally saves to **Downloads/DiPlay**; Android 7.1–9 asks for storage access). Review the `.txt`, remove private information, and attach it to a matching [existing issue](https://github.com/Tupig/DiPlay/issues) or [create one](https://github.com/Tupig/DiPlay/issues/new/choose), with car/head-unit model, DiLink/Android/full firmware, iPhone/iOS, connection mode, relevant settings, reproduction steps and the failure time. Reports are shared only when you choose; never post your hotspot password.
 
 **问：为什么导航小组件或悬浮地图不显示？**
 
