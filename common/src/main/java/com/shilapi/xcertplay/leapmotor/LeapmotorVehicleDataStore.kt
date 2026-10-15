@@ -20,6 +20,7 @@ class LeapmotorVehicleDataStore(context: Context) {
         private const val KEY_CALIBRATION = "calibration"
         private const val KEY_USER_PREFERENCES = "user_preferences"
         private const val KEY_VEHICLE_CONFIG = "vehicle_config"
+        private const val KEY_ADB_SPEED_COMMAND = "adb_speed_command"
         private const val KEY_LAST_SYNC = "last_sync"
     }
 
@@ -174,6 +175,24 @@ class LeapmotorVehicleDataStore(context: Context) {
         prefs.edit()
             .putString(KEY_VEHICLE_CONFIG, vehicleConfigToJson(config))
             .apply()
+    }
+
+    // ========== ADB 车速命令 ==========
+
+    /**
+     * 读取车速的 ADB shell 命令（#8）。
+     * 零跑车速的 service call 参数需真机标定（见 docs/LEAPMOTOR.md），未标定时返回 null，
+     * 上层以 null 优雅降级。
+     */
+    fun getAdbSpeedCommand(): String? = prefs.getString(KEY_ADB_SPEED_COMMAND, null)?.takeIf { it.isNotBlank() }
+
+    /** 保存车速命令；传 null 或空白即清除标定（恢复降级）。 */
+    fun saveAdbSpeedCommand(command: String?) {
+        if (command.isNullOrBlank()) {
+            prefs.edit().remove(KEY_ADB_SPEED_COMMAND).apply()
+        } else {
+            prefs.edit().putString(KEY_ADB_SPEED_COMMAND, command.trim()).apply()
+        }
     }
 
     // ========== 同步时间戳 ==========
