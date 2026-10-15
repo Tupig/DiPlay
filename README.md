@@ -13,7 +13,7 @@
 >
 > **Note:** These projects focus on BYD cars. They may work on other brands, but other brands are unsupported and there are no plans to add support or fix brand-specific incompatibilities.
 
-[下载与官网 / Download & website](https://shihabal3amri.github.io/DiPlay/) · [0.2.19 版本 / Release v0.2.19](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) · [报告问题 / Report a problem](https://github.com/Tupig/DiPlay/issues/new/choose) · [繁體中文指南 / Traditional Chinese guide](README.zh-TW.md)
+[下载与官网 / Download & website](https://tupig.github.io/DiPlay/) · [0.2.19 版本 / Release v0.2.19](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) · [报告问题 / Report a problem](https://github.com/Tupig/DiPlay/issues/new/choose) · [繁體中文指南 / Traditional Chinese guide](README.zh-TW.md)
 
 ![DiPlay home](site/assets/home.png)
 
@@ -57,12 +57,12 @@ What's new in 0.2.19: wired CarPlay starts several seconds sooner on many head u
 
 ## 🚀 快速开始 / Quick Start
 
-1. 停好车。从[官方发布页](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19)下载 `DiPlay-0.2.19.apk`（[官网](https://shihabal3amri.github.io/DiPlay/)亦有链接）。本 fork 的 `TuPigPlay-0.0.0.1.apk` 需从源码自行构建，见 [BUILD.md](docs/BUILD.md)。
+1. 停好车。从[官方发布页](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19)下载 `DiPlay-0.2.19.apk`（[官网](https://tupig.github.io/DiPlay/)亦有链接）。本 fork 的 `TuPigPlay-0.0.0.1.apk` 需从源码自行构建，见 [BUILD.md](docs/BUILD.md)。
 2. 将 APK 安装到**车机**上，而不是 iPhone 上。车机须允许安装 APK，系统为 Android 7.1+（API 25+）。
 3. 打开 DiPlay，按需授予权限：蓝牙／附近设备、麦克风（Siri／通话）、通知；连接前先关闭其他投屏应用。
 4. 默认使用车内自带热点：在车机设置中开启热点（支持则选 5 GHz），在 **Settings → Connection → Connection setup → Built-in car hotspot** 中保存热点名称与密码；iPhone 保持蓝牙与 Wi-Fi 开启并与车辆配对，然后点按 **Connect phone**。
 
-1. Park the car. Download `DiPlay-0.2.19.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) (also linked on the [website](https://shihabal3amri.github.io/DiPlay/)). This fork's `TuPigPlay-0.0.0.1.apk` is built from source; see [BUILD.md](docs/BUILD.md).
+1. Park the car. Download `DiPlay-0.2.19.apk` from the [official release](https://github.com/shihabal3amri/DiPlay/releases/tag/v0.2.19) (also linked on the [website](https://tupig.github.io/DiPlay/)). This fork's `TuPigPlay-0.0.0.1.apk` is built from source; see [BUILD.md](docs/BUILD.md).
 2. Install the APK on the **car head unit**, not the iPhone. The head unit must permit APK installation and run Android 7.1+ (API 25+).
 3. Open DiPlay and grant the permissions you need: Bluetooth/Nearby devices, microphone (Siri/calls), notifications. Close other phone-projection apps before connecting.
 4. The built-in car hotspot is the default: turn on the car hotspot (5 GHz if available) in the car's settings, save its exact name and password under **Settings → Connection → Connection setup → Built-in car hotspot**, keep Bluetooth and Wi-Fi enabled on the iPhone, pair it with the car, then tap **Connect phone**.
