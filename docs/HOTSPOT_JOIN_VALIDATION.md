@@ -76,7 +76,7 @@ Read-only checks on a OnePlus 7T Pro / Android 13 established that:
   No hotspot writes or restarts were performed during these API checks.
 
 These observations are outside the project's BYD support scope. The separate
-broadcast add/remove/re-add comparison used the original DiPlay 0.2.12 APK and
+broadcast add/remove/re-add comparison used the original TuPigPlay 0.2.12 APK and
 a privileged experimental helper: automatic joining and CarPlay succeeded with
 the tested element, failed after removal and succeeded after re-add. Channel 0
 and IPv6 worked, and other stored fields were preserved. This comparison does

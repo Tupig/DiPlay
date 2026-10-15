@@ -1,4 +1,4 @@
-# 2024 款零跑 C11 (8295P) DiPlay 安装完整指南 / Complete DiPlay installation guide for the 2024 Leapmotor C11 (8295P)
+# 2024 款零跑 C11 (8295P) TuPigPlay 安装完整指南 / Complete TuPigPlay installation guide for the 2024 Leapmotor C11 (8295P)
 
 > **适用车型**：2024/2025 款零跑 C11 增程版/纯电版  
 > **芯片**：高通 SA8295P  
@@ -65,7 +65,7 @@ Recommended priority, based on community-tested reports:
 ```bash
 # 1. 克隆项目 / Clone the project
 git clone https://github.com/Tupig/DiPlay.git
-cd DiPlay
+cd TuPigPlay
 
 # 2. 准备 JDK 17+ 和 Android SDK / Prepare JDK 17+ and the Android SDK
 # 建议使用 Android Studio 自带 SDK / The Android Studio SDK is recommended
@@ -101,7 +101,7 @@ EOF
 
 ```
 mobile/build/outputs/apk/release/
-└── DiPlay-{version}-release.apk   # 重命名后拷入 U 盘 / rename, then copy to the U disk
+└── TuPigPlay-{version}-release.apk   # 重命名后拷入 U 盘 / rename, then copy to the U disk
 ```
 
 > **注意**：构建时会自动去掉 debug 的 `.hudtest` 后缀，APK 完全使用指定包名。
@@ -179,7 +179,7 @@ U盘根目录/
 
 1. iPhone 开启 **蓝牙 + Wi-Fi** / Turn on **Bluetooth + Wi-Fi** on the iPhone
 2. iPhone `设置 → 蓝牙` → 与车机配对 / iPhone `Settings → Bluetooth` → pair with the head unit
-3. DiPlay 主页 → `选择 iPhone` → 选中已配对设备 / DiPlay home → `Choose iPhone` → select the paired device
+3. TuPigPlay 主页 → `选择 iPhone` → 选中已配对设备 / TuPigPlay home → `Choose iPhone` → select the paired device
 4. 点击 `连接手机` → iPhone 弹窗允许 "CarPlay" "本地网络" "蓝牙" / Tap `Connect phone` → allow "CarPlay", "Local Network" and "Bluetooth" in the iPhone prompts
 
 ### 3. 分辨率/帧率调优（8295P 推荐）/ 3. Resolution/frame-rate tuning (recommended for 8295P)
@@ -233,7 +233,7 @@ U盘根目录/
 ```
 设置 → 诊断 → 保存诊断报告 / Settings → Diagnostics → Save diagnostic report
 ├── 选择保存位置：下载/文件/U盘 / Choose save location: Downloads / Files / U disk
-├── 文件名：DiPlay_diagnostic_yyyyMMdd_HHmmss.txt / File name: DiPlay_diagnostic_yyyyMMdd_HHmmss.txt
+├── 文件名：TuPigPlay_diagnostic_yyyyMMdd_HHmmss.txt / File name: TuPigPlay_diagnostic_yyyyMMdd_HHmmss.txt
 └── 反馈时必附：此文件 + 车型年款 + 系统版本 + 安装包名 + 复现步骤
     Always attach: this file + model year + system version + install package name + reproduction steps
 ```
@@ -273,7 +273,7 @@ git pull origin main
 
 ## 📚 参考资料 / References
 
-- [DiPlay 官方仓库 / DiPlay repository](https://github.com/Tupig/DiPlay)
+- [TuPigPlay 官方仓库 / TuPigPlay repository](https://github.com/Tupig/DiPlay)
 - [零跑 C 系列白名单详情 / Leapmotor C-series whitelist details](https://www.yeyulingfeng.com/222080.html)
 - [U 盘安装视频教程 / U-disk install video tutorial](https://v.douyin.com/q-UifwDixxA/)
 - [社区讨论：汽车之家 C11 论坛 / Community: Autohome C11 forum](https://club.autohome.com.cn/bbs/thread/7d089e78e6743966/109027712-1.html)

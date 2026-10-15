@@ -1,36 +1,36 @@
-# 构建 DiPlay / Build DiPlay
+# 构建 TuPigPlay / Build TuPigPlay
 
-按照本流程为 Android 车机构建 DiPlay 应用。请在仓库根目录下执行命令，`gradlew` 和 `settings.gradle.kts` 位于该目录。
+按照本流程为 Android 车机构建 TuPigPlay 应用。请在仓库根目录下执行命令，`gradlew` 和 `settings.gradle.kts` 位于该目录。
 
-Use this procedure to build the DiPlay app for an Android head unit. Run the commands from the repository root, where `gradlew` and `settings.gradle.kts` are located.
+Use this procedure to build the TuPigPlay app for an Android head unit. Run the commands from the repository root, where `gradlew` and `settings.gradle.kts` are located.
 
 ## 选择应用 / Select the application
 
-本仓库包含多个 Android 应用。选择 `mobile` 来构建 DiPlay 主应用。
+本仓库包含多个 Android 应用。选择 `mobile` 来构建 TuPigPlay 主应用。
 
-This repository contains several Android applications. Select `mobile` to build the main DiPlay app.
+This repository contains several Android applications. Select `mobile` to build the main TuPigPlay app.
 
 | Gradle 模块 | 用途 | Debug APK |
 | --- | --- | --- |
-| `:mobile` | 面向 Android 车机的 DiPlay 主应用 | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
-| `:maphost` | 显示来自 DiPlay 的地图的示例应用 | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
-| `:home` | 可选的 DiPlay Home 启动器 | `samples/home/build/outputs/apk/debug/home-debug.apk` |
+| `:mobile` | 面向 Android 车机的 TuPigPlay 主应用 | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
+| `:maphost` | 显示来自 TuPigPlay 的地图的示例应用 | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
+| `:home` | 可选的 TuPigPlay Home 启动器 | `samples/home/build/outputs/apk/debug/home-debug.apk` |
 | `:automotive` | 从 xcertplay 继承的独立 Android Automotive 应用 | `automotive/build/outputs/apk/debug/automotive-debug.apk` |
 
 | Gradle module | Purpose | Debug APK |
 | --- | --- | --- |
-| `:mobile` | Main DiPlay app for Android head units | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
-| `:maphost` | Sample application that displays a map from DiPlay | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
-| `:home` | Optional DiPlay Home launcher | `samples/home/build/outputs/apk/debug/home-debug.apk` |
+| `:mobile` | Main TuPigPlay app for Android head units | `mobile/build/outputs/apk/debug/mobile-debug.apk` |
+| `:maphost` | Sample application that displays a map from TuPigPlay | `samples/maphost/build/outputs/apk/debug/maphost-debug.apk` |
+| `:home` | Optional TuPigPlay Home launcher | `samples/home/build/outputs/apk/debug/home-debug.apk` |
 | `:automotive` | Separate Android Automotive application inherited from xcertplay | `automotive/build/outputs/apk/debug/automotive-debug.apk` |
 
 `:common` 和 `:shared` 模块是库，应用会使用这些库。
 
 The `:common` and `:shared` modules are libraries. The applications use these libraries.
 
-如果你安装的应用是 **DiPlay map host**，说明你选择了 `:maphost` 或其 APK。构建 `:mobile` 并选择 `mobile-debug.apk` 即可安装主应用。诸如 `./gradlew assembleDebug` 这样的命令可能同时构建多个应用；请在每条构建命令中使用模块名来指定所需的应用。
+如果你安装的应用是 **TuPigPlay map host**，说明你选择了 `:maphost` 或其 APK。构建 `:mobile` 并选择 `mobile-debug.apk` 即可安装主应用。诸如 `./gradlew assembleDebug` 这样的命令可能同时构建多个应用；请在每条构建命令中使用模块名来指定所需的应用。
 
-If the installed app is **DiPlay map host**, you selected `:maphost` or its APK. Build `:mobile` and select `mobile-debug.apk` to install the main app. A command such as `./gradlew assembleDebug` can build more than one application; use the module name in each build command to select the required application.
+If the installed app is **TuPigPlay map host**, you selected `:maphost` or its APK. Build `:mobile` and select `mobile-debug.apk` to install the main app. A command such as `./gradlew assembleDebug` can build more than one application; use the module name in each build command to select the required application.
 
 ## 准备构建环境 / Prepare the build environment
 
@@ -154,9 +154,9 @@ Run the unit tests, lint checks, and main debug build:
 ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :mobile:lintDebug :mobile:assembleDebug
 ```
 
-确认 Gradle 报告 `BUILD SUCCESSFUL`。完整的 CI 流程见 [DiPlay workflow](../.github/workflows/diplay.yml)：其 `unit-test` job 运行测试与 lint 检查，随后 `build-apk` 为 `mobile`、`home` 和 `maphost` 应用构建 debug APK。
+确认 Gradle 报告 `BUILD SUCCESSFUL`。完整的 CI 流程见 [TuPigPlay workflow](../.github/workflows/diplay.yml)：其 `unit-test` job 运行测试与 lint 检查，随后 `build-apk` 为 `mobile`、`home` 和 `maphost` 应用构建 debug APK。
 
-Check that Gradle reports `BUILD SUCCESSFUL`. For the complete CI procedure, see [the DiPlay workflow](../.github/workflows/diplay.yml): its `unit-test` job runs the tests and lint checks, and `build-apk` then builds the debug APKs for the `mobile`, `home` and `maphost` applications.
+Check that Gradle reports `BUILD SUCCESSFUL`. For the complete CI procedure, see [the TuPigPlay workflow](../.github/workflows/diplay.yml): its `unit-test` job runs the tests and lint checks, and `build-apk` then builds the debug APKs for the `mobile`, `home` and `maphost` applications.
 
 ## 构建独立车载测试 APK / Build a standalone car-test APK
 
@@ -238,7 +238,7 @@ The public source archive matches the release tag. It excludes runtime identitie
 
 | 症状 | 处理 |
 | --- | --- |
-| 安装的应用是 DiPlay map host | 在 Android Studio 中选择 `mobile`，从 `mobile` 输出目录构建并安装 APK |
+| 安装的应用是 TuPigPlay map host | 在 Android Studio 中选择 `mobile`，从 `mobile` 输出目录构建并安装 APK |
 | Gradle 找不到 Android SDK | 设置 `ANDROID_HOME`，或设置 `local.properties` 中的 `sdk.dir` 值 |
 | 缺少所需的 SDK 或 NDK 组件 | 用 SDK Manager 安装列表中的组件 |
 | Java 或 Gradle JDK 版本不正确 | 将终端 JDK 和 Android Studio Gradle JDK 设为 Java 25 |
@@ -248,7 +248,7 @@ The public source archive matches the release tag. It excludes runtime identitie
 
 | Symptom | Action |
 | --- | --- |
-| Installed app is DiPlay map host | Select `mobile` in Android Studio. Build and install the APK from the `mobile` output directory. |
+| Installed app is TuPigPlay map host | Select `mobile` in Android Studio. Build and install the APK from the `mobile` output directory. |
 | Gradle cannot find the Android SDK | Set `ANDROID_HOME` or the `sdk.dir` value in `local.properties`. |
 | A required SDK or NDK package is absent | Install the listed package with SDK Manager. |
 | Java or Gradle JDK version is incorrect | Set the terminal JDK and Android Studio Gradle JDK to Java 25. |

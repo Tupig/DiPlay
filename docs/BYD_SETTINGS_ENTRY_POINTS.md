@@ -1,7 +1,7 @@
 # BYD DiLink 1.0 settings entry points (Android 7.1)
 
 Firmware audit of DiLink 1.0 (BYD Song Pro 2019, platform MSM8953 / Android 7.1.2, package
-`VP128_1.38.2103120.14.2103090.zip`) covering every screen DiPlay opens through a settings intent.
+`VP128_1.38.2103120.14.2103090.zip`) covering every screen TuPigPlay opens through a settings intent.
 
 The car ships no AOSP `Settings` package. Its settings UI is `VehicleSettings`
 (`com.byd.vehiclesettings`, `priv-app/VehicleSettings`), and that app registers a decoy activity for
@@ -12,7 +12,7 @@ support this operation*. A `startActivity` that reaches the decoy **succeeds**, 
 the single fact that makes the ordering of intent candidates matter.
 
 This document records which actions the decoy claims, which real activity answers the rest, and what
-each of DiPlay's settings buttons should therefore send. Everything below is read out of the
+each of TuPigPlay's settings buttons should therefore send. Everything below is read out of the
 firmware image, not inferred from behaviour on the car.
 
 ## Reproducing this audit
@@ -84,16 +84,16 @@ android.settings.SHOW_ADMIN_SUPPORT_DETAILS      android.settings.REQUEST_IGNORE
 android.settings.IGNORE_BACKGROUND_DATA_RESTRICTIONS_SETTINGS
 ```
 
-## The four actions DiPlay sends that are on the list
+## The four actions TuPigPlay sends that are on the list
 
-| Action | Where DiPlay sends it | Status |
+| Action | Where TuPigPlay sends it | Status |
 |---|---|---|
 | `android.settings.BLUETOOTH_SETTINGS` | `openBluetoothSettings` fallback | explicit component first, so the decoy is never reached |
 | `android.settings.APPLICATION_DEVELOPMENT_SETTINGS` | `openDeveloperOptions` fallback | idem |
 | `android.settings.WIRELESS_SETTINGS` | `openCarWifiSettings` fallback | **reached on every hotspot button press** |
 | `android.settings.USAGE_ACCESS_SETTINGS` | the small-window "grant access" button | **reached, and has no replacement** |
 
-## The actions DiPlay sends that are not on the list
+## The actions TuPigPlay sends that are not on the list
 
 These work as written. The real screen answers the standard action, so no explicit component is
 required and an added one would only be a second code path to keep correct.
@@ -145,7 +145,7 @@ not an app-drawer entry — it is reachable only by explicit component, which is
 
 ## Accessibility (辅助功能): the screen exists, nothing opens it
 
-DiPlay's USB auto-confirm needs the driver to enable `UsbAutoConfirmService` under accessibility.
+TuPigPlay's USB auto-confirm needs the driver to enable `UsbAutoConfirmService` under accessibility.
 The car does have that screen, and the user-visible label is **辅助功能** (`system_accessibility_title`;
 the string is not translated as 无障碍 anywhere in the resources, which is why searching for the
 latter finds nothing):
@@ -178,7 +178,7 @@ It is nevertheless unreachable on this firmware, for four independent reasons:
    `com.baidu.input/com.baidu.acs.service.AcsService` (百度输入法). There is no AOSP `Settings`
    package and no other accessibility screen.
 
-So on DiLink 1.0 the UI route to enabling DiPlay's accessibility service does not exist, and
+So on DiLink 1.0 the UI route to enabling TuPigPlay's accessibility service does not exist, and
 `UsbAutoConfirmService.openSettings` cannot succeed — it will try the standard action
 (`SecurityException`), then `com.byd.systemsettings` (absent), then `com.android.settings` (absent),
 and return `false`. The ADB route the project already uses —
@@ -187,7 +187,7 @@ and return `false`. The ADB route the project already uses —
 [UsbPermissionSetup.kt](../common/src/main/java/com/shilapi/xcertplay/UsbPermissionSetup.kt) — is the
 only one that works here and should be treated as the primary path on this firmware, not a fallback.
 
-## What DiPlay should take from this
+## What TuPigPlay should take from this
 
 The one rule worth carrying forward is that an explicit component must come before any standard action
 in a candidate list, and that `startActivity` returning without a throw is not evidence the driver saw

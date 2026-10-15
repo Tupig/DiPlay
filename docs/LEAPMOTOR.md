@@ -1,8 +1,8 @@
 # Leapmotor（零跑）说明 / Leapmotor notes
 
-**未经验证。** 目前还没有 Leapmotor 车机运行过 DiPlay。本页汇总了在为 2024 款 Leapmotor C11 增程版（LeapOS 3.21.40）做准备期间收集到的、已公开的零跑 C 系列安装事实。下文每一条都来自 OEM 或社区渠道，均不构成 DiPlay 兼容性承诺。在依赖任何一步之前，请先在车上逐项确认，并先阅读[保修警告](#保修--warranty)。
+**未经验证。** 目前还没有 Leapmotor 车机运行过 TuPigPlay。本页汇总了在为 2024 款 Leapmotor C11 增程版（LeapOS 3.21.40）做准备期间收集到的、已公开的零跑 C 系列安装事实。下文每一条都来自 OEM 或社区渠道，均不构成 TuPigPlay 兼容性承诺。在依赖任何一步之前，请先在车上逐项确认，并先阅读[保修警告](#保修--warranty)。
 
-**Unvalidated.** No Leapmotor head unit has run DiPlay. This page collects published Leapmotor C-series install facts gathered while preparing a 2024 Leapmotor C11 EREV on LeapOS 3.21.40. Every item below is OEM- or community-sourced and none of it is a DiPlay compatibility claim. Confirm each step on the car before relying on it, and read the [warranty warning](#保修--warranty) first.
+**Unvalidated.** No Leapmotor head unit has run TuPigPlay. This page collects published Leapmotor C-series install facts gathered while preparing a 2024 Leapmotor C11 EREV on LeapOS 3.21.40. Every item below is OEM- or community-sourced and none of it is a TuPigPlay compatibility claim. Confirm each step on the car before relying on it, and read the [warranty warning](#保修--warranty) first.
 
 ## 应用白名单 / The application whitelist
 
@@ -137,11 +137,11 @@ The failure text of each attempt is the evidence. "需要白名单" at baseline 
 
 Consequences if it works, before you install:
 
-- DiPlay 会以其他厂商的包名安装，在应用列表中与该应用无法区分。
+- TuPigPlay 会以其他厂商的包名安装，在应用列表中与该应用无法区分。
 - 在类似的车机上，被认可的包会被视为系统应用而无法卸载；需要恢复出厂设置才能移除。
 - 只要白名单发生变化，或 OTA 加入证书校验（至少一个 2026 年的系统版本已经这样做），该对应关系就会失效。
 
-- DiPlay is installed under another vendor's package name and is indistinguishable from that application in the app list.
+- TuPigPlay is installed under another vendor's package name and is indistinguishable from that application in the app list.
 - On comparable head units an approved package is treated as a system application and cannot be uninstalled; a factory reset is required to remove it.
 - The mapping is invalidated whenever the whitelist changes or the OTA adds certificate checking, which at least one 2026 build has done.
 
@@ -163,17 +163,17 @@ Consequences if it works, before you install:
 
 ## ADB
 
-运行 DiPlay 不需要 ADB。它只对无法满足白名单的车机有意义。
+运行 TuPigPlay 不需要 ADB。它只对无法满足白名单的车机有意义。
 
-ADB is not required to run DiPlay. It matters only for head units whose whitelist cannot be satisfied.
+ADB is not required to run TuPigPlay. It matters only for head units whose whitelist cannot be satisfied.
 
 历史观察（更早的系统版本）：iPhone 热点网段 `172.20.10.0/28` 上有一个主机在 5555 端口响应 `unauthorized`，且从未出现过授权提示。这更像是遗留可达的 Leapmotor 服务网 ADB，而不是用户可启用的调试端口。
 
 Earlier observation (on an earlier system build): the iPhone hotspot range `172.20.10.0/28` exposes a host on port 5555 answering `unauthorized` with no authorization prompt ever shown. That is consistent with a Leapmotor service-network ADB left reachable, not with a user-enableable debug port.
 
-当前目标车辆已启用 ADB（2026-10 确认），DiPlay 的零跑 ADB 功能——热点自动开启、车速读取（#8）——在这辆车上可用。此前「公开渠道没有已知方法可在 LeapOS 3.x 上启用 ADB」的结论对当前车辆不再成立；若你的车机没有 ADB，这些功能保持降级，不影响 CarPlay 主功能。
+当前目标车辆已启用 ADB（2026-10 确认），TuPigPlay 的零跑 ADB 功能——热点自动开启、车速读取（#8）——在这辆车上可用。此前「公开渠道没有已知方法可在 LeapOS 3.x 上启用 ADB」的结论对当前车辆不再成立；若你的车机没有 ADB，这些功能保持降级，不影响 CarPlay 主功能。
 
-The current target vehicle has ADB enabled (confirmed 2026-10), and DiPlay's Leapmotor ADB features — automatic hotspot and vehicle-speed reading (#8) — work on it. The earlier conclusion that no public method enables ADB on LeapOS 3.x no longer holds for this vehicle; on a head unit without ADB those features stay degraded and CarPlay itself is unaffected.
+The current target vehicle has ADB enabled (confirmed 2026-10), and TuPigPlay's Leapmotor ADB features — automatic hotspot and vehicle-speed reading (#8) — work on it. The earlier conclusion that no public method enables ADB on LeapOS 3.x no longer holds for this vehicle; on a head unit without ADB those features stay degraded and CarPlay itself is unaffected.
 
 ## 车速命令标定 / Calibrating the speed command
 

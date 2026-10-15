@@ -84,23 +84,23 @@ class UsbAutoConfirmServiceTest {
     }
 
     @Test fun otherSystemDialogsNamingDiPlayAreLeftAlone() {
-        assertFalse(UsbAutoConfirmService.isTargetPrompt("Start recording or casting with DiPlay?", "DiPlay"))
+        assertFalse(UsbAutoConfirmService.isTargetPrompt("Start recording or casting with DiPlay?", "TuPigPlay"))
         assertFalse(UsbAutoConfirmService.isTargetPrompt(
-            "DiPlay will have access to all of the information that is visible on your screen", "DiPlay",
+            "DiPlay will have access to all of the information that is visible on your screen", "TuPigPlay",
         ))
-        assertFalse(UsbAutoConfirmService.isTargetPrompt("要开始使用DiPlay录制或投放内容吗？", "DiPlay"))
+        assertFalse(UsbAutoConfirmService.isTargetPrompt("要开始使用DiPlay录制或投放内容吗？", "TuPigPlay"))
     }
 
     @Test fun promptMustNameDiPlayInEveryAndroidWording() {
         // Android 7.1 and 10+ wording, in English and Chinese (#409, #521).
-        assertTrue(UsbAutoConfirmService.isTargetPrompt("Allow the app DiPlay to access the USB device?", "DiPlay"))
-        assertTrue(UsbAutoConfirmService.isTargetPrompt("允许应用“DiPlay”访问该USB设备吗？", "DiPlay"))
-        assertTrue(UsbAutoConfirmService.isTargetPrompt("Allow DiPlay to access iPhone?", "DiPlay"))
-        assertTrue(UsbAutoConfirmService.isTargetPrompt("要允许DiPlay访问iPhone吗？", "DiPlay"))
-        assertTrue(UsbAutoConfirmService.isTargetPrompt("Always open DiPlay when iPhone is connected", "DiPlay"))
-        assertFalse(UsbAutoConfirmService.isTargetPrompt("Allow CarPlay access to iPhone?", "DiPlay"))
-        assertFalse(UsbAutoConfirmService.isTargetPrompt("Allow FakeDiPlay to access iPhone?", "DiPlay"))
-        assertFalse(UsbAutoConfirmService.isTargetPrompt("要允许DiPlayer访问iPhone吗？", "DiPlay"))
+        assertTrue(UsbAutoConfirmService.isTargetPrompt("Allow the app TuPigPlay to access the USB device?", "TuPigPlay"))
+        assertTrue(UsbAutoConfirmService.isTargetPrompt("允许应用“TuPigPlay”访问该USB设备吗？", "TuPigPlay"))
+        assertTrue(UsbAutoConfirmService.isTargetPrompt("Allow TuPigPlay to access iPhone?", "TuPigPlay"))
+        assertTrue(UsbAutoConfirmService.isTargetPrompt("要允许TuPigPlay访问iPhone吗？", "TuPigPlay"))
+        assertTrue(UsbAutoConfirmService.isTargetPrompt("Always open TuPigPlay when iPhone is connected", "TuPigPlay"))
+        assertFalse(UsbAutoConfirmService.isTargetPrompt("Allow CarPlay access to iPhone?", "TuPigPlay"))
+        assertFalse(UsbAutoConfirmService.isTargetPrompt("Allow FakeDiPlay to access iPhone?", "TuPigPlay"))
+        assertFalse(UsbAutoConfirmService.isTargetPrompt("要允许DiPlayer访问iPhone吗？", "TuPigPlay"))
         assertFalse(UsbAutoConfirmService.isTargetPrompt("Allow USB access?", ""))
     }
 

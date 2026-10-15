@@ -4,9 +4,9 @@ iPhone 可能收到了可用的热点凭据，却无法自动加入。如果它�
 
 An iPhone can receive usable hotspot credentials yet fail to join automatically. If it leaves its current Wi-Fi network, but selecting the receiver's hotspot manually starts CarPlay without a password prompt, distinguish that association failure from a failure after the Wi-Fi link is established.
 
-先按 [Apple 的 CarPlay 故障排查指引](https://support.apple.com/en-us/105109) 检查 CarPlay 网络的 Bluetooth、Wi-Fi 和"自动加入"。请在停车状态下复现问题，并附上一份经过审阅的 DiPlay 诊断报告，其中包含接收端固件/Android 版本、手机/iOS 版本、连接方式以及手动选择是否成功。密码、完整的网络抓包、地址和私有设备备份都不要出现在公开报告里。
+先按 [Apple 的 CarPlay 故障排查指引](https://support.apple.com/en-us/105109) 检查 CarPlay 网络的 Bluetooth、Wi-Fi 和"自动加入"。请在停车状态下复现问题，并附上一份经过审阅的 TuPigPlay 诊断报告，其中包含接收端固件/Android 版本、手机/iOS 版本、连接方式以及手动选择是否成功。密码、完整的网络抓包、地址和私有设备备份都不要出现在公开报告里。
 
-First check Bluetooth, Wi-Fi and Auto-Join for the CarPlay network, as described in [Apple's CarPlay troubleshooting](https://support.apple.com/en-us/105109). Reproduce while parked and share a reviewed DiPlay diagnostic report with the receiver firmware/Android version, phone/iOS version, connection mode and whether manual selection succeeds. Keep passwords, full network captures, addresses and private device backups out of public reports.
+First check Bluetooth, Wi-Fi and Auto-Join for the CarPlay network, as described in [Apple's CarPlay troubleshooting](https://support.apple.com/en-us/105109). Reproduce while parked and share a reviewed TuPigPlay diagnostic report with the receiver firmware/Android version, phone/iOS version, connection mode and whether manual selection succeeds. Keep passwords, full network captures, addresses and private device backups out of public reports.
 
 ## 文档记载的要求 / Documented requirements
 
@@ -14,9 +14,9 @@ First check Bluetooth, Wi-Fi and Auto-Join for the CarPlay network, as described
 
 [Apple's WWDC 2017 wireless CarPlay session](https://developer.apple.com/videos/play/wwdc2017/717/) describes automatic joining after credential exchange and requires Apple Device and Interworking information elements in the access point's broadcasts. Sending Wi-Fi credentials through iAP2 alone does not demonstrate that the AP advertises those elements.
 
-[Apple 的 WWDC 2023 连接性讨论](https://developer.apple.com/videos/play/wwdc2023/10150/) 指出简化版端点交换自 iOS 14 起支持。目前没有任何经过审阅的公开 Apple 通告把下述失败认定为 iOS 14.0.1 独有的缺陷。这些公开演讲既没有对 DiPlay 做认证，也没有涵盖私有配件规范的全部细节。
+[Apple 的 WWDC 2023 连接性讨论](https://developer.apple.com/videos/play/wwdc2023/10150/) 指出简化版端点交换自 iOS 14 起支持。目前没有任何经过审阅的公开 Apple 通告把下述失败认定为 iOS 14.0.1 独有的缺陷。这些公开演讲既没有对 TuPigPlay 做认证，也没有涵盖私有配件规范的全部细节。
 
-[Apple's WWDC 2023 connectivity discussion](https://developer.apple.com/videos/play/wwdc2023/10150/) states that the simplified endpoint exchange supports iOS 14 onward. No reviewed public Apple notice identifies the failure below as an iOS 14.0.1-specific defect. These public presentations do not certify DiPlay or describe every private accessory specification detail.
+[Apple's WWDC 2023 connectivity discussion](https://developer.apple.com/videos/play/wwdc2023/10150/) states that the simplified endpoint exchange supports iOS 14 onward. No reviewed public Apple notice identifies the failure below as an iOS 14.0.1-specific defect. These public presentations do not certify TuPigPlay or describe every private accessory specification detail.
 
 ## 受控互操作性观察 / Controlled interoperability observation
 
@@ -24,16 +24,16 @@ First check Bluetooth, Wi-Fi and Auto-Join for the CarPlay network, as described
 
 A controlled comparison used the following receiver and phone:
 
-- DiPlay **0.2.12**，包名 `com.shihab.diplay`，原始安装版本。
+- TuPigPlay **0.2.12**，包名 `com.shihab.diplay`，原始安装版本。
 - iPhone **8 Plus / iOS 14.0.1**，热点"自动加入"已启用。
-- OnePlus **7T Pro / Android 13 (API 33)**，WPA2 热点，实际工作在 **5220 MHz / 信道 44**。这是 DiPlay 的 BYD 支持范围之外的一次接收端互操作性观察；它并不意味着增加了 OnePlus 支持。
-- DiPlay 广播的信道为 **0**，因为其应用无法读出有效信道。Android 存储的信道同样是 0（自动选择）。
+- OnePlus **7T Pro / Android 13 (API 33)**，WPA2 热点，实际工作在 **5220 MHz / 信道 44**。这是 TuPigPlay 的 BYD 支持范围之外的一次接收端互操作性观察；它并不意味着增加了 OnePlus 支持。
+- TuPigPlay 广播的信道为 **0**，因为其应用无法读出有效信道。Android 存储的信道同样是 0（自动选择）。
 - 手动加入无需输入密码即可成功。重命名热点可以复现自动加入失败，而手动加入依然可用。
 
-- DiPlay **0.2.12**, package `com.shihab.diplay`, original installed release.
+- TuPigPlay **0.2.12**, package `com.shihab.diplay`, original installed release.
 - iPhone **8 Plus / iOS 14.0.1**, with hotspot Auto-Join enabled.
-- OnePlus **7T Pro / Android 13 (API 33)**, WPA2 hotspot, actual **5220 MHz / channel 44**. This is a receiver interoperability observation outside DiPlay's BYD support scope; it does not add OnePlus support.
-- DiPlay advertised channel **0**, because its app could not read the effective channel. Android's stored channel was also 0 (automatic selection).
+- OnePlus **7T Pro / Android 13 (API 33)**, WPA2 hotspot, actual **5220 MHz / channel 44**. This is a receiver interoperability observation outside TuPigPlay's BYD support scope; it does not add OnePlus support.
+- TuPigPlay advertised channel **0**, because its app could not read the effective channel. Android's stored channel was also 0 (automatic selection).
 - Manual joining worked without asking for a password. A renamed hotspot reproduced the automatic-join failure, and manual joining still worked.
 
 全新的 Windows Native Wi-Fi BSS 扫描显示存在 Interworking IE **107**，但没有 Apple 厂商元素。原本的厂商元素是 WMM（`00:50:f2`，类型 2）。这次对比使用了相同的接收端、手机、发布版本和已保存的热点配置：
@@ -80,9 +80,9 @@ Android 13 exposes vendor elements through a privileged system API rather than a
 
 ## 自选式应用内修复 / Opt-in app repair
 
-**Connection setup → Built-in car hotspot → Check hotspot repair** 会运行 DiPlay 授权的本地 ADB/app_process 辅助程序。打开该界面、应用恢复前台或启动 CarPlay 都不会运行这一修复。Check 会读取已保存的配置并准备一份私有的完整回滚快照；它不会改动热点。检查成功后，**Add automatic-join information** 需要单独一次确认。这是基于能力的实验性 BYD 工作，而不是对新车辆品牌的支持。
+**Connection setup → Built-in car hotspot → Check hotspot repair** 会运行 TuPigPlay 授权的本地 ADB/app_process 辅助程序。打开该界面、应用恢复前台或启动 CarPlay 都不会运行这一修复。Check 会读取已保存的配置并准备一份私有的完整回滚快照；它不会改动热点。检查成功后，**Add automatic-join information** 需要单独一次确认。这是基于能力的实验性 BYD 工作，而不是对新车辆品牌的支持。
 
-**Connection setup → Built-in car hotspot → Check hotspot repair** runs DiPlay's authorized local-ADB/app_process helper. Opening the screen, resuming the app or starting CarPlay does not run this repair. Check reads the saved configuration and prepares a private full rollback snapshot; it does not change the hotspot. After a successful check, **Add automatic-join information** requires a separate confirmation. This is experimental, capability-based BYD work, not support for a new vehicle brand.
+**Connection setup → Built-in car hotspot → Check hotspot repair** runs TuPigPlay's authorized local-ADB/app_process helper. Opening the screen, resuming the app or starting CarPlay does not run this repair. Check reads the saved configuration and prepares a private full rollback snapshot; it does not change the hotspot. After a successful check, **Add automatic-join information** requires a separate confirmation. This is experimental, capability-based BYD work, not support for a new vehicle brand.
 
 该辅助程序要求 Android 13/API 33 或更高版本、固件提供完整的 `SoftApConfiguration` getter/setter 与厂商元素/复制 API、权威的热点 5 GHz 能力（含所支持的信道），以及一份已保存的、**仅 5 GHz** 的频段配置（且该配置已被框架标记为用户已配置）。它会拒绝 2.4 GHz、自动/混合频段、桥接 AP、6/60 GHz，以及含糊或冲突的 Apple Device 元素。它不改动频段、凭据、安全设置、信道、地址或 Interworking IE 107。已有的厂商元素按原顺序保留；若已存在完全相同的 Apple 元素，则保持原样，不声称拥有其回滚权。任何写入之前，都会先将副本与原始配置做比对。
 
@@ -96,9 +96,9 @@ Default/non-user configurations are refused before a backup or write. Android 13
 
 Ordinary app permissions, including WRITE_SETTINGS, are insufficient for this API on many builds. LocalAdb supports **plain localhost:5555 ADB only**. It does not implement Android's TLS wireless-debugging pairing protocol. Check can ask for ADB authorization; Apply/Restore never request authorization in the background. A receiver accessible only through a computer's paired TLS ADB connection is not automatically accessible to this app path. No root command, adbd reconfiguration or TLS downgrade is performed.
 
-在 Apply 或 Restore 之前，请停车、断开 CarPlay，并在车机设置中关闭热点。这两次写入都要求一份新鲜、权威且处于**已禁用**状态的 AP 状态；启动中/停止中/失败/隐藏状态都会被拒绝。DiPlay 绝不会停止或重启热点。之后请自行打开热点以更新广播，然后验证全新扫描与自动加入。已保存配置的回读，并不能证明某个 OEM HAL 真的广播了该元素，也不能证明 CarPlay 加入成功。
+在 Apply 或 Restore 之前，请停车、断开 CarPlay，并在车机设置中关闭热点。这两次写入都要求一份新鲜、权威且处于**已禁用**状态的 AP 状态；启动中/停止中/失败/隐藏状态都会被拒绝。TuPigPlay 绝不会停止或重启热点。之后请自行打开热点以更新广播，然后验证全新扫描与自动加入。已保存配置的回读，并不能证明某个 OEM HAL 真的广播了该元素，也不能证明 CarPlay 加入成功。
 
-While parked, disconnect CarPlay and turn the hotspot off in car settings before Apply or Restore. Both writes require a fresh, authoritative **disabled** AP state; starting/stopping/failed/hidden states are refused. DiPlay never stops or restarts the hotspot. Turn it on yourself afterward to update broadcasts, then verify a fresh scan and automatic joining. Saved-configuration readback is not proof that an OEM HAL broadcasts the element or that CarPlay joins successfully.
+While parked, disconnect CarPlay and turn the hotspot off in car settings before Apply or Restore. Both writes require a fresh, authoritative **disabled** AP state; starting/stopping/failed/hidden states are refused. TuPigPlay never stops or restarts the hotspot. Turn it on yourself afterward to update broadcasts, then verify a fresh scan and automatic joining. Saved-configuration readback is not proof that an OEM HAL broadcasts the element or that CarPlay joins successfully.
 
 ### 回滚与不确定结果 / Rollback and uncertain outcomes
 
