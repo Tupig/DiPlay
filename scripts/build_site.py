@@ -2,13 +2,36 @@
 """Generate the static GitHub Pages editions, one per language in content.json; no runtime dependencies."""
 from pathlib import Path
 import json
+import re
 from html import escape as e
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
+VERSION_FILE = ROOT / 'version.properties'
+VERSION_KEYS = ('VERSION_MAJOR', 'VERSION_MINOR', 'VERSION_PATCH', 'VERSION_BUILD')
+
+
+def read_version(path):
+    values = {}
+    for raw_line in path.read_text(encoding='utf-8').splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = (part.strip() for part in line.split('=', 1))
+        if key in VERSION_KEYS:
+            if not re.fullmatch(r'[0-9]+', value):
+                raise ValueError(f'{key} must be a non-negative integer')
+            values[key] = value
+
+    missing = [key for key in VERSION_KEYS if key not in values]
+    if missing:
+        raise ValueError(f'missing version.properties keys: {", ".join(missing)}')
+    return '.'.join(values[key] for key in VERSION_KEYS)
+
+
 data = json.loads((SITE / 'content.json').read_text(encoding='utf-8'))
 BASE = 'https://tupig.github.io/DiPlay/'
 REPO = 'https://github.com/Tupig/DiPlay'
-VERSION = '0.0.0.1'
+VERSION = read_version(VERSION_FILE)
 RELEASE = REPO + f'/releases/tag/v{VERSION}'
 DOWNLOAD = REPO + f'/releases/download/v{VERSION}/TuPigPlay-{VERSION}.apk'
 for lang, d in data.items():
