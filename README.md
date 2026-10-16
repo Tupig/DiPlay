@@ -168,8 +168,8 @@ For the full build guide (module selection, environment setup, the standalone ca
 ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :mobile:lintDebug :mobile:assembleDebug
 ```
 
-> 💡 提示：Debug 应用 ID 为 `com.shihab.diplay.hudtest`，Release 为 `com.shihab.diplay`；可用 `-PdiplayApplicationId=` 覆盖应用 ID，详见 [BUILD.md](docs/BUILD.md)。
-> Tip: the debug application ID is `com.shihab.diplay.hudtest` and the release one is `com.shihab.diplay`; the application ID can be overridden with `-PdiplayApplicationId=` — see [BUILD.md](docs/BUILD.md).
+> 💡 提示：Debug 应用 ID 为 `com.tupig.tupigplay.hudtest`，Release 为 `com.tupig.tupigplay`；可用 `-PtupigplayApplicationId=` 覆盖应用 ID，详见 [BUILD.md](docs/BUILD.md)。
+> Tip: the debug application ID is `com.tupig.tupigplay.hudtest` and the release one is `com.tupig.tupigplay`; the application ID can be overridden with `-PtupigplayApplicationId=` — see [BUILD.md](docs/BUILD.md).
 
 ## ❓ 常见问题 / FAQ
 

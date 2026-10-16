@@ -16,7 +16,7 @@
 ---
 
 ## Phase 1: 核心构建系统与白名单包名支持
-- [x] 1.1 修改 `mobile/build.gradle.kts` 支持 `-PdiplayApplicationId` 参数
+- [x] 1.1 修改 `mobile/build.gradle.kts` 支持 `-PtupigplayApplicationId` 参数
 - [x] 1.2 验证白名单包名构建：喜马拉雅、B站、QQ音乐三选一
 - [x] 1.3 添加构建脚本 `build_leapmotor.sh` 一键构建
 - [x] 1.4 验证 APK 包名、签名、安装流程

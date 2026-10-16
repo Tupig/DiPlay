@@ -108,13 +108,13 @@ apkanalyzer manifest application-id path/to/app.apk
 
 ## 本 fork 中的包名实验 / Package-name experiment in this fork
 
-`mobile` 接受一个可选的 Gradle 属性，用于替换最终的应用 ID。它在 CI 中未设置，因此普通构建以及 CI 命令中的所有测试都不受影响。设置后，debug 的 `.hudtest` 后缀会被去掉，APK 将完全使用你所要求的包名。
+`mobile` 接受一个可选的 Gradle 属性，用于替换最终的应用 ID。CI 的检查命令（单测、lint、普通 debug 构建）不设置它，因此不受影响；`build-apk` job 仅在构建 gallery3d 变体时设置它（见下节）。设置后，debug 的 `.hudtest` 后缀会被去掉，APK 将完全使用你所要求的包名。
 
-`mobile` accepts an optional Gradle property that replaces the final application ID. It is unset in CI, so ordinary builds and every test in the CI command are unaffected. When it is set the debug `.hudtest` suffix is dropped, so the APK carries exactly the requested package name.
+`mobile` accepts an optional Gradle property that replaces the final application ID. The CI checks (unit tests, lint, ordinary debug builds) never set it and are unaffected; the `build-apk` job sets it only when building the gallery3d variant (next section). When it is set the debug `.hudtest` suffix is dropped, so the APK carries exactly the requested package name.
 
 ```sh
-DIPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets \
-  ./gradlew :mobile:assembleDebug -PdiplayApplicationId=com.example.app
+TUPIGPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets \
+  ./gradlew :mobile:assembleDebug -PtupigplayApplicationId=com.example.app
 ```
 
 该实验用于判断白名单是否以包名为键：
@@ -144,6 +144,59 @@ Consequences if it works, before you install:
 - TuPigPlay is installed under another vendor's package name and is indistinguishable from that application in the app list.
 - On comparable head units an approved package is treated as a system application and cannot be uninstalled; a factory reset is required to remove it.
 - The mapping is invalidated whenever the whitelist changes or the OTA adds certificate checking, which at least one 2026 build has done.
+
+## gallery3d 变体（CI 构建伪装包）/ The gallery3d variant (CI-built disguise package)
+
+用户实测可用包（`DiPlay包名gallery.apk`，装上零跑 C11 跑过 CarPlay）实证了这条路：包名改为白名单内的 `com.android.gallery3d`（Android 系统图库），并用 AOSP 公开平台测试密钥（`CN=Android, O=Android`）签名，LeapOS 3.x 接受该签名。本 fork 把它产品化为 CI 产物。
+
+A user-verified package (`DiPlay包名gallery.apk`, installed and running CarPlay on a Leapmotor C11) proved the path: rename the package to the whitelisted `com.android.gallery3d` (Android's stock gallery) and sign with the public AOSP platform test key (`CN=Android, O=Android`); LeapOS 3.x accepts that signature. This fork turns it into a CI artifact.
+
+每次推送到 main 或 PR，`build-apk` job 会额外产出：
+
+Every push to main and every PR additionally produces in the `build-apk` job:
+
+- 产物名：`TuPigPlay-<version>-gallery3d-<短SHA>.apk`（Actions artifact，保留 7 天）
+- 包名 `com.android.gallery3d`，release 构建（非 debuggable），`versionCode`/`versionName` 来自 `version.properties`
+- 签名：AOSP 公开平台测试密钥（证书 SHA-256 `a40da80a…a71bf5dc`，与上述实测可用包的签名指纹一致）
+- **无 MFi 认证资产**：MFi 资产被 `scripts/check_public_tree.py` 禁入仓库，CI 产物只能验证构建与安装，**不能连接 CarPlay**
+
+- Artifact: `TuPigPlay-<version>-gallery3d-<shortSHA>.apk` (Actions artifact, 7-day retention)
+- Package `com.android.gallery3d`, release build (not debuggable); `versionCode`/`versionName` come from `version.properties`
+- Signed with the public AOSP platform test key (certificate SHA-256 `a40da80a…a71bf5dc`, identical to the verified package above)
+- **No MFi authentication assets**: blocked from the repository by `scripts/check_public_tree.py`, so the CI artifact verifies build and installability only and **cannot connect CarPlay**
+
+### 本地构建可连车的 gallery3d 包 / Building a connectable gallery3d package locally
+
+MFi 运行时资产只在本地存在。带资产的可连车变体在本地构建：
+
+MFi runtime assets exist only locally. Build the connectable variant locally with them:
+
+```sh
+export JAVA_HOME=<JDK 路径 / path to a JDK>
+export TUPIGPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets  # 含 offline-mfi/identity.pk8 与 certificate.p7b
+./gradlew :mobile:assembleRelease -PtupigplayApplicationId=com.android.gallery3d
+```
+
+产物为 `mobile/build/outputs/apk/release/mobile-release-unsigned.apk`。用 AOSP 测试密钥签名（密钥不入库，从 AOSP 获取 `build/target/product/security/testkey.pk8` 与 `testkey.x509.pem`）：
+
+The output is `mobile/build/outputs/apk/release/mobile-release-unsigned.apk`. Sign it with the AOSP test key (not stored in this repository; obtain `build/target/product/security/testkey.pk8` and `testkey.x509.pem` from AOSP):
+
+```sh
+BT="$ANDROID_HOME/build-tools/36.0.0"
+"$BT/zipalign" -f -p 4 mobile/build/outputs/apk/release/mobile-release-unsigned.apk gallery3d-aligned.apk
+"$BT/apksigner" sign --key testkey.pk8 --cert testkey.x509.pem --out TuPigPlay-gallery3d.apk gallery3d-aligned.apk
+"$BT/apksigner" verify --print-certs TuPigPlay-gallery3d.apk   # 应含 CN=Android, OU=Android, O=Android
+```
+
+### 冲突与升级 / Conflicts and upgrades
+
+- **同签名同包名**：本变体与实测可用包的签名指纹一致，可在其上原地升级；但旧实验包 `versionCode` 为 40030，高于本 fork 的 39，直接安装会被系统拒绝降级。先卸载旧包（设置内卸载或 `adb uninstall com.android.gallery3d`），再安装新包。
+- **系统图库冲突**：若车机自带 `com.android.gallery3d` 系统应用且签名不同，安装会以 `INSTALL_FAILED_UPDATE_INCOMPATIBLE` 失败。实测的 2024 款 C11（LeapOS 3.x）无此冲突；其他车型安装前先自查。
+- **失效风险**：白名单是系统行为，OTA 随时可能加入证书校验（至少一个 2026 年的系统版本已这样做）。届时本变体与所有包名伪装路径一并失效。
+
+- **Same signature, same package**: this variant's signing fingerprint matches the verified package, so it upgrades in place; however the old experimental package has `versionCode` 40030, higher than this fork's 39, so a direct install is rejected as a downgrade. Uninstall the old package first (from Settings or `adb uninstall com.android.gallery3d`), then install.
+- **System gallery conflict**: if the head unit ships its own `com.android.gallery3d` system app with a different signature, installation fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`. The verified 2024 C11 (LeapOS 3.x) has no such conflict; check your own model first.
+- **Invalidation risk**: the whitelist is system behavior and an OTA can add certificate checking at any time (at least one 2026 build already has). This variant then fails together with every package-disguise path.
 
 ## 已关闭的路径 / Paths that are closed
 

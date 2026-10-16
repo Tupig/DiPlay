@@ -18,6 +18,7 @@ val overrideApplicationId = providers.gradleProperty("tupigplayApplicationId").o
 // TuPigPlay fork versioning: version.properties is the single source of truth, decoupled from the
 // upstream version scheme. Bump it with ./version_increment.sh [major|minor|patch|build].
 // versionCode keeps the +38 offset so 0.0.0.1 stays compatible with the previously released code 39.
+val releaseKeystoreConfigured = providers.environmentVariable("ANDROID_KEYSTORE_PATH").isPresent
 val versionProperties = Properties().apply {
     rootProject.file("version.properties").inputStream().use { load(it) }
 }
@@ -67,8 +68,14 @@ android {
             optimization {
                 enable = false
             }
-            signingConfig = signingConfigs.getByName("release")
-            // 零跑白名单包名构建：指定 -PtupigplayApplicationId 时使用指定包名，去掉后缀
+            // 白名单伪装包名构建：指定 -PtupigplayApplicationId 且未提供发布密钥（ANDROID_KEYSTORE_PATH）
+            // 时不附加签名配置，产出未签名 APK，由 CI 用 AOSP 公开平台测试密钥签名
+            // （零跑白名单实证接受该签名）；提供了发布密钥时仍直接签名。
+            signingConfig = if (overrideApplicationId != null && !releaseKeystoreConfigured) {
+                null
+            } else {
+                signingConfigs.getByName("release")
+            }
             applicationIdSuffix = if (overrideApplicationId != null) "" else ""
         }
     }
