@@ -290,12 +290,15 @@ class SettingsBackupServerTest {
     // The same address every time: a browser remembers it, and only the code has to be typed again.
     @Test
     fun theTypedAddressKeepsItsPortFromOneOpeningToTheNext() {
-        val wanted = freePort()
-        val typed = typedServer().apply { typedPort = wanted }
+        val typed = typedServer().apply { typedPort = freePort() }
         try {
-            assertEquals(wanted, typed.start()!!.port)
+            // The requested port can be claimed between freePort() and start(). Use the port the
+            // first opening actually published, which is the address a browser will remember.
+            val first = typed.start()!!
+            val wanted = first.port
             Socket("127.0.0.1", wanted).close()
             typed.stop()
+            typed.typedPort = wanted
             assertEquals(wanted, typed.start()!!.port)
         } finally {
             typed.stop()
