@@ -11,7 +11,7 @@
 - [ ] Phase 4: 三屏显示适配（中控+仪表+副驾）
 - [ ] Phase 5: 无 ADB 环境功能降级与优化（注意：零跑有 ADB，可保留 ADB 功能）
 - [ ] Phase 6: 文档合并为中英双语单文件
-- [ ] Phase 8: 构建验证与测试
+- [ ] Phase 8: 构建验证与测试（版本机制/CI 验证链已落地，真机验收 #46/#42 与首个 release 8.4 待办）
 
 ---
 
@@ -112,12 +112,18 @@
 ---
 
 ## Phase 8: 构建验证与测试
-- [ ] 8.1 完整构建 Release APK（自动版本号递增）
-- [ ] 8.2 验证包名、签名、安装
-- [ ] 8.3 模拟器/真机测试核心流程
-- [ ] 8.4 生成最终交付物
-- [ ] 8.5 推送到主库（自动版本号递增）
-- [ ] 8.6 **项目全称：TuPigPlay**（已完成重命名）
+- [x] 8.1 版本机制与构建验证：version.properties 单一事实源 + version_increment.sh 四段式递增 + versionCode 偏移公式（M×1,000,000+m×10,000+p×100+build+38，0.0.0.1→39，#41）；release 构建路径由 CI gallery3d 段每链验证（optimization 关闭，无 R8 缺口）
+- [x] 8.2 包名/签名/安装验证（gallery3d 变体）：本地四场景签名矩阵 + AOSP testkey 指纹与实测可用包逐字节一致 + CI 产物下载复核（#39，PR #45）；普通包名真机安装留 #46
+- [ ] 8.3 真机测试核心流程：gallery3d 安装与 CarPlay 连接（#46）、轮键映射（#42）
+- [ ] 8.4 生成最终交付物：**首个 release v0.0.0.1 未发布**——站点下载按钮与应用内更新检查（UpdateClient 指 releases/latest）当前 404；可连车 APK 须本地带 MFi 资产构建后手动 gh release create（CI 无法产出，MFi 禁入仓库）
+- [x] 8.5 推送到主库：main 已建立，CI 整链全绿（push/PR/schedule 三路触发）
+
+---
+
+## 🔧 CI 工作流改进候选（梳理 #48 产出，按需开 issue 实施）
+- [ ] CI 失败通知：借鉴 TuPigGHD2Chinese CiNotify（schedule 失败创建/更新单条「[CI 失败]」issue，恢复自动关闭；push/PR 失败页内即时可见不走此渠道）
+- [ ] 发布流程脚本化：本地构建→签名验证→gh release create→SHA256 旁证一键化（与 8.4 首个 release 决策绑定）
+- [x] ~~build_site.py VERSION 与 version.properties 解耦隐患~~ → 已立 issue #49 跟踪
 
 ---
 

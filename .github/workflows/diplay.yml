@@ -26,6 +26,14 @@
 #   依赖: resolve-version → unit-test → build-apk → codeql-scan → deploy-pages
 #         每个 job 显式 needs 前序 job，任一环节失败则整链止步。
 #
+#   数据流（outputs 与下游消费的前后关系）:
+#     resolve-version.outputs.version ─→ build-apk 两个产物容器的命名（debug / gallery3d）
+#     resolve-version.outputs.site-changed ─→ deploy-pages 的 push 放行开关
+#     deploy-pages 不消费 version——站点版本由 scripts/build_site.py 内嵌 VERSION 常量
+#     自渲染（与 version.properties 独立，递增版本时须手动同步，见「版本号规则」）
+#     build-apk 的两个 artifact 仅供人工下载复核，不向下游 job 传递：
+#     codeql-scan 自行 traced build，deploy-pages 只消费 site/（部署前重新生成 HTML）
+#
 #   串行链与手动跳级的兼容（规避 needs 跳过传播）:
 #     GitHub Actions 会把 needs 的 skipped 状态向下游连锁传播：若下游 if 不含
 #     显式状态函数，skipped 的 needs 会让下游被无条件跳过，仅靠
@@ -61,6 +69,26 @@
 #                    AOSP 公开测试密钥签名；无 MFi 资产，仅验证构建与安装，不能连车）
 #   注意：CI 无法产出可连真车的 APK——MFi 认证资产被 scripts/check_public_tree.py 禁入仓库，
 #         只能由本地构建并手动发布到 Releases。
+#
+# ── 版本号规则 ───────────────────────────────────────────────
+#   version.properties 是 fork 版本的单一事实源（与上游 0.2.x 版本方案解耦）:
+#     VERSION_MAJOR.MINOR.PATCH.BUILD 四段拼为 versionName；
+#     versionCode = MAJOR×1,000,000 + MINOR×10,000 + PATCH×100 + BUILD + 38
+#     （+38 偏移：0.0.0.1 对应 code 39，保持与既有实验包的升级兼容）。
+#   递增用 ./version_increment.sh [major|minor|patch|build]，后三位满 100 进位。
+#   resolve-version 从该文件解析 versionName 并做格式校验，防非法值污染产物命名。
+#   已知解耦点：scripts/build_site.py 的 VERSION 为独立硬编码常量（渲染站点徽章与
+#   下载链接），与 version.properties 无联动，递增版本时须手动同步（改进项见 issue #49）。
+#
+# ── 发布流程（为什么没有 Release job）───────────────────────
+#   与 TuPigGHD2Chinese 的自动 Release job 模式的本质差异：MFi 认证资产禁入公开仓库
+#   （check_public_tree.py），CI 产物不含认证资产、无法连车，因此不做全自动发布。
+#   发布路径（手动）:
+#     1. 本地带资产构建：TUPIGPLAY_AUTH_ASSETS_DIR=<dir> ./gradlew :mobile:assembleRelease
+#        （流程见 docs/BUILD.md；零跑伪装包名变体见 docs/LEAPMOTOR.md「gallery3d 变体」）
+#     2. gh release create v<版本> 上传 APK + SHA256 校验值
+#   首个 release v0.0.0.1 尚未创建：站点下载按钮与应用内更新检查（UpdateClient 指
+#   releases/latest）在此之前均为 404，发布为待决策的开放事项（issue #36 范围外备注）。
 
 name: TuPigPlay CI
 
