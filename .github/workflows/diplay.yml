@@ -29,8 +29,8 @@
 #   数据流（outputs 与下游消费的前后关系）:
 #     resolve-version.outputs.version ─→ build-apk 两个产物容器的命名（debug / gallery3d）
 #     resolve-version.outputs.site-changed ─→ deploy-pages 的 push 放行开关
-#     deploy-pages 不消费 version——站点版本由 scripts/build_site.py 内嵌 VERSION 常量
-#     自渲染（与 version.properties 独立，递增版本时须手动同步，见「版本号规则」）
+#     deploy-pages 不消费 version——站点版本由 scripts/build_site.py 从 version.properties 读取
+#     自渲染与 APK 使用同一个版本事实源，递增版本后无需另改站点脚本。
 #     build-apk 的两个 artifact 仅供人工下载复核，不向下游 job 传递：
 #     codeql-scan 自行 traced build，deploy-pages 只消费 site/（部署前重新生成 HTML）
 #
@@ -77,8 +77,7 @@
 #     （+38 偏移：0.0.0.1 对应 code 39，保持与既有实验包的升级兼容）。
 #   递增用 ./version_increment.sh [major|minor|patch|build]，后三位满 100 进位。
 #   resolve-version 从该文件解析 versionName 并做格式校验，防非法值污染产物命名。
-#   已知解耦点：scripts/build_site.py 的 VERSION 为独立硬编码常量（渲染站点徽章与
-#   下载链接），与 version.properties 无联动，递增版本时须手动同步（改进项见 issue #49）。
+#   scripts/build_site.py 同样从上述四段读取站点徽章与下载链接，避免版本递增后漂移。
 #
 # ── 发布流程（为什么没有 Release job）───────────────────────
 #   与 TuPigGHD2Chinese 的自动 Release job 模式的本质差异：MFi 认证资产禁入公开仓库
