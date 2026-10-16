@@ -101,15 +101,22 @@ class SettingsBackupServer(
 
     fun stop() {
         closed = true
-        runCatching { server?.close() }
+        val listener = server
         server = null
+        val acceptThread = thread
         thread = null
+        runCatching { listener?.close() }
         connections?.shutdown()
         connections = null
         // A connection still waiting for its request would otherwise outlive the page by its timeout.
         // Walked in place: connection threads drop their own entry at any moment, and a copy taken
         // with toList() can fail when one goes between its size check and its read.
         for (socket in open) runCatching { socket.close() }
+        // Do not let a previous accept loop observe a newly started listener after a quick restart.
+        // stop() can run from that loop's idle callback, so never join the current thread.
+        if (acceptThread != null && acceptThread !== Thread.currentThread()) {
+            runCatching { acceptThread.join(STOP_JOIN_MILLIS) }
+        }
     }
 
     private fun loop() {
@@ -264,6 +271,7 @@ class SettingsBackupServer(
         private const val MAX_CONNECTIONS = 16
         const val IDLE_TIMEOUT_MILLIS = 10 * 60_000
         private const val ACCEPT_POLL_MILLIS = 250
+        private const val STOP_JOIN_MILLIS = ACCEPT_POLL_MILLIS.toLong() * 2
         private const val MAX_REQUEST = 2 shl 20
         const val EXPORT_FILE = "diplay-settings.json"
         const val REPORT_FILE = "diplay-report.txt"
