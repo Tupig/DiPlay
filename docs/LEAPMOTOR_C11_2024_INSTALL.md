@@ -70,15 +70,16 @@ cd TuPigPlay
 # 2. 准备 JDK 17+ 和 Android SDK / Prepare JDK 17+ and the Android SDK
 # 建议使用 Android Studio 自带 SDK / The Android Studio SDK is recommended
 
-# 3. 配置签名密钥（local.properties）/ Configure the signing key (local.properties)
-cat > local.properties << 'EOF'
-sdk.dir=/path/to/Android/Sdk
-diplay.keystore=/path/to/release.keystore
-diplay.keystore.password=your_keystore_password
-diplay.key.alias=your_key_alias
-diplay.key.password=your_key_password
-EOF
+# 3.（可选）配置发布签名密钥（环境变量）/ (Optional) configure the release signing key (environment variables)
+export ANDROID_KEYSTORE_PATH=/path/to/release.keystore
+export ANDROID_KEYSTORE_PASSWORD=your_keystore_password
+export ANDROID_KEY_ALIAS=your_key_alias
+export ANDROID_KEY_PASSWORD=your_key_password
 ```
+
+> **签名行为**：设置了 `ANDROID_KEYSTORE_PATH` 时，伪装包名构建直接产出已签名 APK；未设置时产出未签名 APK（`mobile-release-unsigned.apk`），需要自行签名（`zipalign` + `apksigner`）。零跑场景推荐 AOSP 公开平台测试密钥——与实测可用的 `DiPlay包名gallery.apk` 同签名，见 [LEAPMOTOR.md](LEAPMOTOR.md) 的 gallery3d 变体章节。
+
+> **Signing behavior**: with `ANDROID_KEYSTORE_PATH` set, the disguised-package build outputs a signed APK directly; without it you get an unsigned APK (`mobile-release-unsigned.apk`) that you must sign yourself (`zipalign` + `apksigner`). For Leapmotor the public AOSP platform test key is recommended — the same signature as the verified `DiPlay包名gallery.apk`; see the gallery3d variant section in [LEAPMOTOR.md](LEAPMOTOR.md).
 
 ### 构建命令（核心：指定白名单包名）/ Build commands (core: specify the whitelist package name)
 
@@ -86,22 +87,23 @@ EOF
 # 方案 A：喜马拉雅包名（推荐，成功率最高）
 # Option A: Ximalaya package name (recommended, highest success rate)
 ./gradlew :mobile:assembleRelease \
-  -PdiplayApplicationId=com.ximalaya.ting.android.car
+  -PtupigplayApplicationId=com.ximalaya.ting.android.car
 
 # 方案 B：B 站车机版包名 / Option B: bilibili car package name
 ./gradlew :mobile:assembleRelease \
-  -PdiplayApplicationId=com.bilibili.bilithings
+  -PtupigplayApplicationId=com.bilibili.bilithings
 
 # 方案 C：QQ音乐车机版包名 / Option C: QQ Music car package name
 ./gradlew :mobile:assembleRelease \
-  -PdiplayApplicationId=com.tencent.qqmusiccar
+  -PtupigplayApplicationId=com.tencent.qqmusiccar
 ```
 
 ### 输出文件 / Output files
 
 ```
 mobile/build/outputs/apk/release/
-└── TuPigPlay-{version}-release.apk   # 重命名后拷入 U 盘 / rename, then copy to the U disk
+├── mobile-release.apk             # 配置了发布密钥时 / when a release key is configured
+└── mobile-release-unsigned.apk    # 未配置时，需自行签名 / unsigned when not; sign it yourself
 ```
 
 > **注意**：构建时会自动去掉 debug 的 `.hudtest` 后缀，APK 完全使用指定包名。
@@ -248,10 +250,14 @@ git pull origin main
 
 # 重新构建（保持相同包名和签名以覆盖安装）/ Rebuild (keep the same package name and signature to update in place)
 ./gradlew :mobile:assembleRelease \
-  -PdiplayApplicationId=com.ximalaya.ting.android.car
+  -PtupigplayApplicationId=com.ximalaya.ting.android.car
 
 # U 盘覆盖安装（设置和配对记录保留）/ Update from the U disk (settings and pairing records are kept)
 ```
+
+> 覆盖安装要求新旧版本**签名一致**：上一版用什么密钥签名，这一版就用同一个密钥；换了签名需先卸载旧版（设置与配对记录会丢失）。
+
+> An in-place update requires the **same signature** on the old and new builds: sign with the same key you used last time; a different key requires uninstalling first (settings and pairing records are lost).
 
 ---
 

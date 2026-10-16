@@ -113,7 +113,7 @@ The debug application ID is `com.shihab.diplay.hudtest`. The release application
 A head unit that only installs vendor-approved packages rejects the default identity. `mobile` accepts an optional Gradle property that replaces the final application ID:
 
 ```sh
-./gradlew :mobile:assembleDebug -PdiplayApplicationId=com.example.app
+./gradlew :mobile:assembleDebug -PtupigplayApplicationId=com.example.app
 ```
 
 设置该属性后，debug 的 `.hudtest` 后缀会被去掉，APK 将完全使用你传入的值；未设置时，行为与普通构建完全一致，因此 CI 以及 CI 命令中的所有测试都不受影响。仅在车机要求使用不同包名时才使用它；其后果见 [Leapmotor 说明](LEAPMOTOR.md)。
@@ -175,14 +175,14 @@ runtime-assets/
 
 Use only the intended runtime files in this directory. Keep the directory and its private key outside Git. The build rejects unexpected credential containers in APK assets.
 
-1. 将 `DIPLAY_AUTH_ASSETS_DIR` 设为该目录的绝对路径。
+1. 将 `TUPIGPLAY_AUTH_ASSETS_DIR` 设为该目录的绝对路径。
 2. 运行独立 debug 任务。
 
-1. Set `DIPLAY_AUTH_ASSETS_DIR` to the absolute directory path.
+1. Set `TUPIGPLAY_AUTH_ASSETS_DIR` to the absolute directory path.
 2. Run the standalone debug task.
 
 ```sh
-DIPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets ./gradlew :mobile:assembleStandaloneDebug
+TUPIGPLAY_AUTH_ASSETS_DIR=/absolute/path/to/runtime-assets ./gradlew :mobile:assembleStandaloneDebug
 ```
 
 若任一必需文件缺失或为空，该任务会中止。其 APK 输出为 `mobile/build/outputs/apk/debug/mobile-debug.apk`。请对照你所选的本地输入检查 APK 中的以下两个文件：
@@ -204,7 +204,7 @@ Prepare the runtime assets as described in the car-test procedure, and set these
 
 | 变量 | 值 |
 | --- | --- |
-| `DIPLAY_AUTH_ASSETS_DIR` | 运行时资产目录的绝对路径 |
+| `TUPIGPLAY_AUTH_ASSETS_DIR` | 运行时资产目录的绝对路径 |
 | `ANDROID_KEYSTORE_PATH` | 你的 Android 签名 keystore 路径 |
 | `ANDROID_KEYSTORE_PASSWORD` | Keystore 密码 |
 | `ANDROID_KEY_ALIAS` | 签名密钥别名 |
@@ -212,7 +212,7 @@ Prepare the runtime assets as described in the car-test procedure, and set these
 
 | Variable | Value |
 | --- | --- |
-| `DIPLAY_AUTH_ASSETS_DIR` | Absolute path to the runtime assets directory |
+| `TUPIGPLAY_AUTH_ASSETS_DIR` | Absolute path to the runtime assets directory |
 | `ANDROID_KEYSTORE_PATH` | Path to your Android signing keystore |
 | `ANDROID_KEYSTORE_PASSWORD` | Keystore password |
 | `ANDROID_KEY_ALIAS` | Signing key alias |

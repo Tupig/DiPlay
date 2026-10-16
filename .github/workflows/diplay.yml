@@ -57,6 +57,8 @@
 #
 # ── 产物约定 ───────────────────────────────────────────────
 #   build-apk 产物   TuPigPlay-<version>-debug-<短SHA>.apk（Actions artifact，保留 7 天）
+#   build-apk 产物   TuPigPlay-<version>-gallery3d-<短SHA>.apk（零跑白名单伪装包名变体，
+#                    AOSP 公开测试密钥签名；无 MFi 资产，仅验证构建与安装，不能连车）
 #   注意：CI 无法产出可连真车的 APK——MFi 认证资产被 scripts/check_public_tree.py 禁入仓库，
 #         只能由本地构建并手动发布到 Releases。
 
@@ -217,6 +219,39 @@ jobs:
         with:
           name: TuPigPlay-${{ needs.resolve-version.outputs.version }}-debug-${{ github.sha }}
           path: mobile/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
+
+      # 零跑 C 系列白名单按包名放行：com.android.gallery3d（系统图库）在白名单内，
+      # 且 LeapOS 3.x 实证接受 AOSP 公开平台测试密钥的签名（见 docs/LEAPMOTOR.md）。
+      # 无 MFi 资产：产物只验证构建与安装，不能连车；可连车的包须本地带资产构建（文档流程）。
+      - name: 构建零跑白名单伪装包名变体
+        run: >-
+          ./gradlew
+          :mobile:assembleRelease -PtupigplayApplicationId=com.android.gallery3d
+          --stacktrace
+
+      - name: 下载 AOSP 公开平台测试密钥并签名伪装包
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/aosp-testkey
+          curl -fsSL "https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.pk8?format=TEXT" | base64 -d > /tmp/aosp-testkey/testkey.pk8
+          curl -fsSL "https://android.googlesource.com/platform/build/+/refs/heads/main/target/product/security/testkey.x509.pem?format=TEXT" | base64 -d > /tmp/aosp-testkey/testkey.x509.pem
+          openssl x509 -in /tmp/aosp-testkey/testkey.x509.pem -noout -subject
+          BT_DIR="$(dirname "$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}/build-tools" -name apksigner -type f | sort -V | tail -n 1)")"
+          UNSIGNED="mobile/build/outputs/apk/release/mobile-release-unsigned.apk"
+          test -f "${UNSIGNED}"
+          "${BT_DIR}/zipalign" -f -p 4 "${UNSIGNED}" /tmp/gallery3d-aligned.apk
+          SIGNED="TuPigPlay-${{ needs.resolve-version.outputs.version }}-gallery3d-${GITHUB_SHA::7}.apk"
+          "${BT_DIR}/apksigner" sign --key /tmp/aosp-testkey/testkey.pk8 --cert /tmp/aosp-testkey/testkey.x509.pem --out "${SIGNED}" /tmp/gallery3d-aligned.apk
+          "${BT_DIR}/apksigner" verify --print-certs "${SIGNED}" | grep -F "CN=Android, OU=Android, O=Android"
+          "${BT_DIR}/aapt2" dump badging "${SIGNED}" | head -n 1 | grep -F "package: name='com.android.gallery3d'"
+
+      - name: 上传伪装包变体 APK
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: TuPigPlay-${{ needs.resolve-version.outputs.version }}-gallery3d-${{ github.sha }}
+          path: TuPigPlay-*-gallery3d-*.apk
           if-no-files-found: error
           retention-days: 7
 
